@@ -1,0 +1,26 @@
+﻿@page "/ViewOpenDenied/{FUNCTION_NAME}"
+@using BAMTS.Internal;
+@using System.Text;
+@using BlazorStrap;
+@using Newtonsoft.Json;
+@using BAMTS_Internal_Client.Components;
+@inject HttpClient Http
+@inject IBlazorStrap blazorStrap
+@inject IJSRuntime JSRuntime
+
+<div class="page-head-title"><img src="/Resource/Image/bam_logo1.png" width="100" height="45" />&emsp;@this.FUNCTION_NAME&emsp;<LogonInfoDisp LogonUserInfo="@this.loginInfo" /></div>
+<br />
+<hr />
+<br />
+<h4 style="color: darkgrey">💀　Access Denied...　　Sorry you can't use this function.　💀</h4>
+
+@code {
+    [Parameter]
+    public string? FUNCTION_NAME { get; set; }
+
+    private SetLOGON_USER_INFO? loginInfo;
+    protected override async Task OnInitializedAsync()
+    {
+        this.loginInfo = await Http.GetFromJsonAsync<SetLOGON_USER_INFO?>($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_LoginUserInfo/{Common.LOGIN_STAFF_ID}");
+    }
+}

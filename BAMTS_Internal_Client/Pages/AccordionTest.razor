@@ -1,0 +1,89 @@
+﻿@page "/AccordionTest"
+@using BlazorStrap;
+@inject IBlazorStrap blazorStrap
+
+<hr />
+<h3>AccordionTest</h3>
+<hr />
+<BSNav IsTabs="true">
+    <BSNavItem>
+        <TabLabel>Active</TabLabel>
+        <TabContent>Active Tab content</TabContent>
+    </BSNavItem>
+    <BSNavItem>
+        <TabLabel>Link</TabLabel>
+        <TabContent>Link 1 Tab content</TabContent>
+    </BSNavItem>
+    <BSNavItem>
+        <TabLabel>Link</TabLabel>
+        <TabContent>Link 2 Tab content</TabContent>
+    </BSNavItem>
+    <BSNavItem IsDisabled="true">
+        <TabLabel>Disabled</TabLabel>
+        <TabContent>Active Tab content</TabContent>
+    </BSNavItem>
+</BSNav><hr />
+<BSAccordion>
+    <BSAccordionItem AlwaysOpen="true">
+        <Header>Accordion Item #1</Header>
+        <Content>
+            Placeholder content for this accordion, which is intended to demonstrate the AlwaysOpen parameter. This is the first item's accordion body.
+        </Content>
+    </BSAccordionItem>
+    <BSAccordionItem DefaultShown="true">
+        <Header>Accordion Item #2</Header>
+        <Content>
+            Placeholder content for this accordion, which is intended to demonstrate the DefaultShown parameter. This is the first item's accordion body.
+        </Content>
+    </BSAccordionItem>
+    <BSAccordionItem>
+        <Header>Accordion Item #3</Header>
+        <Content>
+            Placeholder content for this accordion.
+        </Content>
+    </BSAccordionItem>
+</BSAccordion>
+<hr />
+<div class="accordion" id="accordionExample">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+            <button type="button" class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                アコーディオン・アイテム #1
+            </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+                <strong>これが最初のアイテムのアコーディオン本体。</strong>...
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingTwo">
+            <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                アコーディオン・アイテム #2
+            </button>
+        </h2>
+        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+                <strong>これは2番目のアイテムのアコーディオン本体。</strong>...
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingThree">
+            <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                アコーディオン・アイテム #3
+            </button>
+        </h2>
+        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+                <strong>これは3番目のアイテムのアコーディオン本体。</strong>...
+            </div>
+        </div>
+    </div>
+</div>
+<hr />
+
+@code {
+
+}

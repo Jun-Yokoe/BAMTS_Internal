@@ -1,0 +1,126 @@
+﻿@page "/test"
+@using BAMTS.Internal;
+@using Newtonsoft.Json;
+@using System.Net;
+@inject HttpClient Http;
+
+<h1 class="display-3">トリマテストするページ<small class="text-muted">（サブタイトル）</small></h1>
+<hr />
+<p>
+    このページは、サンプルの寄せ集めで、実験用の開発用のページです！<br />
+    やりたい事の実験や、できる事のサンプルページにしています。<br />
+    <strong>太字強調表示</strong><br />
+    <del>削除①</del><br />
+    <s>削除②</s><br />
+    <mark>ハイライト表示</mark><br />
+    <ins>挿入文</ins><br />
+    <u>ラベル付けされたテキスト（アンダーライン）</u><br />
+    <em>Italicイタリック（ブラウザのデフォルトスタイルによるnので適用される文字に制限がある場合がある）</em><br />
+    <abbr title="HiperText Markup Language" class="initialism">HTML(Tooltip表示)</abbr><br />
+    <h3>ラインリスト</h3>
+    <dl class="row">
+        <dt class="col-sm-3 text-truncate">短いテキスト</dt>
+        <dd class="col-sm-9">テキスト</dd>
+        <dt class="col-sm-3 text-truncate">長いテキストは切り捨てて省略する場合長いテキストは切り捨てて省略する場合長いテキストは切り捨てて省略する場合長いテキストは切り捨てて省略する場合</dt>
+        <dd class="col-sm-9">テキスト</dd>
+        <dt class="col-sm-3 text-truncate">new ExcelFileAccessor(Common.TARGET_EXCEL_FILE_PATH, Common.TARGET_EXCEL_FILE_SHEET)</dt>
+        <dd class="col-sm-9">テキスト</dd>
+    </dl>
+<p class="col-sm-3 text-truncate">長いテキストは切り捨てて省略する場合長いテキストは切り捨てて省略する場合長いテキストは切り捨てて省略する場合長いテキストは切り捨てて省略する場合長いテキストは切り捨てて省略する場合</p>
+    単行インラインコード<code>&lt;code&gt;</code>
+<br />
+    キーボード入力キー表現<kbd>Enter</kbd>を押下して<kbd>Ctrl + C</kbd>を押下して下さい。
+<br />
+<samp>プログラムの実行結果などを現わすサンプル出力</samp>
+<br />
+</p>
+<hr />
+<table class="table table-bordered table-hover table-sm">
+    <thead>
+        <tr>
+            <th>社員ID</th>
+            <th>社員名</th>
+            <th>生年月日</th>
+            <th>入社年月日</th>
+            <th>有給消費日数</th>
+            <th>性別</th>
+            <th>携帯電話番号</th>
+            <th>携帯電話メールアドレス</th>
+            <th>PCメールアドレス</th>
+            <th>PCメールパスワード</th>
+            <th>備考</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in list)
+        {
+            <tr>
+                <td>@item.EMP_ID</td>
+                <td>@item.EMP_NAME</td>
+                <td>@item.BIRTH_DATE.ToString("yyyy/MM/dd")</td>
+                <td>@item.JOINED_DATE.ToString("yyyy/MM/dd")</td>
+                <td>@item.USED_PAID_HOLIDAY</td>
+                <td>@item.GENDER</td>
+                <td>@item.CELLPHONE_NO</td>
+                <td>@item.CELLPHONE_MAIL_ADDRESS</td>
+                <td>@item.PC_MAIL_ADDRESS</td>
+                <td>@item.PC_MAIL_PASSWORD</td>
+                <td>@item.NOTE</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<button class="btn btn-primary" @onclick="LoadDataAsync">Display List</button>
+@*<button class="btn btn-primary" @onclick="GetExcelData">Get Excel Data</button>*@
+
+<h2>@message</h2>
+<hr />
+<h3>@URL</h3>
+
+@code {
+    string message = "";
+    string URL = "";
+    List<RecEmployeeAll> list = new List<RecEmployeeAll>();
+
+    //private async Task GetExcelData()
+    //{
+    //    try
+    //    {
+    //        message = "Please wait...";
+    //        var excel = new ExcelFileAccessor(Common.TARGET_EXCEL_FILE_PATH, Common.TARGET_EXCEL_FILE_SHEET);
+    //        var list = excel.GetEmployeeAll();
+    //        message = "";
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        message = ex.Message;
+    //    }
+    //    finally
+    //    {
+    //        this.StateHasChanged();
+    //    }
+    //}
+    private async Task LoadDataAsync()
+    {
+        try
+        {
+            this.URL = $"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/GetEmployeeAll";
+            message = "Please wait...";
+            this.list = await Http.GetFromJsonAsync<List<RecEmployeeAll>>(this.URL);
+            message = "";
+        }
+        catch (Exception ex)
+        {
+            message = ex.Message;
+        }
+        finally
+        {
+            this.StateHasChanged();
+        }
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        await this.LoadDataAsync();
+    }
+}

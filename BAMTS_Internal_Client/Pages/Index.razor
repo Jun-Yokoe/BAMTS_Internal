@@ -1,0 +1,116 @@
+﻿@page "/"
+@using BAMTS.Internal;
+@using System.Text;
+@using BlazorStrap;
+@using Newtonsoft.Json;
+@inject HttpClient Http;
+@inject IBlazorStrap blazorStrap
+<style>
+    div.page-head-title {
+        padding: 1rem 1rem;
+        color: #fff;
+        border-radius: 10px;
+        font-size: xx-large;
+        background-image: -webkit-gradient(linear, left top, right top, from(#2041ff), to(#87b6ff));
+        background-image: -webkit-linear-gradient(left, #2041ff 0%, #87b6ff 100%);
+        background-image: linear-gradient(to right, #2041ff 0%, #87b6ff 100%);
+    }
+</style>
+<div class="page-head-title"><img src="/Resource/Image/bam_logo1.png" width="100" height="45" />&emsp;株式会社B&Mテクノサービス：Home&emsp;<BAMTS_Internal_ClientSPA.Components.LogonInfoDisp LogonUserInfo="@this.loginInfo" /></div>
+<hr />
+<br />
+
+<BSCard CardType="CardType.Card" style="width: 80rem;">
+    <BSCard CardType="CardType.Body">
+        <BSCard CardType="CardType.Title"><h3 style="color:darkgreen"><strong>受注一覧について</strong></h3></BSCard>
+        <BSCard CardType="CardType.Text">
+            <hr />
+            <strong>受注一覧機能の試作バージョンを作成しました、<br />これをたたき台にニーズに合ったモノにしていきたいと思います。</strong><br />
+            <br />関係各位に、触って頂いて、ニーズ等をまたフィードバックして頂きたいのですが、
+            <br />現在、開発／テスト中でもありますので、
+            <br />使用中に急に動作しなくなったりする場合があるかもしれませんが御容赦下さい。
+            <br /><br />
+            <strong>《現状の機能概要》</strong><br />
+            <ul>
+                <li>
+                    【📒　表示について】
+                    <br />画面上部に、表示中の機能名とログインユーザー情報が表示されます。
+                    <br />デフォルト表示は、直近300件のデータとなります。（設定値変更にて件数変更可能）
+                    <br />表の一番下の行は、抽出データに対するサマリ情報となっています。（表示されているページのサマリではありません）
+                    <br />各項目見出しのクリックにて、ソートが可能です。（ソート対象項目には矢印マークが付いています）
+                    <br />現在は1920×1080画面に合わせて、ページ辺り10件を表示しています。
+                    <br />画面上部のページ選択バーでページ送りが可能です。
+                    <br />現在表示されているデータは過去のデータですが、テストデータなので更新等操作して頂いてかまいません。
+                </li>
+                <li>
+                    【🔎　検索について】
+                    <br />「検索」ボタンにてデータの選択抽出が可能ですが、検索指定はこれからニーズに合わせて追加します。
+                    <br />　✋対象件数によって表示されるまでに少し時間がかかる場合はありますので御容赦下さい✋
+                </li>
+                <li>
+                    【✍　データの編集について】
+                    <br />各行をダブルクリックすると、受注番号毎の入力画面が開き、閲覧／編集／保存が可能です。
+                    <br />画面上に別画面が開きます。
+                    <br />「受注／確認情報」、「取引先情報」、「原価管理」、「その他」、「管理／設定」の5つのタブ選択表示に分かれています。
+                </li>
+                <li>
+                    【✏　新規作成について】
+                    <br />新規登録は、「新規作成」ボタンで表示される入力画面にて、一から入力するか、
+                    <br />コピー元の受注データを開いて、「コピーして新規作成」ボタンを押下して新規番号の編集画面を開いて、
+                    <br />必要に応じて各項目を変更して作成します。
+                    <br />🖊いずれの場合も受注番号は自動採番されます。
+                </li>
+                <li>
+                    【✘　削除について】
+                    <br />削除機能は一応編集画面に設けてありますが、運用時は使用しないと思っています。（現状でも権限設定にて無効化しています）
+                </li>
+                <li>
+                    【🗝　権限について】
+                    <br />ユーザー毎に権限設定が可能で、各画面や画面内の各機能に対して設定が可能です、
+                    <br />各画面や画面内の各機能に対して、ニーズに合わせて制限をかけます。
+                    <br />現在、テスト的に「Memo」画面にアクセス制限をかけています。
+                    <br />画面に対してアクセス制限がかかっている場合は「Memo」画面のようにアクセスできないメッセージ画面が表示されます。
+                    <br />画面内の機能に対する制限の場合は、対象の機能が非表示もしくは無効化表示されます。（現状、編集画面の削除ボタンに制限がかかっています）
+                </li>
+                <li>
+                    【👯　他ユーザーとの競合について】
+                    <br />更新や新規登録時に、他ユーザーと同じ受注番号のデータを操作してしまった場合は、下記の動作となります。
+                    <br />[更新時]
+                    <br />　後から更新した方の画面に、誰が何時にこの受注データを変更したという内容のメッセージが表示されますので、
+                    <br />　更新者と連絡を取り合って、必要に応じて、上書き更新／キャンセルを行う事が可能です。
+                    <br />[登録時]
+                    <br />　後から登録した方の画面に、誰が何時にこの受注番号データを登録もしくは変更したという内容のメッセージが表示されますので、
+                    <br />　更新者と連絡を取り合って、必要に応じて、新しく受注番号を採番して登録／上書き更新／キャンセルを行う事が可能です。
+                    <hr />📔　よって受注番号の取り合い等は、気にしないで使用頂いて問題ないと思っています。
+                    <hr />
+                </li>
+                <li>
+                    【💴　消費税率について】
+                    <br />消費税率は現時点でデフォルト10%としており、各受注番号事に設定値を持っています。
+                    <br />　✋現状のテストデータは、税率が上がる前の過去データも全て10%となっております。✋
+                </li>
+            </ul>
+        </BSCard>
+        <BSButton Color="BSColor.Primary" Size="Size.Large" @onclick="@(() => this.MovePageToOrderList())">受注一覧へ...</BSButton>
+    </BSCard>
+</BSCard>
+
+@code {
+    [Inject]
+    private NavigationManager NavManager { get; set; }
+    private SetLOGON_USER_INFO loginInfo = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Common.LOGIN_STAFF_ID == null)
+        {
+            this.NavManager.NavigateTo("UserLogin");
+            return;
+        }
+        this.loginInfo = await Http.GetFromJsonAsync<SetLOGON_USER_INFO>($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_LoginUserInfo/{Common.LOGIN_STAFF_ID}");
+    }
+    private void MovePageToOrderList()
+    {
+        this.NavManager.NavigateTo("OrderListForExcel");
+    }
+}

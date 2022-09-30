@@ -1,0 +1,10 @@
+﻿@using BAMTS.Internal
+
+@if (this.LogonUserInfo != null)
+{
+    <span style="font-size: large;">@($"{LogonUserInfo.USER_PRIMARY_INFO.STAFF_DISP_NAME}【{LogonUserInfo.USER_PRIMARY_INFO.DEPARTMENT_NAME}】　ログイン時間：{LogonUserInfo.USER_PRIMARY_INFO.LoginTime:yyyy/MM/dd HH:mm:ss}")</span>
+}
+@code {
+    [Parameter]
+    public SetLOGON_USER_INFO LogonUserInfo { get; set; }
+}

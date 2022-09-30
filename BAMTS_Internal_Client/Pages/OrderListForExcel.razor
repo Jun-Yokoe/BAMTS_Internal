@@ -1,0 +1,2137 @@
+﻿@page "/OrderListForExcel"
+@using BAMTS.Internal;
+@using System.Text;
+@using System.Timers;
+@using BlazorStrap;
+@using Newtonsoft.Json;
+@using BAMTS_Internal_Client.Components;
+@inject HttpClient Http
+@inject IBlazorStrap blazorStrap
+@inject IJSRuntime JSRuntime
+
+<style>
+    div.page-head-title {
+        padding: 1rem 1rem;
+        color: #fff;
+        border-radius: 10px;
+        font-size: xx-large;
+        background-image: -webkit-gradient(linear, left top, right top, from(#2041ff), to(#87b6ff));
+        background-image: -webkit-linear-gradient(left, #2041ff 0%, #87b6ff 100%);
+        background-image: linear-gradient(to right, #2041ff 0%, #87b6ff 100%);
+    }
+</style>
+<div class="page-head-title"><img src="/Resource/Image/bam_logo1.png" width="100" height="45" />&emsp;@this.ACCESS_FUNC_NAME<small class="text-muted">（<em></em>）</small><LogonInfoDisp LogonUserInfo="@this.loginInfo" />
+    @if(this.LockInfo.STAFF_NAME != null)
+    {
+        <span style="font-size: large;">@($"　更新使用中ユーザー：{this.LockInfo.STAFF_NAME}")</span>
+    }
+    else
+    {
+        <span style="font-size: large;">@($"　【更新使用中のユーザーはいません】")</span>
+    }
+</div>
+<div style="display: flex; width: stretch; align-items: center;">
+    <button class="btn" @onclick="@(e => this.OnSearch())" style="background-color: orange ; color:white;">検　索</button>&emsp;
+    @if (this.readOnly == false)
+    {
+        <button class="btn" @onclick="@(e => this.OnSelected())" style="background-color: blue; color:white;">新規作成</button>
+    }
+    &emsp;
+    <button class="btn" @onclick="this.LoadDataAsync" style="background-color: olive; color: white;">再読込(直近@(this.DefaultMaxRecs)件)</button>&emsp;
+    <h4 style="color: forestgreen">@message</h4>&emsp;
+    <strong>@this.recordCount</strong><span>件中&emsp;</span>@(this.DisplayRowWindow())<span>&emsp;</span>
+    <BSPagination Pages="this.GetMaxPage()+1" @bind-Value="this.NowPage" style="width: 700px; margin-top: 12px" />
+    <BSAlert Color="BSColor.Info" HasIcon="true" MarginTop="Margins.Small">各行をダブルクリックすると編集画面が開きます。</BSAlert>
+    &emsp;&emsp;&emsp;
+    <button class="btn btn-primary" @onclick="OnClickDownloadOrderList"><span class="oi oi-cloud-download" aria-hidden="true"></span>&emsp;一覧CSVダウンロード</button>
+    &emsp;&emsp;&emsp;
+    @if(this.readOnly)
+    {
+        if(string.IsNullOrEmpty(this.LockInfo.USER_ID))
+        {
+            <button class="btn" style="background-color: green; color:white;" @onclick="LockOrderList"><Icons Value="0"></Icons>&emsp;更新権利取得</button>
+        }
+    }
+    else
+    {
+        if(this.LockInfo.USER_ID == Common.LOGIN_STAFF_ID)
+        {
+            <button class="btn" style="background-color: teal; color:white;" @onclick="UnlockOrderList"><Icons Value="1"></Icons>&emsp;更新権利破棄</button>
+        }
+    }
+    &emsp;&emsp;&emsp;
+    @if (this.readOnly == false)
+    {
+        <button class="btn" style="background-color: red; color:white;" @onclick="DeleteLatestRecord"><Icons Value="2"></Icons>&emsp;最後のレコード１件削除</button>
+    }
+</div>
+<div>
+    <table class="table table-bordered table-hover table-sm border-dark">
+        <thead class="bg-primary">
+            <tr class="border-dark">
+                <th colspan="18" class="table-primary">受注情報</th>
+                <th colspan="7" class="table-success">取引先情報</th>
+                <th colspan="9" class="table-warning">協力会社</th>
+                <th colspan="6" class="table-secondary">確認欄</th>
+                <th rowspan="3" class="table-secondary">備考</th>
+            </tr>
+            <tr class="border-dark">
+                <th rowspan="2" class="table-primary" @onclick="() => this.SortByColumn(0)">状態<SortMark Value="@this.SortDirections[0]" /></th>
+                <th colspan="2" class="table-primary" @onclick="() => this.SortByColumn(12)">改訂履歴<SortMark Value="@this.SortDirections[12]" /></th>
+                <th rowspan="2" class="table-primary" @onclick="() => this.SortByColumn(13)">見積書<br />発行日<SortMark Value="@this.SortDirections[13]" /></th>
+                <th colspan="4" class="table-primary" @onclick="() => this.SortByColumn(14)">受注番号<SortMark Value="@this.SortDirections[14]" /></th>
+                <th rowspan="2" class="table-primary" @onclick="() => this.SortByColumn(11)">種類<SortMark Value="@this.SortDirections[11]" /></th>
+                @*<th rowspan="2" class="table-primary">納品先</th>*@
+                @*<th rowspan="2" class="table-primary">工事名称</th>*@
+                <th colspan="2" class="table-primary" @onclick="() => this.SortByColumn(21)">受注合計金額<SortMark Value="@this.SortDirections[21]" /></th>
+                <th colspan="2" class="table-primary" @onclick="() => this.SortByColumn(22)">施工金額<SortMark Value="@this.SortDirections[22]" /></th>
+                <th colspan="2" class="table-primary" @onclick="() => this.SortByColumn(23)">セットアップ金額<SortMark Value="@this.SortDirections[23]" /></th>
+                <th colspan="3" class="table-primary">工事期間</th>
+                <th colspan="2" class="table-success">見積依頼</th>
+                <th colspan="1" class="table-success text-nowrap">EDI見積依頼</th>
+                <th colspan="1" class="table-success text-nowrap">EDI注文依頼</th>
+                <th rowspan="2" class="table-success text-nowrap" @onclick="() => this.SortByColumn(33)">検収日<SortMark Value="@this.SortDirections[33]" /></th>
+                <th rowspan="1" class="table-success text-nowrap" @onclick="() => this.SortByColumn(34)">検収月<SortMark Value="@this.SortDirections[34]" /></th>
+                <th colspan="1" class="table-success" @onclick="() => this.SortByColumn(36)">EDI回答<br />金額<SortMark Value="@this.SortDirections[36]" /></th>
+                <th colspan="3" class="table-warning">施工</th>
+                <th colspan="3" class="table-warning">セットアップ</th>
+                <th colspan="3" class="table-warning">その他</th>
+                <th rowspan="1" class="table-secondary">納品書</th>
+                <th colspan="1" class="table-secondary text-nowrap">完了<br />メール</th>
+                <th colspan="1" class="table-secondary text-nowrap">完了<br />報告書</th>
+                <th rowspan="2" class="table-secondary text-nowrap" @onclick="() => this.SortByColumn(3)">引渡<SortMark Value="@this.SortDirections[3]" /><br />報告書</th>
+                <th rowspan="2" class="table-secondary text-nowrap" @onclick="() => this.SortByColumn(8)">担当者<SortMark Value="@this.SortDirections[8]" /></th>
+                <th rowspan="2" class="table-secondary text-nowrap">最終更新<br /><span @onclick="() => this.SortByColumn(9)">入力者<SortMark Value="@this.SortDirections[9]" /></span><br /><span @onclick="() => this.SortByColumn(10)">日時<SortMark Value="@this.SortDirections[10]" /></span></th>
+            </tr>
+            <tr class="border-dark">
+                <th class="table-primary text-nowrap">再発行日</th>
+                <th class="table-primary text-nowrap">改訂</th>
+                <th class="table-primary" @onclick="() => this.SortByColumn(15)">期<br /><SortMark Value="@this.SortDirections[15]" /></th>
+                <th class="table-primary" @onclick="() => this.SortByColumn(16)">種<br /><SortMark Value="@this.SortDirections[16]" /></th>
+                <th class="table-primary" @onclick="() => this.SortByColumn(17)">月<br /><SortMark Value="@this.SortDirections[17]" /></th>
+                <th class="table-primary" @onclick="() => this.SortByColumn(18)">連番<br /><SortMark Value="@this.SortDirections[18]" /></th>
+                <th class="table-primary">金額</th>
+                <th class="table-primary">税込</th>
+                <th class="table-primary">金額</th>
+                <th class="table-primary">税込</th>
+                <th class="table-primary">金額</th>
+                <th class="table-primary">税込</th>
+                <th class="table-primary" @onclick="() => this.SortByColumn(24)">自<SortMark Value="@this.SortDirections[24]" /></th>
+                <th class="table-primary" @onclick="() => this.SortByColumn(25)">至<SortMark Value="@this.SortDirections[25]" /></th>
+                <th class="table-primary" @onclick="() => this.SortByColumn(26)">OP<SortMark Value="@this.SortDirections[26]" /></th>
+                <th class="table-success text-nowrap" @onclick="() => this.SortByColumn(27)">依頼<br />№<SortMark Value="@this.SortDirections[27]" /></th>
+                <th class="table-success text-nowrap" @onclick="() => this.SortByColumn(28)">製造番号<SortMark Value="@this.SortDirections[28]" /></th>
+                <th class="table-success"><span @onclick="() => this.SortByColumn(29)">依頼日<SortMark Value="@this.SortDirections[29]" /></span><br /><span @onclick="() => this.SortByColumn(30)">依頼№<SortMark Value="@this.SortDirections[30]" /></span></th>
+                <th class="table-success"><span @onclick="() => this.SortByColumn(31)">注文日<SortMark Value="@this.SortDirections[31]" /></span><br /><span @onclick="() => this.SortByColumn(32)">注文№<SortMark Value="@this.SortDirections[32]" /></span></th>
+                <th class="table-success" @onclick="() => this.SortByColumn(35)">入金月<SortMark Value="@this.SortDirections[35]" /></th>
+                <th class="table-success">金額<br />税込み</th>
+                <th class="table-warning text-nowrap" @onclick="() => this.SortByColumn(37)">会社名<SortMark Value="@this.SortDirections[37]" /></th>
+                <th class="table-warning text-nowrap" @onclick="() => this.SortByColumn(38)">金額<br />税込<SortMark Value="@this.SortDirections[38]" /></th>
+                <th class="table-warning text-nowrap" @onclick="() => this.SortByColumn(39)">請求月<SortMark Value="@this.SortDirections[39]" /></th>
+                <th class="table-warning text-nowrap" @onclick="() => this.SortByColumn(40)">会社名<SortMark Value="@this.SortDirections[40]" /></th>
+                <th class="table-warning text-nowrap" @onclick="() => this.SortByColumn(41)">金額<br />税込<SortMark Value="@this.SortDirections[41]" /></th>
+                <th class="table-warning text-nowrap" @onclick="() => this.SortByColumn(42)">請求月<SortMark Value="@this.SortDirections[42]" /></th>
+                <th class="table-warning text-nowrap" @onclick="() => this.SortByColumn(43)">会社名<SortMark Value="@this.SortDirections[43]" /></th>
+                <th class="table-warning text-nowrap" @onclick="() => this.SortByColumn(44)">金額<br />税込<SortMark Value="@this.SortDirections[44]" /></th>
+                <th class="table-warning text-nowrap" @onclick="() => this.SortByColumn(45)">請求月<SortMark Value="@this.SortDirections[45]" /></th>
+                <th class="table-secondary text-nowrap"><span @onclick="() => this.SortByColumn(1)">提出日<SortMark Value="@this.SortDirections[1]" /></span><br /><span @onclick="() => this.SortByColumn(2)">期日<SortMark Value="@this.SortDirections[2]" /></span></th>
+                <th class="table-secondary text-nowrap"><span @onclick="() => this.SortByColumn(6)">配信日<SortMark Value="@this.SortDirections[6]" /></span><br /><span @onclick="() => this.SortByColumn(7)">期日<SortMark Value="@this.SortDirections[7]" /></span></th>
+                <th class="table-secondary text-nowrap"><span @onclick="() => this.SortByColumn(4)">発行日<SortMark Value="@this.SortDirections[4]" /></span><br /><span @onclick="() => this.SortByColumn(5)">期日<SortMark Value="@this.SortDirections[5]" /></span></th>
+            </tr>
+        </thead>
+        <tbody style="@(this.readOnly ? "background-color: lightgray" : "background-color: white")">
+            @foreach (var item in this.dspList)
+            {
+                var statusColor = (item.STATUS == 4) ? "orange" : ((item.STATUS == 3) ? "red" : ((item.STATUS == 2) ? "blue" : ((item.STATUS == 1) ? "green" : "black")));
+                <tr class="" @ondblclick="e => OnSelected(item)">
+                    <td rowspan="2" align="center"><font color="@(statusColor)">@item.STATUS_NAME</font></td>
+                    <td rowspan="1" align="center"><font color="@(statusColor)">@($"{item.REV_ISSUE_DATE:yy/MM/dd}")</font></td>
+                    <td rowspan="1" align="center"><font color="@(statusColor)">@item.REV_NO</font></td>
+                    <td rowspan="1" align="center"><font color="@(statusColor)">@($"{item.EST_ISSUE_DATE:yy/MM/dd}")</font></td>
+                    <td rowspan="1" align="center"><font color="@(statusColor)"><strong>@item.ODR_PERIOD</strong></font></td>
+                    <td rowspan="1" align="center"><font color="@(statusColor)"><strong>@item.ODR_CATEGORY</strong></font></td>
+                    <td rowspan="1" align="center"><font color="@(statusColor)"><strong>@item.ODR_MONTH</strong></font></td>
+                    <td rowspan="1" align="center"><font color="@(statusColor)"><strong>@($"{item.ODR_SEQ:0000}")</strong></font></td>
+                    <td rowspan="1" align="center"><font color="@(statusColor)">@item.TYPE_NAME</font></td>
+                    <td rowspan="1" align="right" class="text-nowrap"><font color="@(statusColor)">&yen;@($"{item.CNST_NET_PRICE + item.STUP_NET_PRICE:###,0}")</font></td>
+                    <td rowspan="1" align="right" class="text-nowrap"><font color="@(statusColor)">&yen;@($"{item.CNST_NET_PRICE + item.CALC_CNST_TAX_PRICE + item.STUP_NET_PRICE + item.CALC_STUP_TAX_PRICE:###,0}")</font></td>
+                    <td rowspan="1" align="right" class="text-nowrap"><font color="@(statusColor)">&yen;@($"{item.CNST_NET_PRICE: ###,0}")</font></td>
+                    <td rowspan="1" align="right" class="text-nowrap"><font color="@(statusColor)">&yen;@($"{item.CNST_NET_PRICE + item.CALC_CNST_TAX_PRICE: ###,0}")</font></td>
+                    <td rowspan="1" align="right" class="text-nowrap"><font color="@(statusColor)">&yen;@($"{item.STUP_NET_PRICE: ###,0}")</font></td>
+                    <td rowspan="1" align="right" class="text-nowrap"><font color="@(statusColor)">&yen;@($"{item.STUP_NET_PRICE + item.CALC_STUP_TAX_PRICE: ###,0}")</font></td>
+                    <td rowspan="1" align="center"><font color="@(statusColor)">@($"{item.CNST_START_DATE:yy/MM/dd}")</font></td>
+                    <td rowspan="1" align="center"><font color="@(statusColor)">@($"{item.CNST_END_DATE:yy/MM/dd}")</font></td>
+                    <td rowspan="1" align="center"><font color="@(statusColor)">@($"{item.OPEN_DATE:yy/MM/dd}")</font></td>
+                    <td rowspan="1" align="center"><font color="@(statusColor)">@item.ESTREQ_NO_1</font></td>
+                    <td rowspan="2" align="center"><font color="@(statusColor)">@item.PRODUCT_NO</font></td>
+                    <td rowspan="1" align="center"><font color="@(statusColor)">@($"{item.REQ_DATE:yy/MM/dd}")</font></td>
+                    <td rowspan="1" align="center"><font color="@(statusColor)">@($"{item.ODR_DATE:yy/MM/dd}")</font></td>
+                    <td rowspan="2" align="center"><font color="@(statusColor)">@($"{item.ACCEPT_DATE:yy/MM/dd}")</font></td>
+                    <td rowspan="1" align="center"><font color="@(statusColor)">@($"{item.ACCEPT_MONTH:yy/MM}")</font></td>
+                    <td rowspan="1" align="right" class="text-nowrap"><font color="@(statusColor)">&yen;@($"{item.ANS_NET_PRICE: ###,0}")</font></td>
+                    <td rowspan="2" class="text-nowrap"><font color="@(statusColor)">@item.ASSOCIATE_NAME_1</font></td>
+                    <td rowspan="1" align="right" class="text-nowrap"><font color="@(statusColor)">&yen;@($"{item.NET_PRICE_1: ###,0}")</font></td>
+                    <td rowspan="2" align="center"><font color="@(statusColor)">@($"{item.PAYMENT_MONTH_1:yy/MM}")</font></td>
+                    <td rowspan="2" class="text-nowrap"><font color="@(statusColor)">@item.ASSOCIATE_NAME_2</font></td>
+                    <td rowspan="1" align="right" class="text-nowrap"><font color="@(statusColor)">&yen;@($"{item.NET_PRICE_2: ###,0}")</font></td>
+                    <td rowspan="2" align="center"><font color="@(statusColor)">@($"{item.PAYMENT_MONTH_2:yy/MM}")</font></td>
+                    <td rowspan="2" class="text-nowrap"><font color="@(statusColor)">@item.ASSOCIATE_NAME_3</font></td>
+                    <td rowspan="1" align="right" class="text-nowrap"><font color="@(statusColor)">&yen;@($"{item.NET_PRICE_3: ###,0}")</font></td>
+                    <td rowspan="2" align="center"><font color="@(statusColor)">@($"{item.PAYMENT_MONTH_3:yy/MM}")</font></td>
+                    <td rowspan="1" align="center"><font color="@(statusColor)">@($"{item.DLV_SUBMIT_DATE:yy/MM/dd}")</font></td>
+                    <td rowspan="1" align="center"><font color="@(statusColor)">@($"{item.CMPMAIL_ISSUE_DATE:yy/MM/dd}")</font></td>
+                    <td rowspan="1" align="center"><font color="@(statusColor)">@($"{item.CMPREP_ISSUE_DATE:yy/MM/dd}")</font></td>
+                    <td rowspan="2" align="center"><font color="@(statusColor)">@($"{item.DLVREP_SUBMIT_DATE:yy/MM/dd}")</font></td>
+                    <td rowspan="2" class="text-nowrap"><font color="@(statusColor)">@item.CNST_MANAGER_NAME</font></td>
+                    <td rowspan="1" class="text-nowrap"><font color="@(statusColor)">@(string.IsNullOrEmpty(item.UPD_NAME) ? item.UPD_USER : item.UPD_NAME)</font></td>
+                    <td rowspan="2" class="text-nowrap"><font color="@(statusColor)">@item.NOTE</font></td>
+                </tr>
+                <tr class="" @ondblclick="e => OnSelected(item)">
+                    <td rowspan="1" colspan="17" class="text-nowrap"><font color="@(statusColor)">@($"{@item.ODR_NAME}【{item.CUSTOMER_NAME}】")</font></td>
+                    <td rowspan="1" align="center"><font color="@(statusColor)">@item.ESTREQ_NO_2</font></td>
+                    <td rowspan="1" align="center"><font color="@(statusColor)">@item.REQ_NO</font></td>
+                    <td rowspan="1" align="center"><font color="@(statusColor)">@item.ODR_NO</font></td>
+                    <td rowspan="1" align="center"><font color="@(statusColor)">@($"{item.PAYMENT_MONTH:yy/MM}")</font></td>
+                    <td rowspan="1" align="right" class="text-nowrap"><font color="@(statusColor)">&yen;@($"{item.ANS_NET_PRICE + item.CALC_ANS_TAX_PRICE: ###,0}")</font></td>
+                    <td rowspan="1" align="right" class="text-nowrap"><font color="@(statusColor)">&yen;@($"{item.NET_PRICE_1 + item.CALC_ASS1_TAX_PRICE: ###,0}")</font></td>
+                    <td rowspan="1" align="right" class="text-nowrap"><font color="@(statusColor)">&yen;@($"{item.NET_PRICE_2 + item.CALC_ASS2_TAX_PRICE: ###,0}")</font></td>
+                    <td rowspan="1" align="right" class="text-nowrap"><font color="@(statusColor)">&yen;@($"{item.NET_PRICE_3 + item.CALC_ASS3_TAX_PRICE: ###,0}")</font></td>
+                    <td rowspan="1" align="center"><font color="@(statusColor)">@($"{item.DLV_DEADLINE_DATE:yy/MM/dd}")</font></td>
+                    <td rowspan="1" align="center"><font color="@(statusColor)">@($"{item.CMPMAIL_DEADLINE_DATE:yy/MM/dd}")</font></td>
+                    <td rowspan="1" align="center"><font color="@(statusColor)">@($"{item.CMPREP_DEADLINE_DATE:yy/MM/dd}")</font></td>
+                    @if (item.UPD_TIME == null)
+                    {
+                        <td rowspan="1" align="center" class="text-nowrap"></td>
+                    }
+                    else if (item.UPD_TIME?.Date == DateTime.Now.Date)
+                    {
+                        <td rowspan="1" align="center" class="text-nowrap"><font color="@(statusColor)">@($"{item.UPD_TIME:HH:mm:ss}")</font></td>
+                    }
+                    else
+                    {
+                        <td rowspan="1" align="center" class="text-nowrap"><font color="@(statusColor)">@($"{item.UPD_TIME:yyyy/MM/dd}")</font></td>
+                    }
+                </tr>
+            }
+            @if (this.dspList.Count > 0)
+            {
+                <tr style="height: 5px"><td style="background-color: darkgray;" colspan="41"></td></tr>
+                <tr>
+                    <td rowspan="2" align="center"></td>
+                    <td rowspan="1" align="center"></td>
+                    <td rowspan="1" align="center"></td>
+                    <td rowspan="1" align="center"></td>
+                    <td rowspan="1" align="center"></td>
+                    <td rowspan="1" align="center"></td>
+                    <td rowspan="1" align="center"></td>
+                    <td rowspan="1" align="center"></td>
+                    <td rowspan="1" align="center"></td>
+                    <td rowspan="1" align="right" class="text-nowrap">&yen;@($"{this.allList.Sum(item => item.CNST_NET_PRICE + item.STUP_NET_PRICE):###,0}")</td>
+                    <td rowspan="1" align="right" class="text-nowrap">&yen;@($"{this.allList.Sum(item => item.CNST_NET_PRICE + item.CALC_CNST_TAX_PRICE + item.STUP_NET_PRICE + item.CALC_STUP_TAX_PRICE):###,0}")</td>
+                    <td rowspan="1" align="right" class="text-nowrap">&yen;@($"{this.allList.Sum(item => item.CNST_NET_PRICE): ###,0}")</td>
+                    <td rowspan="1" align="right" class="text-nowrap">&yen;@($"{this.allList.Sum(item => item.CNST_NET_PRICE + item.CALC_CNST_TAX_PRICE): ###,0}")</td>
+                    <td rowspan="1" align="right" class="text-nowrap">&yen;@($"{this.allList.Sum(item => item.STUP_NET_PRICE): ###,0}")</td>
+                    <td rowspan="1" align="right" class="text-nowrap">&yen;@($"{this.allList.Sum(item => item.STUP_NET_PRICE + item.CALC_STUP_TAX_PRICE): ###,0}")</td>
+                    <td rowspan="1" align="center"></td>
+                    <td rowspan="1" align="center"></td>
+                    <td rowspan="1" align="center"></td>
+                    <td rowspan="1" align="center"></td>
+                    <td rowspan="2" align="center"></td>
+                    <td rowspan="1" align="center"></td>
+                    <td rowspan="1" align="center"></td>
+                    <td rowspan="2" align="center"></td>
+                    <td rowspan="1" align="center"></td>
+                    <td rowspan="1" align="right" class="text-nowrap">&yen;@($"{this.allList.Sum(item => item.ANS_NET_PRICE): ###,0}")</td>
+                    <td rowspan="2" class="text-nowrap"></td>
+                    <td rowspan="1" align="right" class="text-nowrap">&yen;@($"{this.allList.Sum(item => item.NET_PRICE_1): ###,0}")</td>
+                    <td rowspan="2" align="center"></td>
+                    <td rowspan="2" class="text-nowrap"></td>
+                    <td rowspan="1" align="right" class="text-nowrap">&yen;@($"{this.allList.Sum(item => item.NET_PRICE_2): ###,0}")</td>
+                    <td rowspan="2" align="center"></td>
+                    <td rowspan="2" class="text-nowrap"></td>
+                    <td rowspan="1" align="right" class="text-nowrap">&yen;@($"{this.allList.Sum(item => item.NET_PRICE_3): ###,0}")</td>
+                    <td rowspan="2" align="center"></td>
+                    <td rowspan="1" align="center"></td>
+                    <td rowspan="2" align="center"></td>
+                    <td rowspan="1" align="center"></td>
+                    <td rowspan="1" align="center"></td>
+                    <td rowspan="2" class="text-nowrap"></td>
+                    <td rowspan="1" class="text-nowrap"></td>
+                    <td rowspan="2" class="text-nowrap"></td>
+                </tr>
+                <tr>
+                    <td rowspan="1" align="center" class="text-nowrap"></td>
+                    <td rowspan="1" colspan="17" class="text-nowrap"></td>
+                    <td rowspan="1" align="center"></td>
+                    <td rowspan="1" align="center"></td>
+                    <td rowspan="1" align="center"></td>
+                    <td rowspan="1" align="center"></td>
+                    <td rowspan="1" align="right" class="text-nowrap">&yen;@($"{this.allList.Sum(item => item.ANS_NET_PRICE + item.CALC_ANS_TAX_PRICE): ###,0}")</td>
+                    <td rowspan="1" align="right" class="text-nowrap">&yen;@($"{this.allList.Sum(item => item.NET_PRICE_1 + item.CALC_ASS1_TAX_PRICE): ###,0}")</td>
+                    <td rowspan="1" align="right" class="text-nowrap">&yen;@($"{this.allList.Sum(item => item.NET_PRICE_2 + item.CALC_ASS2_TAX_PRICE): ###,0}")</td>
+                    <td rowspan="1" align="right" class="text-nowrap">&yen;@($"{this.allList.Sum(item => item.NET_PRICE_3 + item.CALC_ASS3_TAX_PRICE): ###,0}")</td>
+                    <td rowspan="1" align="center"></td>
+                    <td rowspan="1" align="center"></td>
+                    <td rowspan="1" align="center"></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<hr />
+<BSModal DataId="SearchInput" @ref="SearchInput" IsFullScreen="true" FullScreenSize="Size.Medium" IsCentered="true" IsStaticBackdrop="true" IsScrollable="true" Size="Size.Medium">
+    <Header><SurveyPrompt Title="@this.SearchInput_HeaderTitle" /></Header>
+    <Content>
+        <EditForm Model="this.searchModel" OnValidSubmit="this.SearchExecute">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="mb-3">
+                <div style="display: flex;">
+                    <table class="table table-sm">
+                        <tbody>
+                            <tr>
+                                <td class="table-secondary">
+                                    <label class="text-nowrap">受注番号</label>
+                                </td>
+                                <td colspan="3">
+                                    <div style="display: flex;">
+                                        <BSInput InputType="InputType.Number" @bind-Value="searchModel.ODR_PERIOD" style="width: 110px" />
+                                        <label>-</label>
+                                        <select class="custom-select" id="inputOrderCategory" @bind="this.searchModel.ODR_CATEGORY">
+                                            @foreach (var item in this.selOrderCategory)
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+                                            }
+                                        </select>
+                                        <label>-</label>
+                                        <select class="custom-select" id="inputMonth" @bind="this.searchModel.ODR_MONTH">
+                                            @foreach (var item in this.selMonth)
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+                                            }
+                                        </select>
+                                        <label>-</label>
+                                        <BSInput InputType="InputType.Number" @bind-Value="searchModel.ODR_SEQ" style="width: 110px" />
+                                    </div>
+                                </td>
+                            </tr>
+                            @*
+                            <tr>
+                                <td class="table-secondary">
+                                    <label class="text-nowrap">納品先</label>
+                                </td>
+                                <td colspan="3">
+                                    <select class="custom-select" id="inputCustomer" @bind="this.searchModel.CUSTOMER_ID">
+                                        @foreach (var item in this.selCustomer)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                </td>
+                            </tr>
+                            *@
+                            <tr>
+                                <td class="table-secondary">
+                                    <label class="text-nowrap">納品先</label>
+                                </td>
+                                <td colspan="3">
+                                    <div style="display: flex;">
+                                        <input type="text" autocomplete="on" list="searchList"  @bind-value="this.searchModel.CUSTOMER_NAME">
+                                        <datalist id="searchList">
+                                            @foreach (var item in this.selCustomer)
+                                            {
+                                                <option value="@item.Text"/>
+                                            }
+                                        </datalist>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-secondary">
+                                    <label class="text-nowrap">名称</label>
+                                </td>
+                                <td colspan="3">
+                                    <BSInput InputType="InputType.Text" @bind-Value="searchModel.ODR_NAME" style="width: stretch" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-secondary">
+                                    <label class="text-nowrap">状態</label>
+                                </td>
+                                <td valign="middle">
+                                    <select class="custom-select" id="inputOrderStatus" @bind="this.searchModel.STATUS">
+                                        @foreach (var item in this.selOrderStatus1)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                </td>
+                            </tr>
+                            @*
+                            <tr>
+                                <td class="table-secondary">
+                                    <label class="text-nowrap">種類</label>
+                                    <br />
+                                </td>
+                                <td valign="middle">
+                                    <select class="custom-select" id="inputOrderType" @bind="this.searchModel.TYPE">
+                                        @foreach (var item in this.selOrderType)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                </td>
+                            </tr>
+                            *@
+                            <tr>
+                                <td class="table-secondary">
+                                    <label class="text-nowrap">施工<br />管理者</label>
+                                </td>
+                                <td>
+                                    <select class="custom-select" id="inputManager" @bind="this.searchModel.CNST_MANAGER_ID">
+                                        @foreach (var item in this.selStaff)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <hr />
+            <BSButton Color="BSColor.Success" Size="Size.Large" type="submit">検　索</BSButton>&emsp;
+            <BSButton Color="BSColor.Warning" Size="Size.Large" @onclick="@(() => this.SearchInput.HideAsync())">キャンセル</BSButton>&emsp;
+            <BSButton Color="BSColor.Light" Size="Size.Large" @onclick="@(() => this.ClearSearchInput())">クリア</BSButton>
+            @if (this.ShowSearchMessage)
+            {
+                <hr /><span class="text-info"><strong>　しばらくお待ちください...</strong></span>
+            }
+        </EditForm>
+    </Content>
+</BSModal>
+<BSModal DataId="DataInput" @ref="DataInput" IsFullScreen="true" FullScreenSize="Size.ExtraLarge" IsCentered="true" IsStaticBackdrop="true" IsScrollable="true" Size="Size.ExtraLarge">
+    <Header><SurveyPrompt Title="@this.DataInput_HeaderTitle" /></Header>
+    <Content>
+        @if (this.inputModel == null)
+        {
+            this.inputModel = new RecVV_ORDER_LIST_FOR_EXCEL_P1(this.TaxRate);
+        }
+        <div class="input-group">
+            <span class="input-group-text" style="width:90px">受注番号</span>
+            <span class="input-group-text" style="background:White">@($"{this.inputModel.ODR_PERIOD}-{this.inputModel.ODR_CATEGORY}-{this.inputModel.ODR_MONTH}-{this.inputModel.ODR_SEQ}")</span>
+            <span style="width:30px"/>
+            <span class="input-group-text" style="width:80px">納品先</span>
+            <span class="input-group-text" style="background:White">@($"{this.inputModel.CUSTOMER_NAME}")</span>
+            <span style="width:30px"/>
+            <span class="input-group-text" style="width:125px">見積書発行日</span>
+            <span class="input-group-text" style="background:White">@($"{this.inputModel.EST_ISSUE_DATE:yyyy/MM/dd}")</span>
+            <span style="width:30px"/>
+        </div>
+        <br />
+        <div class="input-group">
+            <span class="input-group-text" style="width:125px">再発行日</span>
+            <span class="input-group-text" style="background:White">@($"{this.inputModel.REV_ISSUE_DATE:yyyy/MM/dd}")</span>
+            <span style="width:30px"/>
+            <span class="input-group-text" style="width:125px">改訂番号</span>
+            <span class="input-group-text" style="background:White">@($"{this.inputModel.REV_NO}")</span>
+        </div>
+        <hr />
+        @*<EditForm Model="this.inputModel" OnValidSubmit="() => this.UpdateInput(0)">*@
+        <EditForm Model="this.inputModel">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="mb-3">
+            <BSNav IsTabs="true" IsFill="true">
+                <BSNavItem IsDisabled="false">
+                    <TabLabel>受注／確認情報</TabLabel>
+                    <TabContent>
+                        <div style="display: flex; width: 1100px">
+                            <table class="table table-sm">
+                                <tbody>
+                                    <tr>
+                                        <td class="table-secondary">
+                                            <label class="text-nowrap">受注番号</label>
+                                        </td>
+                                        <td colspan="3">
+                                            <div style="display: flex;">
+                                                <BSInput InputType="InputType.Number" @bind-Value="inputModel.ODR_PERIOD" style="width: 80px" disabled />
+                                                <label>-</label>
+                                                <select class="custom-select" id="inputOrderCategory" @bind="this.inputModel.ODR_CATEGORY">
+                                                    @foreach (var item in this.selOrderCategory)
+                                                    {
+                                                        <option value="@item.Value">@item.Text</option>
+                                                    }
+                                                </select>
+                                                <label>-</label>
+                                                <select class="custom-select" id="inputMonth" @bind="this.inputModel.ODR_MONTH">
+                                                    @foreach (var item in this.selMonth)
+                                                    {
+                                                        <option value="@item.Value">@item.Text</option>
+                                                    }
+                                                </select>
+                                                <label>-</label>
+                                                <BSInput InputType="InputType.Number" @bind-Value="inputModel.ODR_SEQ" style="width: 100px" disabled />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-secondary">
+                                            <label class="text-nowrap">種類</label>
+                                            <br />
+                                        </td>
+                                        <td valign="middle">
+                                            <select class="custom-select" id="inputOrderType" @bind="this.inputModel.TYPE">
+                                                @foreach (var item in this.selOrderType)
+                                                {
+                                                    <option value="@item.Value">@item.Text</option>
+                                                }
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-secondary">
+                                            <label class="text-nowrap">納品先</label>
+                                        </td>
+                                        <td colspan="3">
+                                            <div style="display: flex;">
+                                                @*<select class="custom-select" id="inputCustomer" @bind="this.inputModel.CUSTOMER_ID">*@
+                                                @*
+                                                <input type="text" list="data" @bind-value="this.inputModel.CUSTOMER_NAME" />
+                                                <label>-</label>
+                                                <select class="custom-select" id="inputCustomer" @onchange="CUSTOMER_ID_Changed">
+                                                @foreach (var item in this.selCustomer)
+                                                {
+                                                    @if(this.inputModel.CUSTOMER_ID.ToString() == item.Value)
+                                                    {
+                                                        <option value="@item.Value" selected="selected">@item.Text</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@item.Value">@item.Text</option>
+                                                    }
+                                                }
+                                                </select>
+                                                *@
+                                                <input type="text" autocomplete="on" list="dataList"  @bind-value="this.inputModel.CUSTOMER_NAME">
+                                                <datalist id="dataList">
+                                                    @foreach (var item in this.selCustomer)
+                                                    {
+                                                        <option value="@item.Text"/>
+                                                    }
+                                                </datalist>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-secondary">
+                                            @if ((this.readOnly) || (this.inputMode == Common.InputMode.Create))
+                                            {
+                                                <label class="text-nowrap">名称</label>
+                                            }
+                                            else
+                                            {
+                                                <div Class="@BS.Form_Check @BS.Form_Switch" style="text-align:left">
+                                                    <BSLabel IsCheckLabel="true">名称</BSLabel>
+                                                    <BSInputCheckbox CheckedValue="@("on")" @bind-Value="this.ValueKeeper.ODR_NAME_Flag"/>
+                                                </div>
+                                            }
+                                        </td>
+                                        <td colspan="3">
+                                            <BSInput InputType="InputType.Text" @bind-Value="this.inputModel.ODR_NAME" style="width: stretch" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-secondary">
+                                                <label class="text-nowrap">工事期間</label>
+                                        </td>
+                                        <td colspan="3">
+                                            <div style="display: flex;">
+                                                <BSInput InputType="InputType.Date" @bind-Value="this.inputModel.CNST_START_DATE" style="width: stretch;" />
+                                                <label>～</label>
+                                                <BSInput InputType="InputType.Date" @bind-Value="this.inputModel.CNST_END_DATE" style="width: stretch;" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-secondary">
+                                            <label class="text-nowrap">状態</label>
+                                        </td>
+                                        <td valign="middle">
+                                            <select class="custom-select" id="inputOrderStatus" @bind="this.inputModel.STATUS">
+                                                @foreach (var item in this.selOrderStatus2)
+                                                {
+                                                    <option value="@item.Value">@item.Text</option>
+                                                }
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-secondary">
+                                            <label class="text-nowrap">見積書<br />発行日</label>
+                                        </td>
+                                        <td>
+                                            @if(this.inputModel.EST_ISSUE_DATE == null)
+                                            {
+                                                this.inputModel.EST_ISSUE_DATE = DateTime.Now.Date;
+                                            }
+                                            <BSInput InputType="InputType.Date" @bind-Value="this.inputModel.EST_ISSUE_DATE" style="width: 200px;" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-secondary">
+                                            <label class="text-nowrap">担当者</label>
+                                        </td>
+                                        <td>
+                                            <select class="custom-select" id="inputManager" @bind="this.inputModel.CNST_MANAGER_ID">
+                                                @foreach (var item in this.selStaff)
+                                                {
+                                                    <option value="@item.Value">@item.Text</option>
+                                                }
+                                            </select>
+                                        </td>
+                                        <td class="table-secondary">
+                                            <label class="text-nowrap">オープン日</label>
+                                        </td>
+                                        <td>
+                                            <BSInput InputType="InputType.Date" @bind-Value="this.inputModel.OPEN_DATE" style="width: stretch;" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-secondary">
+                                            <label class="text-nowrap">完了メール<br />配信日</label>
+                                        </td>
+                                        <td>
+                                            <BSInput InputType="InputType.Date" @bind-Value="this.inputModel.CMPMAIL_ISSUE_DATE" style="width: stretch;" />
+                                        </td>
+                                        <td class="table-secondary">
+                                            <label class="text-nowrap">完了メール<br />期日</label>
+                                        </td>
+                                        <td>
+                                            <BSInput InputType="InputType.Date" @bind-Value="this.inputModel.CMPMAIL_DEADLINE_DATE" style="width: stretch;" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-secondary">
+                                            <label class="text-nowrap">完了報告書<br />発行日</label>
+                                        </td>
+                                        <td>
+                                            <BSInput InputType="InputType.Date" @bind-Value="this.inputModel.CMPREP_ISSUE_DATE" style="width: stretch;" />
+                                        </td>
+                                        <td class="table-secondary">
+                                            <label class="text-nowrap">完了報告書<br />期日</label>
+                                        </td>
+                                        <td>
+                                            <BSInput InputType="InputType.Date" @bind-Value="this.inputModel.CMPREP_DEADLINE_DATE" style="width: stretch;" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-secondary">
+                                            <label class="text-nowrap">引渡し<br />報告書</label>
+                                        </td>
+                                        <td>
+                                            <BSInput InputType="InputType.Date" @bind-Value="this.inputModel.DLVREP_SUBMIT_DATE" style="width: 200px;" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            &emsp;
+                            <table class="table table-sm">
+                                <tbody>
+                                    <tr>
+                                        <td class="table-secondary" style="width: 150px">
+                                            @if ((this.readOnly) || (this.inputMode == Common.InputMode.Create))
+                                            {
+                                                <label class="text-nowrap">施工金額</label>
+                                            }
+                                            else
+                                            {
+                                                <div Class="@BS.Form_Check @BS.Form_Switch" style="text-align:left">
+                                                    <BSLabel IsCheckLabel="true">施工金額</BSLabel>
+                                                    <BSInputCheckbox CheckedValue="@("on")" @bind-Value="this.ValueKeeper.CNST_NET_PRICE_Flag"/>
+                                                </div>
+                                            }
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                                <span class="input-group-text">金　　額</span>
+                                                <input type="number" @bind-value="inputModel.CNST_NET_PRICE" style="width: 100px;" />
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-text">税　　額</span>
+                                                <p style="text-align: right; vertical-align: middle; width: 100px; "><span>&yen;@($"{this.inputModel.CALC_CNST_TAX_PRICE:###,0}")</span></p>
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-text">税込金額</span>
+                                                <p style="text-align: right; vertical-align: middle; width: 100px; "><span>&yen;@($"{this.inputModel.CALC_CNST_TOTAL_PRICE:###,0}")</span></p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-secondary" style="width: 150px">
+                                            @if ((this.readOnly) || (this.inputMode == Common.InputMode.Create))
+                                            {
+                                                <label class="text-nowrap">セットアップ<br />金額</label>
+                                            }
+                                            else
+                                            {
+                                                <div Class="@BS.Form_Check @BS.Form_Switch" style="text-align:left">
+                                                    <BSLabel IsCheckLabel="true">セットアップ<br />金額</BSLabel>
+                                                    <BSInputCheckbox CheckedValue="@("on")" @bind-Value="this.ValueKeeper.STUP_NET_PRICE_Flag"/>
+                                                </div>
+                                            }
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                                <span class="input-group-text">金　　額</span>
+                                                <input type="number" @bind-value="inputModel.STUP_NET_PRICE" style="width: 100px;" />
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-text">税　　額</span>
+                                                <p style="text-align: right; vertical-align: middle; width: 100px; "><span>&yen;@($"{this.inputModel.CALC_STUP_TAX_PRICE:###,0}")</span></p>
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-text">税込金額</span>
+                                                <p style="text-align: right; vertical-align: middle; width: 100px; "><span>&yen;@($"{this.inputModel.CALC_STUP_TOTAL_PRICE:###,0}")</span></p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-secondary" style="width: 150px">
+                                            <label class="text-nowrap"><strong>受注合計<br />金額</strong></label>
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                                <span class="input-group-text">金　　額</span>
+                                                <p style="text-align: right; vertical-align: middle; width: 100px; "><span><strong>&yen;@($"{(this.inputModel.CNST_NET_PRICE+this.inputModel.STUP_NET_PRICE):###,0}")</strong></span></p>
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-text">税　　額</span>
+                                                <p style="text-align: right; vertical-align: middle; width: 100px; "><span><strong>&yen;@($"{(this.inputModel.CALC_CNST_TAX_PRICE+this.inputModel.CALC_STUP_TAX_PRICE):###,0}")</strong></span></p>
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-text">税込金額</span>
+                                                <p style="text-align: right; vertical-align: middle; width: 100px; "><span><strong>&yen;@($"{(this.inputModel.CALC_CNST_TOTAL_PRICE+this.inputModel.CALC_STUP_TOTAL_PRICE):###,0}")</strong></span></p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr style="height: 5px"><td colspan="4"></td></tr>
+                                    <tr>
+                                        <td class="table-secondary">
+                                            <label class="text-nowrap">再発行日</label>
+                                        </td>
+                                        <td>
+                                            <BSInput InputType="InputType.Date" @bind-Value="this.inputModel.REV_ISSUE_DATE" style="width: stretch;" />
+                                        </td>
+                                        <td class="table-secondary">
+                                            <label class="text-nowrap">改訂番号</label>
+                                        </td>
+                                        <td>
+                                            <input type="number" @bind-value="this.inputModel.REV_NO" style="width: 100px;" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </TabContent>
+                </BSNavItem>
+                <BSNavItem IsDisabled="false">
+                    <TabLabel>取引先情報</TabLabel>
+                    <TabContent>
+                        <div style="display: flex; width: 1100px;">
+                            <table class="table table-sm">
+                                <tbody>
+                                    <tr>
+                                        <td class="table-secondary">
+                                            <label class="text-nowrap">見積依頼</label>
+                                        </td>
+                                        <td colspan="3">
+                                            <div class="input-group">
+                                                <span class="input-group-text" style="width:100px">依頼No.</span>
+                                                <div style="display: flex;">
+                                                    <BSInput InputType="InputType.Text" @bind-Value="this.inputModel.ESTREQ_NO_1" style="width: 100px" />
+                                                    <BSInput InputType="InputType.Text" @bind-Value="this.inputModel.ESTREQ_NO_2" style="width: 100px" />
+                                                </div>
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-text" style="width:100px">製造番号</span>
+                                                <div style="display: flex;">
+                                                    <BSInput InputType="InputType.Text" @bind-Value="this.inputModel.PRODUCT_NO" style="width: 200px" />
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-secondary">
+                                            <label class="text-nowrap">EDI<br />見積依頼</label>
+                                        </td>
+                                        <td colspan="3">
+                                            <div class="input-group">
+                                                <span class="input-group-text" style="width:100px">依頼日</span>
+                                                <BSInput InputType="InputType.Date" @bind-Value="this.inputModel.REQ_DATE" style="width: 200px;" />
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-text" style="width:100px">依頼No.</span>
+                                                <BSInput InputType="InputType.Text" @bind-Value="this.inputModel.REQ_NO" style="width: 200px" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-secondary">
+                                            <label class="text-nowrap">EDI<br />注文依頼</label>
+                                        </td>
+                                        <td colspan="3">
+                                            <div class="input-group">
+                                                <span class="input-group-text" style="width:100px">注文日</span>
+                                                <BSInput InputType="InputType.Date" @bind-Value="this.inputModel.ODR_DATE" style="width: 200px;" />
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-text" style="width:100px">注文No.</span>
+                                                <BSInput InputType="InputType.Text" @bind-Value="this.inputModel.ODR_NO" style="width: 200px" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            &emsp;
+                            <table class="table table-sm">
+                                <tbody>
+
+                                    <tr>
+                                        <td class="table-secondary">
+                                            <label class="text-nowrap">納品書<br />提出日</label>
+                                        </td>
+                                        <td>
+                                            <BSInput InputType="InputType.Date" @bind-Value="this.inputModel.DLV_SUBMIT_DATE" style="width: 200px;" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-secondary">
+                                            <label class="text-nowrap">納品書<br />期日</label>
+                                        </td>
+                                        <td>
+                                            <BSInput InputType="InputType.Date" @bind-Value="this.inputModel.DLV_DEADLINE_DATE" style="width: 200px;" />
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="table-secondary">
+                                            <label class="text-nowrap">検収日</label>
+                                        </td>
+                                        <td>
+                                            <BSInput InputType="InputType.Date" @bind-Value="this.inputModel.ACCEPT_DATE" style="width: 200px;" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-secondary">
+                                            <label class="text-nowrap">検収月</label>
+                                        </td>
+                                        <td>
+                                            <BSInput InputType="InputType.Month" @bind-Value="this.inputModel.ACCEPT_MONTH" style="width: 200px;" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-secondary">
+                                            <label class="text-nowrap">入金月</label>
+                                        </td>
+                                        <td>
+                                            <BSInput InputType="InputType.Month" @bind-Value="this.inputModel.PAYMENT_MONTH" style="width: 200px;" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-secondary">
+                                            <label class="text-nowrap">EDI回答<br />金額</label>
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                                <span class="input-group-text">金　　額</span>
+                                                <input type="number" @bind-value="this.inputModel.ANS_NET_PRICE" style="width: 100px;" />
+                                                <span style="width:10px"/>
+                                                <BSButton Color="BSColor.Secondary" style="font-size: small;" @onclick="() => this.AutoCalcANS_NET_PRICE(false)"><strong>値引無し</strong></BSButton>
+                                                <span style="width:10px"/>
+                                                <BSButton Color="BSColor.Secondary" style="font-size: small;" @onclick="() => this.AutoCalcANS_NET_PRICE(true)"><strong>値引有り</strong></BSButton>
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-text">税　　額</span>
+                                                <p style="text-align: right; vertical-align: middle; width: 100px; "><span>&yen;@($"{this.inputModel.CALC_ANS_TAX_PRICE:###,0}")</span></p>
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-text">税込金額</span>
+                                                <p style="text-align: right; vertical-align: middle; width: 100px; "><span>&yen;@($"{this.inputModel.CALC_ANS_TOTAL_PRICE:###,0}")</span></p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </TabContent>
+                </BSNavItem>
+                <BSNavItem IsDisabled="false">
+                    <TabLabel>協力会社</TabLabel>
+                    <TabContent>
+                        <div style="display: flex;">
+                            <table class="table table-sm">
+                                <tbody>
+                                    <tr>
+                                        <td class="table-secondary">
+                                            <label class="text-nowrap">施工</label>
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                                <span class="input-group-text">会社</span>
+                                                <select class="custom-select" id="inputAssociateID1" @bind="this.inputModel.ASSOCIATE_ID_1">
+                                                    @foreach (var item in this.selAssociate)
+                                                    {
+                                                        <option value="@item.Value">@item.Text</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-text">金　　額</span>
+                                                <input type="number" @bind-value="this.inputModel.NET_PRICE_1" style="width: 100px;" />
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-text">税　　額</span>
+                                                <p style="text-align: right; vertical-align: middle; width: 100px; "><span>&yen;@($"{this.inputModel.CALC_ASS1_TAX_PRICE:###,0}")</span></p>
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-text">税込金額</span>
+                                                <p style="text-align: right; vertical-align: middle; width: 100px; "><span>&yen;@($"{this.inputModel.CALC_ASS1_TOTAL_PRICE:###,0}")</span></p>
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-text">請求月</span>
+                                                <BSInput InputType="InputType.Month" @bind-Value="this.inputModel.PAYMENT_MONTH_1" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            &emsp;
+                            <table class="table table-sm">
+                                <tbody>
+                                    <tr>
+                                        <td class="table-secondary">
+                                            <label class="text-nowrap">セット<br />アップ</label>
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                                <span class="input-group-text">会社</span>
+                                                <select class="custom-select" id="inputAssociateID2" @bind="this.inputModel.ASSOCIATE_ID_2">
+                                                    @foreach (var item in this.selAssociate)
+                                                    {
+                                                        <option value="@item.Value">@item.Text</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-text">金　　額</span>
+                                                <input type="number" @bind-value="this.inputModel.NET_PRICE_2" style="width: 100px;" />
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-text">税　　額</span>
+                                                <p style="text-align: right; vertical-align: middle; width: 100px; "><span>&yen;@($"{inputModel.CALC_ASS2_TAX_PRICE:###,0}")</span></p>
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-text">税込金額</span>
+                                                <p style="text-align: right; vertical-align: middle; width: 100px; "><span>&yen;@($"{inputModel.CALC_ASS2_TOTAL_PRICE:###,0}")</span></p>
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-text">請求月</span>
+                                                <BSInput InputType="InputType.Month" @bind-Value="this.inputModel.PAYMENT_MONTH_2" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            &emsp;
+                            <table class="table table-sm">
+                                <tbody>
+                                    <tr>
+                                        <td class="table-secondary">
+                                            <label class="text-nowrap">その他</label>
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                                <span class="input-group-text">会社</span>
+                                                <select class="custom-select" id="inputAssociateID3" @bind="this.inputModel.ASSOCIATE_ID_3">
+                                                    @foreach (var item in this.selAssociate)
+                                                    {
+                                                        <option value="@item.Value">@item.Text</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-text">金　　額</span>
+                                                <input type="number" @bind-value="this.inputModel.NET_PRICE_3" style="width: 100px;" />
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-text">税　　額</span>
+                                                <p style="text-align: right; vertical-align: middle; width: 100px; "><span>&yen;@($"{this.inputModel.CALC_ASS3_TAX_PRICE:###,0}")</span></p>
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-text">税込金額</span>
+                                                <p style="text-align: right; vertical-align: middle; width: 100px; "><span>&yen;@($"{this.inputModel.CALC_ASS3_TOTAL_PRICE:###,0}")</span></p>
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-text">請求月</span>
+                                                <BSInput InputType="InputType.Month" @bind-Value="this.inputModel.PAYMENT_MONTH_3" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            &emsp;
+                        </div>
+                        <div style="display: flex;">
+                            <table class="table table-sm">
+                                <tbody>
+                                    <tr>
+                                        <td class="table-secondary">
+                                            <label class="text-nowrap"><strong>合計</strong></label>
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                                <span class="input-group-text">金　　額</span>
+                                                <p style="text-align: right; vertical-align: middle; width: 100px; "><span><strong>&yen;@($"{(this.inputModel.NET_PRICE_1+ this.inputModel.NET_PRICE_2+ this.inputModel.NET_PRICE_3):###,0}")</strong></span></p>
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-text">税　　額</span>
+                                                <p style="text-align: right; vertical-align: middle; width: 100px; "><span><strong>&yen;@($"{(this.inputModel.CALC_ASS1_TAX_PRICE+ this.inputModel.CALC_ASS2_TAX_PRICE+ this.inputModel.CALC_ASS3_TAX_PRICE):###,0}")</strong></span></p>
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-text">税込金額</span>
+                                                <p style="text-align: right; vertical-align: middle; width: 100px; "><span><strong>&yen;@($"{(this.inputModel.CALC_ASS1_TOTAL_PRICE+ this.inputModel.CALC_ASS2_TOTAL_PRICE+ this.inputModel.CALC_ASS3_TOTAL_PRICE):###,0}")</strong></span></p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </TabContent>
+                </BSNavItem>
+                <BSNavItem IsDisabled="false">
+                    <TabLabel>その他</TabLabel>
+                    <TabContent>
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr>
+                                    <td class="table-secondary">
+                                        <label class="text-nowrap">備考</label>
+                                    </td>
+                                    <td>
+                                        <BSInput InputType="InputType.Text" @bind-Value="this.inputModel.NOTE" style="width: stretch" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </TabContent>
+                </BSNavItem>
+                <BSNavItem IsDisabled="false">
+                    <TabLabel>管理／設定</TabLabel>
+                    <TabContent>
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr>
+                                    <td class="table-secondary" style="width: 80px;">
+                                        <label>税設定</label>
+                                    </td>
+                                    <td>
+                                        <div class="input-group">
+                                            <span class="input-group-text">消費税</span>
+                                            <input type="number" @bind-value="this.inputModel.TAX_RATE" style="width: 80px;" />％
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        @if ((this.loginInfo.USER_AUTHORITY.Exists(c => (c.ACCESS_FUNC_ID == this.ACCESS_FUNC_ID) && (c.ACCESS_ITEM_ID == this.ACCESS_ITEM_DELREC_ID))) && (this.readOnly == false))
+                        {
+                            <div align="right">
+                                <BSButton Color="BSColor.Danger" Size="Size.Large" @onclick="@(() => this.Delete_Click())">削　除</BSButton>
+                            </div>
+                        }
+                        else
+                        {
+                            <div align="right">
+                                <BSButton Color="BSColor.Danger" Size="Size.Large" @onclick="@(() => this.Delete_Click())" disabled >削　除</BSButton>
+                            </div>
+                        }
+                        <div style="align-content:center;">
+                        </div>
+                    </TabContent>
+                </BSNavItem>
+            </BSNav>
+        </div>
+        <hr />
+        @if (this.readOnly == false)
+        {
+            @*<BSButton Color="BSColor.Success" Size="Size.Large" type="submit">保存</BSButton>*@
+            <BSButton Color="BSColor.Success" Size="Size.Large"  @onclick="@(() => this.UpdateInput(0))">保存</BSButton>
+        }
+        &emsp;
+        <BSButton Color="BSColor.Warning" Size="Size.Large" @onclick="@(() => this.CloseEditor())">閉じる</BSButton>&emsp;&emsp;&emsp;
+        @if ((this.inputMode == Common.InputMode.Update) && (this.readOnly == false))
+        {
+            <BSButton Color="BSColor.Info" Size="Size.Large" @onclick="@(() => this.CreateFromCopy())">コピーして新規作成</BSButton>
+            <input type="number" @bind-value="this.CopyRecs" style="width: 80px;" /> <strong>件</strong>
+        }
+        &emsp;&emsp;&emsp;
+        @if(this.ExistNextRow())
+        {
+            <BSButton Color="BSColor.Danger" Size="Size.Large" @onclick="@(() => this.MoveEditRowNext())">前へ</BSButton>
+        }
+        &emsp;
+        @if(this.ExistPrevRow())
+        {
+            <BSButton Color="BSColor.Primary" Size="Size.Large" @onclick="@(() => this.MoveEditRowPrev())">次へ</BSButton>
+        }
+        @if (!string.IsNullOrEmpty(this.updateMessageText))
+        {
+            <div style="text-align: right">
+                <hr />
+                <span class="text-warning"><strong>@this.updateMessageText</strong></span>
+                @if (this.updateCanRetry)
+                {
+                    @if (this.inputMode == Common.InputMode.Create)
+                    {
+                        <table align="right">
+                            <tr>
+                                <td>
+                                    <span class="text-info"><strong>新たに受注番号を採番して新規作成しますか？　</strong></span>
+                                    <br />
+                                    <span class="text-danger"><strong>それともこの番号で上書きしますか？　</strong></span>
+                                </td>
+                                <td>
+                                    <BSButton Color="BSColor.Info" Size="Size.Large" @onclick="@(() => this.CreateFromCopy())">新たに採番して新規作成</BSButton><span>&emsp;</span>
+                                    <BSButton Color="BSColor.Danger" Size="Size.Large" @onclick="@(() => this.UpdateInput(forceWrite: 1))">この番号で上書更新</BSButton>
+                                </td>
+                            </tr>
+                        </table>
+                    }
+                    else if (this.inputMode == Common.InputMode.Update)
+                    {
+                        <br />
+                        <span class="text-danger"><strong>強制書込みしますか？　</strong></span>
+                        <BSButton Color="BSColor.Danger" Size="Size.Large" @onclick="@(() => this.UpdateInput(forceWrite: 1))">強制書込</BSButton>
+                    }
+                }
+            </div>
+        }
+    </EditForm>
+        <ConfirmBase @ref="DeleteConfirmation" ConfirmationChanged="this.DeleteOrder"
+                     ConfirmationTitle="✋　削除確認　✋"
+                     ConfirmationMessage=@($"この受注番号({this.EditingOrderNo})のデータを全て削除しても宜しいですか？")
+                     ButtonText="削　除">
+        </ConfirmBase>
+    </Content>
+</BSModal>
+@code {
+    [Inject]
+    private NavigationManager NavManager { get; set; }
+    private List<SelectorItem> selOrderStatus1 = new List<SelectorItem>();
+    private List<SelectorItem> selOrderStatus2 = new List<SelectorItem>();
+    private List<SelectorItem> selMonth = new List<SelectorItem>();
+    private List<SelectorItem> selOrderType = new List<SelectorItem>();
+    private List<SelectorItem> selOrderCategory = new List<SelectorItem>();
+    private List<SelectorItem> selStaff = new List<SelectorItem>();
+    private List<SelectorItem> selAssociate = new List<SelectorItem>();
+    private List<SelectorItem> selCustomer = new List<SelectorItem>();
+    private List<SelectorItem> lstViewParams = new List<SelectorItem>();
+    private int nowPage = 0;
+    private int displayRows = 10;
+    private int priceWidth = 6;
+    private int recordCount = 0;
+    private BSModal DataInput { get; set; }
+    private BSModal SearchInput { get; set; }
+    private string message = "";
+    private string updateMessageText = "";
+    private bool updateCanRetry = false;
+    private string URL = "";
+    private List<RecVV_ORDER_LIST_FOR_EXCEL_P1> allList = new List<RecVV_ORDER_LIST_FOR_EXCEL_P1>();
+    private List<RecVV_ORDER_LIST_FOR_EXCEL_P1> dspList = new List<RecVV_ORDER_LIST_FOR_EXCEL_P1>();
+    private RecVV_ORDER_LIST_FOR_EXCEL_P1 inputModel;
+    private RecVV_ORDER_LIST_FOR_SEARCH_P1 searchModel = new RecVV_ORDER_LIST_FOR_SEARCH_P1();
+    private Common.InputMode inputMode = Common.InputMode.Create;
+    private SetLOGON_USER_INFO loginInfo;
+    private int DefaultMaxRecs = 0;
+    private List<int> SortDirections = new List<int>() { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };    //50個
+    protected ConfirmBase DeleteConfirmation { get; set; }
+    private string EditingOrderNo => $"{this.inputModel.ODR_PERIOD}{this.inputModel.ODR_CATEGORY}{this.inputModel.ODR_MONTH}{this.inputModel.ODR_SEQ}";
+    private string ACCESS_FUNC_NAME = "受注一覧";
+    private string ACCESS_FUNC_ID = "OrderListForExcel";
+    private string ACCESS_ITEM_VWOPEN_ID = "ViewOpen";
+    private string ACCESS_ITEM_DELREC_ID = "DeleteOrderRecord";
+    private bool ShowSearchMessage = false;
+    private decimal DiscountRate = (decimal)0.96;
+    private int TaxRate = 10;
+    private Timer timer = null;
+    private DateTime nowTime = DateTime.Now;
+    private RecT_LOCK_MANAGE_EX1 LockInfo = new RecT_LOCK_MANAGE_EX1();
+    private bool readOnly = true;
+    private int CopyRecs = 1;
+    private ValueKeeperForOrderList ValueKeeper;
+
+    private void CloseEditor()
+    {
+        this.ValueKeeper.SetAllFlags(false);
+        this.DataInput.HideAsync();
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        if (Common.LOGIN_STAFF_ID == null)
+        {
+            this.NavManager.NavigateTo("UserLogin");
+            return;
+        }
+        //this.InitializeSortInfo();
+        this.loginInfo = await Http.GetFromJsonAsync<SetLOGON_USER_INFO>($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_LoginUserInfo/{Common.LOGIN_STAFF_ID}");
+        if (!this.loginInfo.USER_AUTHORITY.Exists(c => (c.ACCESS_FUNC_ID == this.ACCESS_FUNC_ID) && (c.ACCESS_ITEM_ID == this.ACCESS_ITEM_VWOPEN_ID)))
+        {
+            this.NavManager.NavigateTo($"ViewOpenDenied/{this.ACCESS_FUNC_NAME}");
+            return;
+        }
+        this.lstViewParams = await Http.GetFromJsonAsync<List<SelectorItem>>($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_T_PROGRAM_Parameters1/VIEW_ORDERLIST");
+        this.DiscountRate = decimal.Parse((await Http.GetFromJsonAsync<List<SelectorItem>>($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_T_PROGRAM_Parameters1/DISCOUNT_RATE/1")).First().Text);
+        this.displayRows = await this.GetDisplayRows();
+        this.TaxRate = int.Parse((await Http.GetFromJsonAsync<List<SelectorItem>>($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_T_PROGRAM_Parameters1/TAX_RATE/1")).First().Text);
+        this.selStaff = await Http.GetFromJsonAsync<List<SelectorItem>>($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_T_STAFF_Selector1");
+        this.selStaff.Insert(0, new SelectorItem() { Text = "", Value = null });
+        this.selAssociate = await Http.GetFromJsonAsync<List<SelectorItem>>($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_T_ASSOCIATE_Selector1");
+        this.selAssociate.Insert(0, new SelectorItem() { Text = "", Value = null });
+        this.selCustomer = await Http.GetFromJsonAsync<List<SelectorItem>>($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_T_CUSTOMER_Selector1");
+        this.selCustomer.Insert(0, new SelectorItem() { Text = "", Value = null });
+        this.selOrderStatus1 = await Http.GetFromJsonAsync<List<SelectorItem>>($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_ListOrderStatus_Selector1");
+        this.selOrderStatus1.Insert(0, new SelectorItem() { Text = "", Value = null });
+        this.selOrderStatus2 = await Http.GetFromJsonAsync<List<SelectorItem>>($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_ListOrderStatus_Selector1");
+        //this.selOrderStatus2.Insert(0, new SelectorItem() { Text = "", Value = null });
+        this.selMonth = await Http.GetFromJsonAsync<List<SelectorItem>>($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_ListMonth_Selector1");
+        this.selMonth.Insert(0, new SelectorItem() { Text = "", Value = null });
+        this.selOrderType = await Http.GetFromJsonAsync<List<SelectorItem>>($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_ListOrderType_Selector1");
+        this.selOrderType.Insert(0, new SelectorItem() { Text = "", Value = null });
+        this.selOrderCategory = await Http.GetFromJsonAsync<List<SelectorItem>>($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_ListOrderCategory_Selector1");
+        this.selOrderCategory.Insert(0, new SelectorItem() { Text = "", Value = null });
+        string work = this.lstViewParams.Where(c => c.Value == "MAX_RECS").Select(c => c.Text).FirstOrDefault();
+        this.DefaultMaxRecs = (work == null) ? 1000 : int.Parse(work);
+        this.timer = new Timer();
+        this.timer.Elapsed +=  this.OnTimerEvent;
+        this.timer.AutoReset = true;
+        this.timer.Interval = 1;
+        this.timer.Enabled = true;
+        this.ValueKeeper = new ValueKeeperForOrderList();
+        await this.LoadDataAsync();
+    }
+    private void OnTimerEvent(object source, ElapsedEventArgs e)
+    {
+        try
+        {
+            this.timer.Enabled = false;
+            this.UpdateLockStatus();
+        }
+        catch(Exception ex)
+        {
+            var m = ex.Message;
+        }
+        finally
+        {
+            this.timer.Interval = 1000;
+            this.timer.Enabled = true;
+        }
+    }
+    private async Task UpdateLockStatus()
+    {
+        var url = $"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_GET_T_LOCK_MANAGE/{this.ACCESS_FUNC_ID}";
+        this.LockInfo = await Http.GetFromJsonAsync<RecT_LOCK_MANAGE_EX1>(url);
+        if(this.LockInfo.USER_ID == Common.LOGIN_STAFF_ID)
+        {
+            this.readOnly = false;
+        }
+        else
+        {
+            this.readOnly = true;
+        }
+        this.StateHasChanged();
+    }
+    private void LockOrderList()
+    {
+        try
+        {
+            var url = $"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_LOCK_T_LOCK_MANAGE/{this.ACCESS_FUNC_ID}/{Common.LOGIN_STAFF_ID}/NA";
+            var result = Http.GetFromJsonAsync<RecLOCK_MANAGE_RESULT>(url).GetAwaiter().GetResult();
+            this.UpdateLockStatus();
+        }
+        catch(Exception ex)
+        {
+            var m = ex.Message;
+        }
+    }
+    private void UnlockOrderList()
+    {
+        try
+        {
+            var url = $"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_UNLOCK_T_LOCK_MANAGE/{this.ACCESS_FUNC_ID}/{Common.LOGIN_STAFF_ID}";
+            var result = Http.GetFromJsonAsync<RecLOCK_MANAGE_RESULT>(url).GetAwaiter().GetResult();
+            this.UpdateLockStatus();
+        }
+        catch(Exception ex)
+        {
+            var m = ex.Message;
+        }
+    }
+    private async Task<int>GetDisplayRows()
+    {
+        int res = 10;
+        try
+        {
+            res = int.Parse((await Http.GetFromJsonAsync<List<SelectorItem>>($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_T_PROGRAM_Parameters1/ORDER_LIST/DISPLAY_ROWS/-/DEFAULT")).First().Text);
+            res = int.Parse((await Http.GetFromJsonAsync<List<SelectorItem>>($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_T_PROGRAM_Parameters1/ORDER_LIST/DISPLAY_ROWS/-/{this.loginInfo.USER_PRIMARY_INFO.STAFF_ID}")).First().Text);
+        }
+        catch { }
+        return res;
+    }
+    private bool ExistNextRow() 
+    {
+        var targetIndex = this.allList.FindIndex(c => (c.ODR_PERIOD == this.inputModel.ODR_PERIOD) && (c.ODR_CATEGORY == this.inputModel.ODR_CATEGORY) && (c.ODR_MONTH == this.inputModel.ODR_MONTH) && (c.ODR_SEQ == this.inputModel.ODR_SEQ));
+        return ((targetIndex >= 0) && (targetIndex < (this.allList.Count - 1)));
+    }
+    private bool ExistPrevRow()
+    {
+        var targetIndex = this.allList.FindIndex(c => (c.ODR_PERIOD == this.inputModel.ODR_PERIOD) && (c.ODR_CATEGORY == this.inputModel.ODR_CATEGORY) && (c.ODR_MONTH == this.inputModel.ODR_MONTH) && (c.ODR_SEQ == this.inputModel.ODR_SEQ));
+        return ((targetIndex > 0) && (targetIndex <= (this.allList.Count - 1)));
+    }
+    private async void MoveEditRowNext()
+    {
+        this.ValueKeeper.SaveKeepItemValue(this.inputModel);
+        var targetIndex = this.allList.FindIndex(c => (c.ODR_PERIOD == this.inputModel.ODR_PERIOD) && (c.ODR_CATEGORY == this.inputModel.ODR_CATEGORY) && (c.ODR_MONTH == this.inputModel.ODR_MONTH) && (c.ODR_SEQ == this.inputModel.ODR_SEQ));
+        if((targetIndex >= 0) && (targetIndex < (this.allList.Count-1)))
+        {
+            this.inputModel = this.allList[targetIndex+1].Copy();
+        }
+        await this.DataInput.HideAsync();   //編集画面を閉じる
+        this.DispListPageAsyncEdit();
+        this.inputMode = Common.InputMode.Update;
+        await this.DataInput.ShowAsync();
+        this.ValueKeeper.LoadKeepItemValue(this.inputModel);
+    }
+    private async void MoveEditRowPrev()
+    {
+        this.ValueKeeper.SaveKeepItemValue(this.inputModel);
+        var targetIndex = this.allList.FindIndex(c => (c.ODR_PERIOD == this.inputModel.ODR_PERIOD) && (c.ODR_CATEGORY == this.inputModel.ODR_CATEGORY) && (c.ODR_MONTH == this.inputModel.ODR_MONTH) && (c.ODR_SEQ == this.inputModel.ODR_SEQ));
+        if((targetIndex > 0) && (targetIndex <= (this.allList.Count-1)))
+        {
+            this.inputModel = this.allList[targetIndex-1].Copy();
+        }
+        await this.DataInput.HideAsync();   //編集画面を閉じる
+        this.DispListPageAsyncEdit();
+        this.inputMode = Common.InputMode.Update;
+        await this.DataInput.ShowAsync();
+        this.ValueKeeper.LoadKeepItemValue(this.inputModel);
+    }
+    private void ClearSearchInput()
+    {
+        this.searchModel.ODR_PERIOD = null;
+        this.searchModel.ODR_CATEGORY = null;
+        this.searchModel.ODR_MONTH = null;
+        this.searchModel.ODR_SEQ = null;
+        this.searchModel.CUSTOMER_NAME = null;
+        this.searchModel.CUSTOMER_ID = null;
+        this.searchModel.ODR_NAME = null;
+        this.searchModel.STATUS = null;
+        this.searchModel.TYPE = null;
+        this.searchModel.CNST_MANAGER_ID = null;
+        this.StateHasChanged();
+    }
+    private void AutoCalcANS_NET_PRICE(bool discount)
+    {
+        this.inputModel.ANS_NET_PRICE = (int)Math.Round((double)((this.inputModel.CNST_NET_PRICE + this.inputModel.STUP_NET_PRICE) * (discount ? this.DiscountRate : 1)), MidpointRounding.AwayFromZero);
+    }
+    private void CUSTOMER_ID_Changed(ChangeEventArgs selectEvent)
+    {
+        try
+        {
+            this.inputModel.CUSTOMER_ID = int.Parse(selectEvent.Value.ToString());
+            this.inputModel.CUSTOMER_NAME = this.selCustomer.Where(c => c.Value == this.inputModel.CUSTOMER_ID.ToString()).FirstOrDefault()?.Text ?? "";
+        }
+        catch 
+        {
+            this.inputModel.CUSTOMER_NAME = "";
+        }
+    }
+    private void Delete_Click()
+    {
+        this.DeleteConfirmation.Show();
+    }
+    private async Task CreateFromCopy()
+    {
+        this.updateCanRetry = false;
+        this.updateMessageText = "";
+        this.inputModel.UPD_USER = Common.LOGIN_STAFF_ID;
+        await DataInput.HideAsync();
+        this.inputMode = Common.InputMode.Update;
+        await this.SetCopyOrderNoItems();
+        await DataInput.ShowAsync();
+    }
+    protected async Task ReloadCustomerList()
+    {
+        this.selCustomer = await Http.GetFromJsonAsync<List<SelectorItem>>($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_T_CUSTOMER_Selector1");
+        this.selCustomer.Insert(0, new SelectorItem() { Text = "", Value = null });
+    }
+    private string DataInput_HeaderTitle => (this.inputMode == Common.InputMode.Create) ? "受注データ入力(新規)" : "受注データ入力(編集)";
+    private string SearchInput_HeaderTitle => "受注データ検索条件指定";
+    //private void AutoJudgeForOrderType()
+    //{
+    //    if ((this.inputModel.CNST_NET_PRICE > 0) && (this.inputModel.STUP_NET_PRICE > 0))
+    //    {
+    //        this.inputModel.TYPE = 1;
+    //    }
+    //    else if (this.inputModel.CNST_NET_PRICE > 0)
+    //    {
+    //        this.inputModel.TYPE = 2;
+    //    }
+    //    else if (this.inputModel.STUP_NET_PRICE > 0)
+    //    {
+    //        this.inputModel.TYPE = 3;
+    //    }
+    //    else
+    //    {
+    //        this.inputModel.TYPE = 4;
+    //    }
+    //}
+    private string DisplayRowWindow()
+    {
+        if (((this.nowPage * this.displayRows) + this.displayRows) < this.allList.Count)
+        {
+            return $"{(this.nowPage * this.displayRows) + 1}件 〜 {(this.nowPage * this.displayRows) + this.displayRows}件表示";
+        }
+        else
+        {
+            return $"{(this.nowPage * this.displayRows) + 1}件 〜 {this.allList.Count}件表示";
+        }
+    }
+    private int NowPage
+    {
+        get { return this.nowPage + 1; }
+        set
+        {
+            this.nowPage = value - 1;
+            this.DispPageAsync();
+        }
+    }
+    private void FirstPageAsync()
+    {
+        try
+        {
+            this.message = "Please wait...";
+            this.nowPage = 0;
+            this.dspList = this.allList.Skip(this.nowPage * this.displayRows).Take(this.displayRows).ToList();
+            message = "";
+        }
+        catch (Exception ex)
+        {
+            this.message = ex.Message;
+        }
+        finally
+        {
+            this.StateHasChanged();
+        }
+    }
+    private void LastPageAsync()
+    {
+        try
+        {
+            this.message = "Please wait...";
+            int maxPage = this.GetMaxPage();
+            this.nowPage = maxPage;
+            this.dspList = this.allList.Skip(this.nowPage * this.displayRows).Take(this.displayRows).ToList();
+            message = "";
+        }
+        catch (Exception ex)
+        {
+            this.message = ex.Message;
+        }
+        finally
+        {
+            this.StateHasChanged();
+        }
+    }
+    private void DispListPageAsyncEdit()
+    {
+        var targetIndex = this.allList.FindIndex(c => (c.ODR_PERIOD == this.inputModel.ODR_PERIOD) && (c.ODR_CATEGORY == this.inputModel.ODR_CATEGORY) && (c.ODR_MONTH == this.inputModel.ODR_MONTH) && (c.ODR_SEQ == this.inputModel.ODR_SEQ));
+        this.DispPageAsync(targetIndex / this.displayRows);
+    }
+    private void DispPageAsync(int? page = null)
+    {
+        try
+        {
+            this.message = "Please wait...";
+            int maxPage = this.GetMaxPage();
+            if ((page == null) || ((page >= 0) && (page <= maxPage)))
+            {
+                this.nowPage = page ?? this.nowPage;
+            }
+            this.dspList = this.allList.Skip(this.nowPage * this.displayRows).Take(this.displayRows).ToList();
+            message = "";
+        }
+        catch (Exception ex)
+        {
+            this.message = ex.Message;
+        }
+        finally
+        {
+            this.StateHasChanged();
+        }
+    }
+    private int GetMaxPage()
+    {
+        int maxPage = (int)Math.Floor((decimal)this.allList.Count / (decimal)this.displayRows);
+        maxPage = ((this.allList.Count % this.displayRows) > 0) ? maxPage + 1 : maxPage;
+        maxPage = (maxPage > 0) ? maxPage - 1 : 0;
+        return maxPage;
+    }
+    private void NextPageAsync()
+    {
+        try
+        {
+            this.message = "Please wait...";
+            int maxPage = this.GetMaxPage();
+            if (this.nowPage < maxPage) this.nowPage++;
+            this.dspList = this.allList.Skip(this.nowPage * this.displayRows).Take(this.displayRows).ToList();
+            message = "";
+        }
+        catch (Exception ex)
+        {
+            this.message = ex.Message;
+        }
+        finally
+        {
+            this.StateHasChanged();
+        }
+    }
+    private void PrevPageAsync()
+    {
+        try
+        {
+            this.message = "Please wait...";
+            if (this.nowPage > 0) this.nowPage--;
+            this.dspList = this.allList.Skip(this.nowPage * this.displayRows).Take(this.displayRows).ToList();
+            message = "";
+        }
+        catch (Exception ex)
+        {
+            this.message = ex.Message;
+        }
+        finally
+        {
+            this.StateHasChanged();
+        }
+    }
+    private async Task LoadDataAsync()
+    {
+        try
+        {
+            this.message = "Please wait...";
+            this.nowPage = 0;
+            this.allList.Clear();
+            this.dspList.Clear();
+            this.URL = $"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_OrderList_ForLegacyExcel";
+            this.allList = await Http.GetFromJsonAsync<List<RecVV_ORDER_LIST_FOR_EXCEL_P1>>(this.URL);
+            this.dspList = this.allList.Skip(this.nowPage * this.displayRows).Take(this.displayRows).ToList();
+            this.recordCount = allList.Count;
+            message = "";
+        }
+        catch (Exception ex)
+        {
+            this.message = ex.Message;
+        }
+        finally
+        {
+            this.StateHasChanged();
+        }
+    }
+    private async Task SetNewOrderNoItems()
+    {
+        var newItem = new RecVV_ORDER_LIST_FOR_EXCEL_P1();
+        var url = $"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_NextOrderNoItems";
+        var items = await Http.GetFromJsonAsync<List<SelectorItem>>(url);
+        //↓ほぼ引き継いでいた時のロジック
+        //this.inputModel.ODR_PERIOD = int.Parse(items.Where(c => c.Text == "ODR_PERIOD").FirstOrDefault()?.Value ?? "0");
+        //this.inputModel.ODR_MONTH = $"{DateTime.Now.Month:00}";
+        //this.inputModel.ODR_SEQ = int.Parse(items.Where(c => c.Text == "ODR_SEQ").FirstOrDefault()?.Value ?? "0");
+        //this.inputModel.STATUS = 0;
+        //this.inputModel.ODR_NO = null;
+        //this.inputModel.DLV_SUBMIT_DATE = null;
+        //↓ほぼ引き継がない（引き継ぐものだけを引き継いでいる）
+        newItem.ODR_PERIOD = int.Parse(items.Where(c => c.Text == "ODR_PERIOD").FirstOrDefault()?.Value ?? "0");
+        newItem.ODR_CATEGORY = this.inputModel.ODR_CATEGORY;
+        newItem.ODR_MONTH = $"{DateTime.Now.Month:00}";
+        newItem.ODR_SEQ = int.Parse(items.Where(c => c.Text == "ODR_SEQ").FirstOrDefault()?.Value ?? "0");
+        newItem.ODR_NAME = this.inputModel.ODR_NAME;
+        newItem.CUSTOMER_ID = this.inputModel.CUSTOMER_ID;
+        newItem.CUSTOMER_NAME = this.inputModel.CUSTOMER_NAME;
+        newItem.EST_ISSUE_DATE = this.inputModel.EST_ISSUE_DATE;
+        newItem.CNST_START_DATE = this.inputModel.CNST_START_DATE;
+        newItem.CNST_END_DATE = this.inputModel.CNST_END_DATE;
+        newItem.ANS_NET_PRICE = this.inputModel.ANS_NET_PRICE;
+        this.inputModel = newItem;
+    }
+    private async Task SetCopyOrderNoItems()
+    {
+        if(this.CopyRecs < 1) this.CopyRecs = 1;
+        RecVV_ORDER_LIST_FOR_EXCEL_P1 firstItem = null;
+        for(var i = 0; i < this.CopyRecs; i++)
+        {
+            var newItem = new RecVV_ORDER_LIST_FOR_EXCEL_P1();
+            var url = $"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_NextOrderNoItems";
+            var items = await Http.GetFromJsonAsync<List<SelectorItem>>(url);  //.GetAwaiter().GetResult();
+            newItem.ODR_PERIOD = int.Parse(items.Where(c => c.Text == "ODR_PERIOD").FirstOrDefault()?.Value ?? "0");
+            newItem.ODR_CATEGORY = this.inputModel.ODR_CATEGORY;
+            newItem.ODR_MONTH = $"{DateTime.Now.Month:00}";
+            newItem.ODR_SEQ = int.Parse(items.Where(c => c.Text == "ODR_SEQ").FirstOrDefault()?.Value ?? "0");
+            newItem.ODR_NAME = this.inputModel.ODR_NAME;
+            newItem.CUSTOMER_ID = this.inputModel.CUSTOMER_ID;
+            newItem.CUSTOMER_NAME = this.inputModel.CUSTOMER_NAME;
+            newItem.EST_ISSUE_DATE = this.inputModel.EST_ISSUE_DATE;
+            newItem.CNST_START_DATE = this.inputModel.CNST_START_DATE;
+            newItem.CNST_END_DATE = this.inputModel.CNST_END_DATE;
+            newItem.ANS_NET_PRICE = this.inputModel.ANS_NET_PRICE;
+            if(firstItem == null)
+            {
+                firstItem = newItem;
+            }
+            var URL = $"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Import_OrderList_ForAppEdit1/0/0";
+            var jsonString = JsonConvert.SerializeObject(new List<RecVV_ORDER_LIST_FOR_EXCEL_P1>() { newItem });
+            var content = new StringContent(jsonString, Encoding.UTF8, @"application/json");
+            var response = await Http.PostAsync(URL, content);
+        }
+        this.inputModel = firstItem;
+        await this.LoadDataAsync();
+        this.DispListPageAsyncEdit();
+    }
+    private async Task OnSelected(RecVV_ORDER_LIST_FOR_EXCEL_P1 item = null)
+    {
+        this.updateMessageText = string.Empty;
+        if (item == null)
+        {
+            this.inputMode = Common.InputMode.Create;
+            this.inputModel = new RecVV_ORDER_LIST_FOR_EXCEL_P1(this.TaxRate);
+            await this.SetNewOrderNoItems();
+        }
+        else
+        {
+            this.inputMode = Common.InputMode.Update;
+            this.inputModel = item.Copy();
+        }
+        await DataInput.ShowAsync();
+    }
+    private async Task OnSearch()
+    {
+        await SearchInput.ShowAsync();
+    }
+    private async Task UpdateInput(int forceWrite = 0)
+    {
+        try
+        {
+            this.updateMessageText = "";
+            this.updateCanRetry = false;
+            this.inputModel.UPD_USER = Common.LOGIN_STAFF_ID;
+            //var URL = $"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Import_OrderList_ForAppEdit1/{((this.inputMode == Common.InputMode.Create) ? "Create" : "Update")}";
+            var URL = $"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Import_OrderList_ForAppEdit1/{((this.inputMode == Common.InputMode.Create) ? 0 : 1)}/{forceWrite}";
+            var jsonString = JsonConvert.SerializeObject(new List<RecVV_ORDER_LIST_FOR_EXCEL_P1>() { this.inputModel });
+            var content = new StringContent(jsonString, Encoding.UTF8, @"application/json");
+            using (var response = await Http.PostAsync(URL, content))
+            {
+                if (response.IsSuccessStatusCode == true)
+                {
+                    var page = this.nowPage;
+                    await this.LoadDataAsync();
+                    //this.DispPageAsync((this.inputMode == Common.InputMode.Create) ? this.GetMaxPage() : page);
+                    this.DispPageAsync(page);
+                    await this.DataInput.HideAsync();   //編集画面を閉じる
+                    var targetIndex = this.allList.FindIndex(c => (c.ODR_PERIOD == this.inputModel.ODR_PERIOD) && (c.ODR_CATEGORY == this.inputModel.ODR_CATEGORY) && (c.ODR_MONTH == this.inputModel.ODR_MONTH) && (c.ODR_SEQ == this.inputModel.ODR_SEQ));
+                    if(targetIndex >= 0)
+                    {
+                        this.inputModel = this.allList[targetIndex].Copy();
+                    }
+                    this.DispListPageAsyncEdit();
+                    this.inputMode = Common.InputMode.Update;
+                    await this.DataInput.ShowAsync();
+                }
+                else
+                {
+                    this.updateMessageText = await response.Content.ReadAsStringAsync();
+                }
+            }
+            await this.ReloadCustomerList();
+        }
+        catch (Exception ex)
+        {
+            this.updateMessageText = ex.Message;
+        }
+        finally
+        {
+            if (this.updateMessageText.Contains(Common.RESULT_OPTION_CANRETRY))
+            {
+                this.updateCanRetry = true;
+                this.updateMessageText = this.updateMessageText.Replace(Common.RESULT_OPTION_CANRETRY, "");
+            }
+        }
+    }
+    private async Task SearchExecute()
+    {
+        try
+        {
+            this.message = "Please wait...";
+            this.ShowSearchMessage = true;
+            this.nowPage = 0;
+            this.allList.Clear();
+            this.dspList.Clear();
+            var sb = new StringBuilder($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_OrderList_ForLegacyExcel/Search");
+            sb.Append($"/{this.searchModel.ODR_PERIOD?.ToString() ?? Common.ROUTE_PARAM_NULL}");
+            sb.Append($"/{(string.IsNullOrEmpty(this.searchModel.ODR_CATEGORY) ? null : this.searchModel.ODR_CATEGORY)?.ToString() ?? Common.ROUTE_PARAM_NULL}");
+            sb.Append($"/{(string.IsNullOrEmpty(this.searchModel.ODR_MONTH) ? null : this.searchModel.ODR_MONTH)?.ToString() ?? Common.ROUTE_PARAM_NULL}");
+            sb.Append($"/{this.searchModel.ODR_SEQ?.ToString() ?? Common.ROUTE_PARAM_NULL}");
+            sb.Append($"/{this.searchModel.STATUS?.ToString() ?? Common.ROUTE_PARAM_NULL}");
+            sb.Append($"/{(string.IsNullOrEmpty(this.searchModel.CNST_MANAGER_ID) ? null : this.searchModel.CNST_MANAGER_ID)?.ToString() ?? Common.ROUTE_PARAM_NULL}");
+            sb.Append($"/{(string.IsNullOrEmpty(this.searchModel.CUSTOMER_NAME) ? null : this.searchModel.CUSTOMER_NAME)?.ToString() ?? Common.ROUTE_PARAM_NULL}");
+            sb.Append($"/{(string.IsNullOrEmpty(this.searchModel.ODR_NAME) ? null : this.searchModel.ODR_NAME)?.ToString() ?? Common.ROUTE_PARAM_NULL}");
+            this.URL = sb.ToString();
+            this.allList = await Http.GetFromJsonAsync<List<RecVV_ORDER_LIST_FOR_EXCEL_P1>>(this.URL);
+            this.dspList = this.allList.Skip(this.nowPage * this.displayRows).Take(this.displayRows).ToList();
+            this.recordCount = allList.Count;
+            message = "";
+        }
+        catch (Exception ex)
+        {
+            this.message = ex.Message;
+        }
+        finally
+        {
+            this.StateHasChanged();
+        }
+        try
+        {
+            await this.SearchInput.HideAsync();
+            this.FirstPageAsync();
+        }
+        finally
+        {
+            this.ShowSearchMessage = false;
+        }
+    }
+    private async Task DeleteLatestRecord()
+    {
+        var targODR_PERIOD = this.allList.Max(c => c.ODR_PERIOD);
+        var targODR_SEQ = this.allList.Where(c => c.ODR_PERIOD == targODR_PERIOD).Max(c => c.ODR_SEQ);
+        var targRec = this.allList.Where(c => (c.ODR_PERIOD == targODR_PERIOD) && (c.ODR_SEQ == targODR_SEQ)).First();
+        this.inputModel = targRec;
+        var msg = $"\n\n\n受注番号:{this.inputModel.ODR_PERIOD:00}-{this.inputModel.ODR_CATEGORY}-{this.inputModel.ODR_MONTH}-{this.inputModel.ODR_SEQ:0000}のデータを削除します。\n\n\n　☢✋　削除するとデータは元には戻せません　✋☢　";
+        bool confirmed = await JSRuntime.InvokeAsync<bool>("confirm", msg);
+        if (confirmed)
+        {
+            var URL = $"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Delete_OrderItem_ForApp1/Delete/{this.inputModel.ODR_PERIOD}/{this.inputModel.ODR_CATEGORY}/{this.inputModel.ODR_MONTH}/{this.inputModel.ODR_SEQ}";
+            using (var response = await Http.DeleteAsync(URL))
+            {
+                if (response.IsSuccessStatusCode == false)
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+            await this.LoadDataAsync();
+        }
+    }
+    private async Task DeleteOrder(bool execute = true)
+    {
+        if (execute == false) return;
+        var msg = $"\n\n\n受注番号:{this.inputModel.ODR_PERIOD:00}-{this.inputModel.ODR_CATEGORY}-{this.inputModel.ODR_MONTH}-{this.inputModel.ODR_SEQ:0000}のデータを削除します。\n\n\n　☢✋　削除するとデータは元には戻せません　✋☢　";
+        bool confirmed = await JSRuntime.InvokeAsync<bool>("confirm", msg);
+        if (confirmed)
+        {
+            var URL = $"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Delete_OrderItem_ForApp1/Delete/{this.inputModel.ODR_PERIOD}/{this.inputModel.ODR_CATEGORY}/{this.inputModel.ODR_MONTH}/{this.inputModel.ODR_SEQ}";
+            using (var response = await Http.DeleteAsync(URL))
+            {
+                if (response.IsSuccessStatusCode == false)
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+            var page = this.nowPage;
+            await this.DataInput.HideAsync();
+            await this.LoadDataAsync();
+            this.DispPageAsync(page);
+        }
+    }
+    private void InitializeSortInfo()
+    {
+        this.SortDirections.Clear();
+        for (var i = 0; i < 50; i++) this.SortDirections.Add(0);
+    }
+            /*
+            <tr class="border-dark">
+        <th rowspan="2" class="table-secondary" @onclick="() => this.SortByColumn(0)">状態<SortMark Value="@this.SortDirections[0]" /></th>
+        <th rowspan="1" class="table-secondary">納品書</th>
+    <th class="table-secondary text-nowrap"><span @onclick="() => this.SortByColumn(1)">提出日<SortMark Value="@this.SortDirections[1]" /></span><br /><span @onclick="() => this.SortByColumn(2)">期日<SortMark Value="@this.SortDirections[2]" /></span></th>
+    <th rowspan="2" class="table-secondary text-nowrap" @onclick="() => this.SortByColumn(3)">引渡<SortMark Value="@this.SortDirections[3]" /><br />報告書</th>
+    <th colspan="1" class="table-secondary text-nowrap">完了<br />報告書</th>
+    <th class="table-secondary text-nowrap"><span @onclick="() => this.SortByColumn(4)">発行日<SortMark Value="@this.SortDirections[4]" /></span><br /><span @onclick="() => this.SortByColumn(5)">期日<SortMark Value="@this.SortDirections[5]" /></span></th>
+    <th colspan="1" class="table-secondary text-nowrap">完了<br />メール</th>
+    <th class="table-secondary text-nowrap"><span @onclick="() => this.SortByColumn(6)">配信日<SortMark Value="@this.SortDirections[6]" /></span><br /><span @onclick="() => this.SortByColumn(7)">期日<SortMark Value="@this.SortDirections[7]" /></span></th>
+    <th rowspan="2" class="table-secondary text-nowrap" @onclick="() => this.SortByColumn(8)">施工<SortMark Value="@this.SortDirections[8]" /><br />管理者</th>
+    <th rowspan="2" class="table-secondary text-nowrap">最終更新<br /><span @onclick="() => this.SortByColumn(9)">入力者<SortMark Value="@this.SortDirections[9]" /></span><br /><span @onclick="() => this.SortByColumn(10)">日時<SortMark Value="@this.SortDirections[10]" /></span></th>
+    <th rowspan="2" class="table-primary" @onclick="() => this.SortByColumn(11)">種類<SortMark Value="@this.SortDirections[11]" /></th>
+    <th colspan="2" class="table-primary" @onclick="() => this.SortByColumn(12)">改訂履歴<SortMark Value="@this.SortDirections[12]" /></th>
+    <th class="table-primary text-nowrap">再発行日</th>
+    <th class="table-primary text-nowrap">改訂</th>
+    <th rowspan="2" class="table-primary" @onclick="() => this.SortByColumn(13)">発行日<SortMark Value="@this.SortDirections[13]" /></th>
+    <th colspan="4" class="table-primary" @onclick="() => this.SortByColumn(14)">受注番号<SortMark Value="@this.SortDirections[14]" /></th>
+    <th class="table-primary" @onclick="() => this.SortByColumn(15)">期<br /><SortMark Value="@this.SortDirections[15]" /></th>
+    <th class="table-primary" @onclick="() => this.SortByColumn(16)">種<br /><SortMark Value="@this.SortDirections[16]" /></th>
+    <th class="table-primary" @onclick="() => this.SortByColumn(17)">月<br /><SortMark Value="@this.SortDirections[17]" /></th>
+    <th class="table-primary" @onclick="() => this.SortByColumn(18)">連番<br /><SortMark Value="@this.SortDirections[18]" /></th>
+    @*<th rowspan="2" class="table-primary">納品先</th>*@
+    @*<th rowspan="2" class="table-primary">工事名称</th>*@
+    <th colspan="2" class="table-primary" @onclick="() => this.SortByColumn(21)">受注合計金額<SortMark Value="@this.SortDirections[21]" /></th>
+    <th class="table-primary">金額</th>
+    <th class="table-primary">税込</th>
+    <th colspan="2" class="table-primary" @onclick="() => this.SortByColumn(22)">施工金額<SortMark Value="@this.SortDirections[22]" /></th>
+    <th class="table-primary">金額</th>
+    <th class="table-primary">税込</th>
+    <th colspan="2" class="table-primary" @onclick="() => this.SortByColumn(23)">セットアップ金額<SortMark Value="@this.SortDirections[23]" /></th>
+    <th class="table-primary">金額</th>
+    <th class="table-primary">税込</th>
+    <th colspan="3" class="table-primary">工事期間</th>
+    <th class="table-primary" @onclick="() => this.SortByColumn(24)">自<SortMark Value="@this.SortDirections[24]" /></th>
+    <th class="table-primary" @onclick="() => this.SortByColumn(25)">至<SortMark Value="@this.SortDirections[25]" /></th>
+    <th class="table-primary" @onclick="() => this.SortByColumn(26)">OP<SortMark Value="@this.SortDirections[26]" /></th>
+    <th colspan="2" class="table-success">見積依頼</th>
+    <th class="table-success text-nowrap" @onclick="() => this.SortByColumn(27)">依頼<br />№<SortMark Value="@this.SortDirections[27]" /></th>
+    <th class="table-success text-nowrap" @onclick="() => this.SortByColumn(28)">製造番号<SortMark Value="@this.SortDirections[28]" /></th>
+    <th colspan="1" class="table-success text-nowrap">EDI見積依頼</th>
+    <th class="table-success"><span @onclick="() => this.SortByColumn(29)">依頼日<SortMark Value="@this.SortDirections[29]" /></span><br /><span @onclick="() => this.SortByColumn(30)">依頼№<SortMark Value="@this.SortDirections[30]" /></span></th>
+    <th colspan="1" class="table-success text-nowrap">EDI注文依頼</th>
+    <th class="table-success"><span @onclick="() => this.SortByColumn(31)">注文日<SortMark Value="@this.SortDirections[31]" /></span><br /><span @onclick="() => this.SortByColumn(32)">注文№<SortMark Value="@this.SortDirections[32]" /></span></th>
+    <th rowspan="2" class="table-success text-nowrap" @onclick="() => this.SortByColumn(33)">検収日<SortMark Value="@this.SortDirections[33]" /></th>
+    <th rowspan="1" class="table-success text-nowrap" @onclick="() => this.SortByColumn(34)">検収月<SortMark Value="@this.SortDirections[34]" /></th>
+    <th class="table-success" @onclick="() => this.SortByColumn(35)">入金月<SortMark Value="@this.SortDirections[35]" /></th>
+    <th colspan="1" class="table-success" @onclick="() => this.SortByColumn(36)">EDI回答<br />金額<SortMark Value="@this.SortDirections[36]" /></th>
+    <th class="table-success">金額<br />税込み</th>
+    <th colspan="3" class="table-warning">外注先(1)</th>
+    <th class="table-warning text-nowrap" @onclick="() => this.SortByColumn(37)">会社名<SortMark Value="@this.SortDirections[37]" /></th>
+    <th class="table-warning text-nowrap" @onclick="() => this.SortByColumn(38)">金額<br />税込<SortMark Value="@this.SortDirections[38]" /></th>
+    <th class="table-warning text-nowrap" @onclick="() => this.SortByColumn(39)">請求月<SortMark Value="@this.SortDirections[39]" /></th>
+    <th colspan="3" class="table-warning">外注先(2)</th>
+    <th class="table-warning text-nowrap" @onclick="() => this.SortByColumn(40)">会社名<SortMark Value="@this.SortDirections[40]" /></th>
+    <th class="table-warning text-nowrap" @onclick="() => this.SortByColumn(41)">金額<br />税込<SortMark Value="@this.SortDirections[41]" /></th>
+    <th class="table-warning text-nowrap" @onclick="() => this.SortByColumn(42)">請求月<SortMark Value="@this.SortDirections[42]" /></th>
+    <th colspan="3" class="table-warning">外注先(3)</th>
+    <th class="table-warning text-nowrap" @onclick="() => this.SortByColumn(43)">会社名<SortMark Value="@this.SortDirections[43]" /></th>
+    <th class="table-warning text-nowrap" @onclick="() => this.SortByColumn(44)">金額<br />税込<SortMark Value="@this.SortDirections[44]" /></th>
+    <th class="table-warning text-nowrap" @onclick="() => this.SortByColumn(45)">請求月<SortMark Value="@this.SortDirections[45]" /></th>
+    </tr>
+    */
+    private void SortByColumn(int colNo)
+    {
+        if (colNo >= this.SortDirections.Count) return;
+        for (var i = 0; i < this.SortDirections.Count; i++) { if (i != colNo) this.SortDirections[i] = 0; }
+        if ((this.SortDirections[colNo] == 0) || (this.SortDirections[colNo] == -1))
+            this.SortDirections[colNo] = 1;
+        else
+            this.SortDirections[colNo] = -1;
+        switch (colNo)
+        {
+            case 0:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.STATUS).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.STATUS).ToList();
+                break;
+            case 1:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.DLV_SUBMIT_DATE).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.DLV_SUBMIT_DATE).ToList();
+                break;
+            case 2:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.DLV_DEADLINE_DATE).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.DLV_DEADLINE_DATE).ToList();
+                break;
+            case 3:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.DLVREP_SUBMIT_DATE).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.DLVREP_SUBMIT_DATE).ToList();
+                break;
+            case 4:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.CMPREP_ISSUE_DATE).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.CMPREP_ISSUE_DATE).ToList();
+                break;
+            case 5:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.CMPREP_DEADLINE_DATE).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.CMPREP_DEADLINE_DATE).ToList();
+                break;
+            case 6:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.CMPMAIL_ISSUE_DATE).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.CMPMAIL_ISSUE_DATE).ToList();
+                break;
+            case 7:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.CMPMAIL_DEADLINE_DATE).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.CMPMAIL_DEADLINE_DATE).ToList();
+                break;
+            case 8:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.CNST_MANAGER_NAME).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.CNST_MANAGER_NAME).ToList();
+                break;
+            case 9:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.UPD_NAME).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.UPD_NAME).ToList();
+                break;
+            case 10:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.UPD_TIME).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.UPD_TIME).ToList();
+                break;
+            case 11:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.TYPE).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.TYPE).ToList();
+                break;
+            case 12:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.REV_ISSUE_DATE).ThenBy(c => c.REV_NO).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.REV_ISSUE_DATE).ThenByDescending(c => c.REV_NO).ToList();
+                break;
+            case 13:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.EST_ISSUE_DATE).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.EST_ISSUE_DATE).ToList();
+                break;
+            case 14:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.ODR_PERIOD).ThenBy(c => c.ODR_CATEGORY).ThenBy(c => c.ODR_MONTH).ThenBy(c => c.ODR_SEQ).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.ODR_PERIOD).ThenByDescending(c => c.ODR_CATEGORY).ThenByDescending(c => c.ODR_MONTH).ThenByDescending(c => c.ODR_SEQ).ToList();
+                break;
+            case 15:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.ODR_PERIOD).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.ODR_PERIOD).ToList();
+                break;
+            case 16:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.ODR_CATEGORY).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.ODR_CATEGORY).ToList();
+                break;
+            case 17:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.ODR_MONTH).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.ODR_MONTH).ToList();
+                break;
+            case 18:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.ODR_SEQ).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.ODR_SEQ).ToList();
+                break;
+            case 21:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => (c.CNST_NET_PRICE + c.STUP_NET_PRICE)).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => (c.CNST_NET_PRICE + c.STUP_NET_PRICE)).ToList();
+                break;
+            case 22:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.CNST_NET_PRICE).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.CNST_NET_PRICE).ToList();
+                break;
+            case 23:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.STUP_NET_PRICE).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.STUP_NET_PRICE).ToList();
+                break;
+            case 24:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.CNST_START_DATE).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.CNST_START_DATE).ToList();
+                break;
+            case 25:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.CNST_END_DATE).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.CNST_END_DATE).ToList();
+                break;
+            case 26:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.OPEN_DATE).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.OPEN_DATE).ToList();
+                break;
+            case 27:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => $"{c.ESTREQ_NO_1}{c.ESTREQ_NO_2}").ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => $"{c.ESTREQ_NO_1}{c.ESTREQ_NO_2}").ToList();
+                break;
+            case 28:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.PRODUCT_NO).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.PRODUCT_NO).ToList();
+                break;
+            case 29:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.REQ_DATE).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.REQ_DATE).ToList();
+                break;
+            case 30:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.REQ_NO).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.REQ_NO).ToList();
+                break;
+            case 31:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.ODR_DATE).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.ODR_DATE).ToList();
+                break;
+            case 32:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.ODR_NO).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.ODR_NO).ToList();
+                break;
+            case 33:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.ACCEPT_DATE).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.ACCEPT_DATE).ToList();
+                break;
+            case 34:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.ACCEPT_MONTH).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.ACCEPT_MONTH).ToList();
+                break;
+            case 35:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.PAYMENT_MONTH).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.PAYMENT_MONTH).ToList();
+                break;
+            case 36:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.ANS_NET_PRICE).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.ANS_NET_PRICE).ToList();
+                break;
+            case 37:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.ASSOCIATE_NAME_1).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.ASSOCIATE_NAME_1).ToList();
+                break;
+            case 38:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.NET_PRICE_1).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.NET_PRICE_1).ToList();
+                break;
+            case 39:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.PAYMENT_MONTH_1).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.PAYMENT_MONTH_1).ToList();
+                break;
+            case 40:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.ASSOCIATE_NAME_2).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.ASSOCIATE_NAME_2).ToList();
+                break;
+            case 41:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.NET_PRICE_2).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.NET_PRICE_2).ToList();
+                break;
+            case 42:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.PAYMENT_MONTH_2).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.PAYMENT_MONTH_2).ToList();
+                break;
+            case 43:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.ASSOCIATE_NAME_3).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.ASSOCIATE_NAME_3).ToList();
+                break;
+            case 44:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.NET_PRICE_3).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.NET_PRICE_3).ToList();
+                break;
+            case 45:
+                if (this.SortDirections[colNo] == 1)
+                    this.allList = this.allList.OrderBy(c => c.PAYMENT_MONTH_3).ToList();
+                else
+                    this.allList = this.allList.OrderByDescending(c => c.PAYMENT_MONTH_3).ToList();
+                break;
+            default:
+                return;
+        }
+        this.FirstPageAsync();
+    }
+    #region CSV Download
+        private async Task OnClickDownloadButton()
+        {
+            var res = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure?");
+            if (res == false) return;
+
+            await JSRuntime.InvokeVoidAsync(
+                "downloadFromUrl",
+                new { Url = "pictures/1", FileName = "Space Needle.jpeg" });
+        }
+        private ElementReference HiddenAnchorTag;
+        private async Task OnClickDownloadButtonUsingHiddenAnchorTag()
+        {
+            var res = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure?");
+            if (res == false) return;
+
+            await JSRuntime.InvokeVoidAsync("clickElement", HiddenAnchorTag);
+        }
+        public async Task OnClickDownloadOrderList()
+        {
+            var data = new StringBuilder(RecVV_ORDER_LIST_FOR_EXCEL_P1.CSVHeader);
+            this.allList.OrderBy(c => c.ODR_PERIOD).ThenBy(c => c.ODR_SEQ).ToList().ForEach(c => data.Append(c.CSVRecord));
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            var bytes = System.Text.Encoding.GetEncoding("Shift_JIS").GetBytes(data.ToString());
+            await JSRuntime.InvokeVoidAsync("downloadFromByteArray", new {ByteArray = bytes, FileName = "OrderList.csv", ContentType = "text/csv"});
+        }
+    #endregion
+}

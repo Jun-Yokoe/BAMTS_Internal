@@ -1,0 +1,76 @@
+﻿@page "/AccountList"
+@using BAMTS.Internal;
+@using System.Text;
+@using BlazorStrap;
+@using Newtonsoft.Json;
+@inject HttpClient Http;
+@inject IBlazorStrap blazorStrap
+<style>
+    div.page-head-title {
+        padding: 1rem 1rem;
+        color: #fff;
+        border-radius: 10px;
+        font-size: xx-large;
+        background-image: -webkit-gradient(linear, left top, right top, from(#2041ff), to(#87b6ff));
+        background-image: -webkit-linear-gradient(left, #2041ff 0%, #87b6ff 100%);
+        background-image: linear-gradient(to right, #2041ff 0%, #87b6ff 100%);
+    }
+</style>
+<div class="page-head-title"><img src="/Resource/Image/bam_logo1.png" width="100" height="45" />&emsp;アカウントリスト</div>
+<hr />
+<br />
+
+<BSCard CardType="CardType.Card" style="width: 50rem;">
+    <BSCard CardType="CardType.Body">
+        <BSCard CardType="CardType.Title">ログインID／パスワード【テスト用】</BSCard>
+        <BSCard CardType="CardType.Text">
+            <table class="table table-bordered table-hover table-sm border-dark">
+                <thead class="bg-primary">
+                    <tr class="border-dark">
+                        <th>社員番号</th>
+                        <th>所属</th>
+                        <th>社員名</th>
+                        <th>パスワード</th>
+                        <th>権限グループ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in this.accounts.OrderBy(c => c.STAFF_ID))
+                    {
+                        <tr>
+                            <td>@item.STAFF_ID</td>
+                            <td>@item.DEPARTMENT_NAME</td>
+                            <td>@item.STAFF_NAME</td>
+                            <td>@item.PASS_WORD</td>
+                            <td>@item.ACCESS_GROUP_NAME</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <BSButton Color="BSColor.Primary" Size="Size.Large" @onclick="@(() => this.MovePageToLogin())">ログイン画面へ...</BSButton>
+        </BSCard>
+    </BSCard>
+</BSCard>
+
+
+@code {
+    [Inject]
+    private NavigationManager NavManager { get; set; }
+
+    private List<RecLOGON_USER_PRIMARY> accounts = new List<RecLOGON_USER_PRIMARY>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        this.accounts = await Http.GetFromJsonAsync<List<RecLOGON_USER_PRIMARY>>($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_AllUserInfo/");
+        //if (Common.LOGIN_STAFF_ID == null)
+        //{
+        //    this.NavManager.NavigateTo("UserLogin");
+        //    return;
+        //}
+        //this.loginInfo = await Http.GetFromJsonAsync<SetLOGON_USER_INFO>($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_LoginUserInfo/{Common.LOGIN_STAFF_ID}");
+    }
+    private void MovePageToLogin()
+    {
+        this.NavManager.NavigateTo("UserLogin");
+    }
+}

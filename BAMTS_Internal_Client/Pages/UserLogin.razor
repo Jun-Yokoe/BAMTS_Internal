@@ -1,0 +1,82 @@
+﻿@page "/UserLogin"
+@using BAMTS.Internal;
+@using System.Text;
+@using BlazorStrap;
+@using Newtonsoft.Json;
+@inject HttpClient Http;
+@inject IBlazorStrap blazorStrap
+<style>
+    div.page-head-title {
+        padding: 1rem 1rem;
+        color: #fff;
+        border-radius: 10px;
+        font-size: xx-large;
+        background-image: -webkit-gradient(linear, left top, right top, from(#2041ff), to(#87b6ff));
+        background-image: -webkit-linear-gradient(left, #2041ff 0%, #87b6ff 100%);
+        background-image: linear-gradient(to right, #2041ff 0%, #87b6ff 100%);
+    }
+</style>
+<div class="page-head-title"><img src="/Resource/Image/bam_logo1.png" width="100" height="45" />&emsp;株式会社B&Mテクノサービス：ログイン画面　<small>Version 1.0.0.0 [ProtoType] </small></div>
+<div>
+    <BSAlert Color="BSColor.Info" HasIcon="true" MarginTop="Margins.Large">
+        <strong>&emsp;ユーザー名／パスワードを入力して、ログインして下さい。</strong>
+    </BSAlert>
+    <hr />
+    <div class="input-group">
+        <span class="input-group-text"><strong>　ユーザー名：</strong></span>
+        <input type="text" @bind-value="this.InputSTAFF_ID" style="width: 300px;" />
+    </div>
+    <br />
+    <div class="input-group">
+        <span class="input-group-text"><strong>　パスワード：</strong></span>
+        <input type="password" @bind-value="this.InputPASS_WORD" style="width: 300px;" />
+    </div>
+    <hr />
+    <BSButton Color="BSColor.Info" Size="Size.ExtraLarge" @onclick="@(() => this.Login())"><strong style="font-size: xx-large;">ログイン</strong></BSButton>
+    <hr />
+    <h5>
+        👈　ユーザー名／パスワードは画面左メニューの「アカウントリスト」を参照して下さい。<br /><br />
+        💡　パスワードは予め入力されています。（テスト運用時のみ）<br /><br />
+        ✋　「アカウントリスト」は実運用に入ったら削除します。
+    </h5>
+    <hr />
+    @if (this.ShowLoginFailedMessage)
+    {
+        <h5 style="color: red">
+            💀　入力された情報でログインができませんでした。　💀
+        </h5>
+        <hr />
+    }
+</div>
+
+@code {
+    [Inject]
+    private NavigationManager NavManager { get; set; }
+    private string InputSTAFF_ID = "";
+    private string InputPASS_WORD = "bamts";
+    private bool ShowLoginFailedMessage = false;
+
+    private async Task Login()
+    {
+        try
+        {
+            this.ShowLoginFailedMessage = false;
+            Common.LOGIN_STAFF_ID = null;
+            var url = $"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_LoginUserInfo/{((string.IsNullOrEmpty(this.InputSTAFF_ID)) ? "############" : this.InputSTAFF_ID)}";
+            var loginInfo = await Http.GetFromJsonAsync<SetLOGON_USER_INFO>(url);
+            loginInfo.USER_PRIMARY_INFO.InputSTAFF_ID = this.InputSTAFF_ID;
+            loginInfo.USER_PRIMARY_INFO.InputPASS_WORD = this.InputPASS_WORD;
+            if (loginInfo.USER_PRIMARY_INFO.IsValid)
+            {
+                Common.LOGIN_STAFF_ID = this.InputSTAFF_ID;
+                Common.LOGIN_TIME = DateTime.Now;
+                this.NavManager.NavigateTo("");
+            }
+        }
+        catch
+        {
+            this.ShowLoginFailedMessage = true;
+        }
+    }
+}
+

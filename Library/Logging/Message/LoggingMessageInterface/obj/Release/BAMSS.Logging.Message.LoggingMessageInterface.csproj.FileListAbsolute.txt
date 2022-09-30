@@ -1,0 +1,11 @@
+C:\User\Projects\Practice\Education\Source\Library\Logging\Message\LoggingMessageInterface\bin\Release\BAMSS.Logging.Message.LoggingMessageInterface.dll
+C:\User\Projects\Practice\Education\Source\Library\Logging\Message\LoggingMessageInterface\bin\Release\BAMSS.Logging.Message.LoggingMessageInterface.pdb
+C:\User\Projects\Practice\Education\Source\Library\Logging\Message\LoggingMessageInterface\obj\Release\BAMSS.Logging.Message.LoggingMessageInterface.csproj.CoreCompileInputs.cache
+C:\User\Projects\Practice\Education\Source\Library\Logging\Message\LoggingMessageInterface\obj\Release\BAMSS.Logging.Message.LoggingMessageInterface.dll
+C:\User\Projects\Practice\Education\Source\Library\Logging\Message\LoggingMessageInterface\obj\Release\BAMSS.Logging.Message.LoggingMessageInterface.pdb
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\Source\Library\Logging\Message\LoggingMessageInterface\bin\Release\BAMSS.Logging.Message.LoggingMessageInterface.dll
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\Source\Library\Logging\Message\LoggingMessageInterface\bin\Release\BAMSS.Logging.Message.LoggingMessageInterface.pdb
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\Source\Library\Logging\Message\LoggingMessageInterface\obj\Release\BAMSS.Logging.Message.LoggingMessageInterface.csproj.AssemblyReference.cache
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\Source\Library\Logging\Message\LoggingMessageInterface\obj\Release\BAMSS.Logging.Message.LoggingMessageInterface.csproj.CoreCompileInputs.cache
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\Source\Library\Logging\Message\LoggingMessageInterface\obj\Release\BAMSS.Logging.Message.LoggingMessageInterface.dll
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\Source\Library\Logging\Message\LoggingMessageInterface\obj\Release\BAMSS.Logging.Message.LoggingMessageInterface.pdb

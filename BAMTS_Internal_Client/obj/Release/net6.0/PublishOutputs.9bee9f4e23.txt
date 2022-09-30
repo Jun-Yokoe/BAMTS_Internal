@@ -1,0 +1,2 @@
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\Source\BAMTS_Internal_Client\obj\Release\net6.0\browser-wasm\PubTmp\Out\tsconfig.json
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\Source\BAMTS_Internal_Client\obj\Release\net6.0\browser-wasm\PubTmp\Out\web.config

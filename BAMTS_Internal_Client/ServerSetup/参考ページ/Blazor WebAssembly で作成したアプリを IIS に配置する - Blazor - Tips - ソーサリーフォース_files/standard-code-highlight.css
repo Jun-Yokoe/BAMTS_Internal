@@ -1,0 +1,293 @@
+﻿/*============================================
+// C#
+============================================*/
+
+/* キーワード */
+.code_cs_keyword           { color: blue; }
+
+/* クラス */
+.code_cs_class           { color: #339999; }
+
+/* 型キーワード */
+.code_cs_typekeyword       { color: blue; }
+
+/* メタキーワード */
+.code_cs_metakeyword       { color: #606060; }
+
+/* 単行コメント */
+.code_cs_singlelinecomment { color: green; }
+
+/* 複数行コメント */
+.code_cs_multilinecomment  { color: green; }
+
+/* 数字リテラル */
+.code_cs_digit             { color: #c00040; }
+
+/* 文字列リテラル */
+.code_cs_doublequotation   { color: #c00040; }
+
+/* 文字リテラル */
+.code_cs_singlequotation   { color: #c00040; }
+
+/* 演算子 */
+.code_cs_operator          { color: #000000; }
+
+/* プリプロセッサ */
+.code_cs_preprocessor      { color: #606060; }
+
+/* ドキュメントコメント */
+.code_cs_documentcomment   { color: green; }
+
+/* XML などの属性名 */
+.code_cs_attributename     { color: #606000; }
+
+/* スクリプトレット */
+.code_cs_scriptlet         { color: red; }
+
+/* その他 */
+.code_cs_default           { color: #000000; }
+
+/*============================================
+// VB
+============================================*/
+
+/* キーワード */
+.code_vb_keyword           { color: blue; }
+
+/* クラス */
+.code_vb_class           { color: #339999; }
+
+/* 型キーワード */
+.code_vb_typekeyword       { color: blue; }
+
+/* メタキーワード */
+.code_vb_metakeyword       { color: #606060; }
+
+/* 単行コメント */
+.code_vb_singlelinecomment { color: green; }
+
+/* 複数行コメント */
+.code_vb_multilinecomment  { color: green; }
+
+/* 数字リテラル */
+.code_vb_digit             { color: #c00040; }
+
+/* 文字列リテラル */
+.code_vb_doublequotation   { color: #c00040; }
+
+/* 文字リテラル */
+.code_vb_singlequotation   { color: #c00040; }
+
+/* 演算子 */
+.code_vb_operator          { color: #000000; }
+
+/* プリプロセッサ */
+.code_vb_preprocessor      { color: #606060; }
+
+/* ドキュメントコメント */
+.code_vb_documentcomment   { color: green; }
+
+/* XML などの属性名 */
+.code_vb_attributename     { color: #606000; }
+
+/* スクリプトレット */
+.code_vb_scriptlet         { color: red; }
+
+/* その他 */
+.code_vb_default           { color: #000000; }
+
+/*============================================
+// Javascript
+============================================*/
+
+/* キーワード */
+.code_javascript_keyword {
+	color: blue;
+}
+
+/* 型キーワード */
+.code_javascript_typekeyword {
+	color: blue;
+}
+
+/* メタキーワード */
+.code_javascript_metakeyword {
+	color: #606060;
+}
+
+/* 数字リテラル */
+.code_javascript_digit {
+	color: #c00040;
+}
+
+/* 文字列リテラル */
+.code_javascript_doublequotation {
+	color: #c00040;
+}
+
+/* 文字リテラル */
+.code_javascript_singlequotation {
+	color: #c00040;
+}
+
+/* 演算子 */
+.code_javascript_operator {
+	color: #000000;
+}
+
+/* プリプロセッサ */
+.code_javascript_preprocessor {
+	color: red;
+	font-weight: bold;
+}
+
+/* 単行コメント */
+.code_javascript_singlelinecomment {
+	color: green;
+}
+
+/* 複数行コメント */
+.code_javascript_multilinecomment {
+	color: green;
+}
+
+/* ドキュメントコメント */
+.code_javascript_documentcomment {
+	color: green;
+}
+
+/* XML などの属性名 */
+.code_javascript_attributename {
+	color: #606000;
+}
+
+/* スクリプトレット */
+.code_javascript_scriptlet {
+	color: red;
+}
+
+/* その他 */
+.code_javascript_default {
+	color: #000000;
+}
+
+
+/*============================================
+// T-SQL
+============================================*/
+
+/* キーワード */
+.code_tsql_keyword           { color: blue; }
+
+/* 型キーワード */
+.code_tsql_typekeyword       { color: blue; }
+
+/* メタキーワード */
+.code_tsql_metakeyword       { color: #606060; }
+
+/* 数字リテラル */
+.code_tsql_digit             { color: #c00040; }
+
+/* 文字列リテラル */
+.code_tsql_doublequotation   { color: #c00040; }
+
+/* 文字リテラル */
+.code_tsql_singlequotation   { color: #c00040; }
+
+/* 演算子 */
+.code_tsql_operator          { color: #000000; }
+
+/* プリプロセッサ */
+.code_tsql_preprocessor      { color: red; font-weight: bold; }
+
+/* 単行コメント */
+.code_tsql_singlelinecomment { color: green; }
+
+/* 複数行コメント */
+.code_tsql_multilinecomment  { color: green; }
+
+/* ドキュメントコメント */
+.code_tsql_documentcomment   { color: green; }
+
+/* XML などの属性名 */
+.code_tsql_attributename     { color: #606000; }
+
+/* スクリプトレット */
+.code_tsql_scriptlet         { color: red; }
+
+/* その他 */
+.code_tsql_default           { color: #000000; }
+
+/* 関数 */
+.code_tsql_function          { color: #f030f0; }
+
+/*============================================
+// XML
+============================================*/
+
+/* キーワード */
+.code_xml_keyword           { color: blue; }
+
+/* 型キーワード */
+.code_xml_typekeyword       { color: blue; }
+
+/* メタキーワード */
+.code_xml_metakeyword       { color: #606060; }
+
+/* 数字リテラル */
+.code_xml_digit             { color: #c00040; }
+
+/* 文字列リテラル */
+.code_xml_doublequotation   { color: #c00040; }
+
+/* 文字リテラル */
+.code_xml_singlequotation   { color: #c00040; }
+
+/* 演算子 */
+.code_xml_operator          { color: #000000; }
+
+/* プリプロセッサ */
+.code_xml_preprocessor      { color: red; font-weight: bold; }
+
+/* 単行コメント */
+.code_xml_singlelinecomment { color: green; }
+
+/* 複数行コメント */
+.code_xml_multilinecomment  { color: green; }
+
+/* ドキュメントコメント */
+.code_xml_documentcomment   { color: green; }
+
+/* XML などの属性名 */
+.code_xml_attributename     { color: #606000; }
+
+/* スクリプトレット */
+.code_xml_scriptlet         { color: red; }
+
+/* その他 */
+.code_xml_default           { color: #000000; }
+
+/*============================================
+// JSON
+============================================*/
+
+/* キー */
+.code_json_key {
+	color: #808080;
+}
+
+/* 文字列リテラル */
+.code_json_string {
+	color: #c00040;
+}
+
+/* 数字リテラル */
+.code_json_number {
+	color: #c00040;
+}
+
+/* キーワード */
+.code_json_valuekeyword {
+	color: blue;
+}
+

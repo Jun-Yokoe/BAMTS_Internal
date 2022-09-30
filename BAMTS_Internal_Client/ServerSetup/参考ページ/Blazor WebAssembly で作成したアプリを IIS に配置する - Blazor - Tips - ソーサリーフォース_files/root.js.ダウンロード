@@ -1,0 +1,119 @@
+﻿
+//// テーマカラーの適用を即実行する必要があるためここに記載
+//let colorThemeValue = localStorage.getItem('color-theme');
+//if (colorThemeValue === 'dark') {
+//	$('#cssStandardDark').prop('disabled', false);
+//}
+
+$(function () {
+	// html や load でキャッシュさせない
+	$.ajaxSetup({
+		cache: false
+	});
+
+	// Download Table の HTML を非同期で取得します
+	$('.partial-download-table').each(function (index, element) {
+		$(element).html('<p style="text-align:center; font-weight:bold">' + LoadingMessage + '</p>');
+		$(element).load('/' + SelectedLanguage + '/Download/TableLayout?' + $(element).attr('id'));
+	});
+
+	initToastr();
+});
+
+/**
+ * ページの言語を切り替えます。ページは再読み込みされます。
+ * @param {object} selObj select オブジェクト。
+ */
+function selectLanguagePage(selObj) {
+	location.href = selObj.options[selObj.selectedIndex].value;
+}
+
+/**
+ * テーマカラーを切り替えます。
+ */
+function toggleColor() {
+	if ($('#cssStandardDark').prop('disabled')) {
+		// ダークモード
+		setDarkTheme();
+		localStorage.setItem('color-theme', 'dark');
+	} else {
+		// ライトモード
+		$('#cssStandardDark').prop('disabled', true);
+		localStorage.setItem('color-theme', 'light');
+	}
+}
+
+/**
+ * テーマカラーをダークテーマに切り替えます。
+ */
+function setDarkTheme() {
+	$('#cssStandardDark').prop('disabled', false);
+}
+
+/**
+ * ajax, post 用の偽造防止トークンを取得します。
+ */
+function getVerificationTokenHeader() {
+	return { "RequestVerificationToken": $("input[name='__RequestVerificationToken']").val() };
+}
+
+//=============================================
+// toastr.js
+//=============================================
+
+function initToastr() {
+	// ドキュメントロード時に、toastr のオプションを設定する
+	toastr.options = {
+		"closeButton": true,
+		"debug": false,
+		"newestOnTop": false,
+		"progressBar": true,
+		"positionClass": "toast-bottom-right",
+		"preventDuplicates": true,
+		"onclick": null,
+		"showDuration": "300",
+		"hideDuration": "300",
+		"timeOut": "5000",
+		"extendedTimeOut": "2000",
+		"showEasing": "swing",
+		"hideEasing": "linear",
+		"showMethod": "fadeIn",
+		"hideMethod": "fadeOut"
+	}
+}
+function toastSuccess(title, message) {
+	toastr["success"](message, title);
+}
+function toastInfo(title, message) {
+	toastr["info"](message, title);
+}
+function toastWarning(title, message) {
+	toastr["warning"](message, title);
+}
+function toastError(title, message) {
+	toastr["error"](message, title);
+}
+
+//=============================================
+// ローカルストレージ
+//=============================================
+
+/**
+ * オブジェクトを JSON 化してローカルストレージに保存します。
+ * @param {string} key ローカルストレージのキー。
+ * @param {Object} obj JSON に変換できる保存する値。
+ */
+function saveToLocalStorage(key, obj) {
+	var setjson = JSON.stringify(obj);
+	localStorage.setItem(key, setjson);
+}
+
+/**
+ * ローカルストレージに保存したデータを取得します。
+ * @param {string} key ローカルストレージのキー。
+ * @return {Object} 取得したデータ。
+ */
+function loadFromLocalStorage(key) {
+	var getjson = localStorage.getItem(key);
+	return JSON.parse(getjson);
+}

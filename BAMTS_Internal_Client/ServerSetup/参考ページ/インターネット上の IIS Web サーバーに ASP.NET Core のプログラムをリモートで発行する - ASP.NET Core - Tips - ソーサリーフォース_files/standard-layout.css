@@ -1,0 +1,263 @@
+﻿
+/*===== レイアウト - ルート =====*/
+body {
+	margin: 0;
+}
+
+.root {
+	height: 100%;
+	display: -ms-grid;
+	display: grid;
+	-ms-grid-rows: auto auto auto;
+	-ms-grid-columns: 200px 1fr;
+	grid-template: "header header" auto "side-bar-left  main" auto "footer footer" auto / 200px 1fr;
+}
+
+header {
+	-ms-grid-row: 1;
+	-ms-grid-column: 1;
+	-ms-grid-column-span: 2;
+	grid-area: header;
+}
+
+main {
+	-ms-grid-row: 2;
+	-ms-grid-column: 2;
+	grid-area: main;
+	padding: 16px;
+	min-width: 0; /* pre タグが横にオーバーするのを防ぐ */
+}
+
+.side-bar-left {
+	-ms-grid-row: 2;
+	-ms-grid-column: 1;
+	grid-area: side-bar-left;
+}
+
+footer {
+	-ms-grid-row: 3;
+	-ms-grid-column: 1;
+	-ms-grid-column-span: 2;
+	grid-area: footer;
+}
+
+@media (max-width: 768px) {
+
+	.root {
+		-ms-grid-rows: auto auto auto auto;
+		-ms-grid-columns: 1fr;
+		grid-template: "header" auto " main" auto "side-bar-left " auto "footer" auto / 1fr;
+	}
+
+	header {
+		-ms-grid-row: 1;
+		-ms-grid-column: 1;
+	}
+
+	main {
+		-ms-grid-row: 2;
+		-ms-grid-column: 1;
+	}
+
+	side-bar-left {
+		-ms-grid-row: 3;
+		-ms-grid-column: 1;
+	}
+
+	footer {
+		-ms-grid-row: 4;
+		-ms-grid-column: 1;
+	}
+}
+
+/*===== レイアウト - ヘッダー・フッター =====*/
+
+.header-footer-nav ul {
+	display: flex;
+	flex-wrap: wrap;
+	list-style: none;
+	justify-content: flex-start;
+	padding: 0px;
+	margin: 0px;
+}
+
+.header-footer-nav li {
+	flex: 1;
+	min-width: 100px;
+	max-width: 200px;
+	padding: 2px;
+}
+
+.header-footer-nav a {
+	display: block;
+	padding-left: 2px 4px 2px 2px;
+}
+
+/*===== レイアウト - ヘッダー =====*/
+
+.header-area {
+	display: -ms-grid;
+	display: grid;
+	-ms-grid-rows: auto auto;
+	-ms-grid-columns: 1fr auto auto;
+	grid-template: "header-category header-user header-home" auto "header-nav header-nav header-nav" auto / 1fr auto auto;
+	align-items: center;
+}
+
+.header-category {
+	-ms-grid-row: 1;
+	-ms-grid-column: 1;
+	grid-area: header-category;
+	padding-left: 4px;
+	margin: 0px 8px;
+}
+
+.header-user {
+	-ms-grid-row: 1;
+	-ms-grid-column: 2;
+	grid-area: header-user;
+	padding: 4px;
+}
+
+.login-user-name-inverse {
+	display: none;
+}
+
+.header-home {
+	-ms-grid-row: 1;
+	-ms-grid-column: 3;
+	grid-area: header-home;
+	padding: 4px;
+}
+
+.header-nav {
+	-ms-grid-row: 2;
+	-ms-grid-column: 1;
+	-ms-grid-column-span: 3;
+	grid-area: header-nav;
+}
+
+
+@media screen and (max-width: 768px) {
+	.login-user-name {
+		display: none;
+	}
+	.login-user-name-inverse {
+		display: inherit;
+	}
+}
+
+/*===== レイアウト - メイン =====*/
+
+.ads-top-area img {
+	max-width: 100%;
+	height: auto;
+}
+
+.main-header-area {
+	display: flex;
+	flex-direction: row-reverse;
+	flex-wrap: wrap;
+}
+
+.main-header-area-content {
+	margin: 4px;
+}
+
+/*===== レイアウト - サイドバー =====*/
+
+.side-bar {
+	display: flex;
+	align-items: flex-start;
+	align-content: flex-start;
+	flex-wrap: wrap;
+	height: 100%;
+}
+
+.side-bar-item {
+	flex: 1;
+	min-width: 180px;
+	margin: 4px;
+	padding: 2px;
+}
+
+.side-bar-item-header {
+	text-align: center;
+	font-weight: bold;
+	padding-bottom: 4px;
+}
+
+.side-bar-item-content {
+	padding: 4px;
+}
+
+.side-bar ul {
+	padding-left: 0px;
+	padding-right: 0px;
+	margin-bottom: 0px;
+	font-size: 0.9em;
+	line-height: 130%;
+}
+
+.side-bar ul li {
+	padding-top: 4px;
+	padding-bottom: 8px;
+	list-style: none;
+	border-bottom: 1px solid #e8e8e8;
+}
+
+.side-bar ul li:last-child {
+	border-bottom: none;
+}
+
+.side-bar ul li time {
+	color: #999;
+}
+
+.ads-sidebar-area img {
+	margin-top: 4px;
+	margin-bottom: 4px;
+}
+
+/*===== レイアウト - フッター =====*/
+
+.footer-area {
+	display: -ms-grid;
+	display: grid;
+	-ms-grid-rows: auto auto auto;
+	-ms-grid-columns: 1fr;
+	grid-template: "footer-nav" auto "footer-pagetop" auto "footer-copyright" auto / 1fr;
+	align-items: center;
+}
+
+.footer-nav {
+	-ms-grid-row: 1;
+	-ms-grid-column: 1;
+	grid-area: footer-nav;
+}
+
+
+.footer-pagetop {
+	-ms-grid-row: 2;
+	-ms-grid-column: 1;
+	grid-area: footer-pagetop;
+	text-align: right;
+}
+
+.footer-copyright {
+	-ms-grid-row: 3;
+	-ms-grid-column: 1;
+	grid-area: footer-copyright;
+	text-align: center;
+}
+
+
+
+/*===== 制御 - 全体 =====*/
+
+.preload {
+	transition: 0 !important;
+}
+
+
+

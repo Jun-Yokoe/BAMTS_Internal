@@ -1,0 +1,28 @@
+﻿/**
+ * 画像をクリックするとサイズが原寸⇔600pxで変化します。
+ */
+$('article > p > img').click(function () {
+	if ($(this).hasClass('enlarged-image')) {
+		$(this).css('width', ''); // html に設定されているので削除。可能であれば元データで削除したい
+		$(this).addClass("enlarged-image2");
+		$(this).removeClass("enlarged-image");
+	} else if ($(this).hasClass('enlarged-image2')) {
+		$(this).addClass("enlarged-image");
+		$(this).removeClass("enlarged-image2");
+	}
+
+	//var result = $(this).css('width');
+	//if (result == '600px') {
+	//	$(this).css('width', '');
+	//} else {
+	//	result = result.replace(/[^0-9]/g, '');
+	//	if (parseInt(result) > 600) {
+	//		$(this).css('width', '600px');
+	//	}
+	//}
+});
+
+
+
+
+

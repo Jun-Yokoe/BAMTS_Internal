@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "UK9jxVK85wRvHFzxygdJZ5YZcgG7+drcC+haTp02z+Y=",
+  "Source": "BAMTS_Internal_WebAPIService",
+  "BasePath": "_content/BAMTS_Internal_WebAPIService",
+  "Mode": "Default",
+  "ManifestType": "Publish",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
