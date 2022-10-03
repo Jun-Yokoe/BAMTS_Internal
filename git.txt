@@ -1,0 +1,8 @@
+cd /C/User/Projects/BAMTS/Development/BAMTS_Internal/Source
+
+git add .
+git commit -m ""
+
+git push https://github.com/Jun-Yokoe/BAMTS_Internal
+
+

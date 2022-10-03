@@ -37,7 +37,7 @@
         <button class="btn" @onclick="@(e => this.OnSelected())" style="background-color: blue; color:white;">新規作成</button>
     }
     &emsp;
-    <button class="btn" @onclick="this.LoadDataAsync" style="background-color: olive; color: white;">再読込(直近@(this.DefaultMaxRecs)件)</button>&emsp;
+    <button class="btn" @onclick="@(e =>  this.LoadDataAsync(true))" style="background-color: olive; color: white;">再読込(直近@(this.DefaultMaxRecs)件)</button>&emsp;
     <h4 style="color: forestgreen">@message</h4>&emsp;
     <strong>@this.recordCount</strong><span>件中&emsp;</span>@(this.DisplayRowWindow())<span>&emsp;</span>
     <BSPagination Pages="this.GetMaxPage()+1" @bind-Value="this.NowPage" style="width: 700px; margin-top: 12px" />
@@ -1530,7 +1530,7 @@
             this.StateHasChanged();
         }
     }
-    private async Task LoadDataAsync()
+    private async Task LoadDataAsync(bool withRowLimit = false)
     {
         try
         {
@@ -1538,7 +1538,10 @@
             this.nowPage = 0;
             this.allList.Clear();
             this.dspList.Clear();
-            this.URL = $"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_OrderList_ForLegacyExcel";
+            if((string.IsNullOrEmpty(this.URL)) || (withRowLimit))
+            {
+                this.URL = $"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_OrderList_ForLegacyExcel";
+            }
             this.allList = await Http.GetFromJsonAsync<List<RecVV_ORDER_LIST_FOR_EXCEL_P1>>(this.URL);
             this.dspList = this.allList.Skip(this.nowPage * this.displayRows).Take(this.displayRows).ToList();
             this.recordCount = allList.Count;
