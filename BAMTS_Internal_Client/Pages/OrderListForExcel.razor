@@ -1076,6 +1076,11 @@
             <BSButton Color="BSColor.Info" Size="Size.Large" @onclick="@(() => this.CreateFromCopy())">コピーして新規作成</BSButton>
             <input type="number" @bind-value="this.CopyRecs" style="width: 80px;" /> <strong>件</strong>
         }
+        &emsp;&emsp;
+        @if ((this.inputMode == Common.InputMode.Update) && (this.readOnly == false))
+        {
+            <BSButton Color="BSColor.Info" Size="Size.Large"  @onclick="@(() => this.OnSelected())">新規作成</BSButton>
+        }
         &emsp;&emsp;&emsp;
         @if(this.ExistNextRow())
         {
