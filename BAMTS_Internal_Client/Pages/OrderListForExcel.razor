@@ -1638,6 +1638,18 @@
             var URL = $"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Import_OrderList_ForAppEdit1/{((this.inputMode == Common.InputMode.Create) ? 0 : 1)}/{forceWrite}";
             var jsonString = JsonConvert.SerializeObject(new List<RecVV_ORDER_LIST_FOR_EXCEL_P1>() { this.inputModel });
             var content = new StringContent(jsonString, Encoding.UTF8, @"application/json");
+            if((string.IsNullOrEmpty(this.inputModel.ODR_CATEGORY)) || (this.inputModel.ODR_CATEGORY.Trim().Length < 1))
+            {
+                throw new Exception("受注番号の種類を指定して下さい。");
+            }
+            if((string.IsNullOrEmpty(this.inputModel.ODR_MONTH)) || (this.inputModel.ODR_MONTH.Trim().Length < 1))
+            {
+                throw new Exception("受注番号の月を指定して下さい。");
+            }
+            if((string.IsNullOrEmpty(this.inputModel.CUSTOMER_NAME)) || (this.inputModel.CUSTOMER_NAME.Trim().Length < 1))
+            {
+                throw new Exception("納品先を指定して下さい。");
+            }
             using (var response = await Http.PostAsync(URL, content))
             {
                 if (response.IsSuccessStatusCode == true)

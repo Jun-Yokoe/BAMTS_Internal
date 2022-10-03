@@ -42,7 +42,7 @@ namespace BAMTS.Internal
 		public string CUSTOMER_NAME { get; set; }
 		[Required(ErrorMessage = "名称を入力して下さい。")]
 		[StringLength(256, ErrorMessage = "名称の最大文字数は256です。")]
-		public string ODR_NAME { get; set; }
+		public string ODR_NAME { get; set; } = "";
 		public DateTime? CNST_START_DATE { get; set; }
 		public DateTime? CNST_END_DATE { get; set; }
 		public DateTime? OPEN_DATE { get; set; }

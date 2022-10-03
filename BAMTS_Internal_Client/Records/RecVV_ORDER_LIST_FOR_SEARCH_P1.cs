@@ -33,7 +33,7 @@ namespace BAMTS.Internal
 		public DateTime? EST_ISSUE_DATE { get; set; }
 		public int? CUSTOMER_ID { get; set; }
 		public string CUSTOMER_NAME { get; set; }
-		public string ODR_NAME { get; set; }
+		public string ODR_NAME { get; set; } = "";
 		public DateTime? CNST_START_DATE { get; set; }
 		public DateTime? CNST_END_DATE { get; set; }
 		public DateTime? OPEN_DATE { get; set; }
