@@ -20,7 +20,7 @@
         background-image: linear-gradient(to right, #2041ff 0%, #87b6ff 100%);
     }
 </style>
-<div class="page-head-title"><img src="/Resource/Image/bam_logo1.png" width="100" height="45" />&emsp;@this.ACCESS_FUNC_NAME<small class="text-muted">（<em></em>）</small><LogonInfoDisp LogonUserInfo="@this.loginInfo" />
+<div class="page-head-title"><img src="/Resource/Image/bam_logo1.png" width="100" height="45" />&emsp;@this.ACCESS_FUNC_NAME<small class="text-muted"><em>&emsp;&emsp;&emsp;</em></small><LogonInfoDisp LogonUserInfo="@this.loginInfo" />
     @if(this.LockInfo.STAFF_NAME != null)
     {
         <span style="font-size: large;">@($"　更新使用中ユーザー：{this.LockInfo.STAFF_NAME}")</span>
