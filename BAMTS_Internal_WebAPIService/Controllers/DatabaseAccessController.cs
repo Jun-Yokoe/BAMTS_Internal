@@ -18,11 +18,12 @@ namespace BAMTS_Internal_WebAPIService.Controllers
         private StoredProcessor _storedProcessor;
         public DatabaseAccessController() => this._storedProcessor = new StoredProcessor(DatabaseAccessController._TARGET_INFO_TEXT);
         [HttpGet]
+        //[Route("api/DatabaseAccessController/P_Get_OrderList_ForLegacyExcel/Search/{ODR_PERIOD}/{ODR_CATEGORY}/{ODR_MONTH}/{ODR_SEQ}/{STATUS}/{CNST_MANAGER_ID}/{CUSTOMER_NAME}/{ODR_NAME}/{ACCEPT_DATE_FROM}/{ACCEPT_DATE_TO}/{ACCEPT_MONTH_FROM}/{ACCEPT_MONTH_TO}/{PAYMENT_MONTH_FROM}/{PAYMENT_MONTH_TO}/{ANS_NET_PRICE_FROM}/{ANS_NET_PRICE_TO}/{ASSOCIATE_NAME_1}/{NET_PRICE_1_FROM}/{NET_PRICE_1_TO}/{PAYMENT_MONTH_1_FROM}/{PAYMENT_MONTH_1_TO}/{ASSOCIATE_NAME_2}/{NET_PRICE_2_FROM}/{NET_PRICE_2_TO}/{PAYMENT_MONTH_2_FROM}/{PAYMENT_MONTH_2_TO}/{ASSOCIATE_NAME_3}/{NET_PRICE_3_FROM}/{NET_PRICE_3_TO}/{PAYMENT_MONTH_3_FROM}/{PAYMENT_MONTH_3_TO}")]
         [Route("api/DatabaseAccessController/P_Get_OrderList_ForLegacyExcel/Search/{ODR_PERIOD}/{ODR_CATEGORY}/{ODR_MONTH}/{ODR_SEQ}/{STATUS}/{CNST_MANAGER_ID}/{CUSTOMER_NAME}/{ODR_NAME}/{ACCEPT_DATE_FROM}/{ACCEPT_DATE_TO}/{ACCEPT_MONTH_FROM}/{ACCEPT_MONTH_TO}/{PAYMENT_MONTH_FROM}/{PAYMENT_MONTH_TO}")]
         public IList<RecMV_ORDER_LIST_FOR_EXCEL_P1> P_Get_OrderList_ForLegacyExcel(
-            string ODR_PERIOD, 
-            string ODR_CATEGORY, 
-            string ODR_MONTH, 
+            string ODR_PERIOD,
+            string ODR_CATEGORY,
+            string ODR_MONTH,
             string ODR_SEQ,
             string STATUS,
             string CNST_MANAGER_ID,
@@ -35,6 +36,7 @@ namespace BAMTS_Internal_WebAPIService.Controllers
             string PAYMENT_MONTH_FROM,
             string PAYMENT_MONTH_TO
         ) => this._storedProcessor.P_Get_OrderList_ForLegacyExcel(
+            DEFAULT: false,
             (ODR_PERIOD == Common.ROUTE_PARAM_NULL) ? null : int.Parse(ODR_PERIOD),
             (ODR_CATEGORY == Common.ROUTE_PARAM_NULL) ? null : ODR_CATEGORY,
             (ODR_MONTH == Common.ROUTE_PARAM_NULL) ? null : ODR_MONTH,
@@ -48,9 +50,76 @@ namespace BAMTS_Internal_WebAPIService.Controllers
             (ACCEPT_MONTH_FROM == Common.ROUTE_PARAM_NULL) ? null : ACCEPT_MONTH_FROM,
             (ACCEPT_MONTH_TO == Common.ROUTE_PARAM_NULL) ? null : ACCEPT_MONTH_TO,
             (PAYMENT_MONTH_FROM == Common.ROUTE_PARAM_NULL) ? null : PAYMENT_MONTH_FROM,
-            (PAYMENT_MONTH_TO == Common.ROUTE_PARAM_NULL) ? null : PAYMENT_MONTH_TO,
-            DEFAULT: false
+            (PAYMENT_MONTH_TO == Common.ROUTE_PARAM_NULL) ? null : PAYMENT_MONTH_TO
         );
+        //[HttpGet]
+        //[Route("api/DatabaseAccessController/P_Get_OrderList_ForLegacyExcel_Search/{ODR_PERIOD}/{ODR_CATEGORY}/{ODR_MONTH}/{ODR_SEQ}/{STATUS}/{CNST_MANAGER_ID}/{CUSTOMER_NAME}/{ODR_NAME}/{ACCEPT_DATE_FROM}/{ACCEPT_DATE_TO}/{ACCEPT_MONTH_FROM}/{ACCEPT_MONTH_TO}/{PAYMENT_MONTH_FROM}/{PAYMENT_MONTH_TO}/{ANS_NET_PRICE_FROM}/{ANS_NET_PRICE_TO}/{ASSOCIATE_NAME_1}/{NET_PRICE_1_FROM}/{NET_PRICE_1_TO}/{PAYMENT_MONTH_1_FROM}/{PAYMENT_MONTH_1_TO}/{ASSOCIATE_NAME_2}/{NET_PRICE_2_FROM}/{NET_PRICE_2_TO}/{PAYMENT_MONTH_2_FROM}/{PAYMENT_MONTH_2_TO}/{ASSOCIATE_NAME_3}/{NET_PRICE_3_FROM}/{NET_PRICE_3_TO}/{PAYMENT_MONTH_3_FROM}/{PAYMENT_MONTH_3_TO}")]
+        //public IList<RecMV_ORDER_LIST_FOR_EXCEL_P1> P_Get_OrderList_ForLegacyExcel(
+        //    string ODR_PERIOD,
+        //    string ODR_CATEGORY,
+        //    string ODR_MONTH,
+        //    string ODR_SEQ,
+        //    string STATUS,
+        //    string CNST_MANAGER_ID,
+        //    string CUSTOMER_NAME,
+        //    string ODR_NAME,
+        //    string ACCEPT_DATE_FROM,
+        //    string ACCEPT_DATE_TO,
+        //    string ACCEPT_MONTH_FROM,
+        //    string ACCEPT_MONTH_TO,
+        //    string PAYMENT_MONTH_FROM,
+        //    string PAYMENT_MONTH_TO,
+        //    string ANS_NET_PRICE_FROM,
+        //    string ANS_NET_PRICE_TO,
+        //    string ASSOCIATE_NAME_1,
+        //    string NET_PRICE_1_FROM,
+        //    string NET_PRICE_1_TO,
+        //    string PAYMENT_MONTH_1_FROM,
+        //    string PAYMENT_MONTH_1_TO,
+        //    string ASSOCIATE_NAME_2,
+        //    string NET_PRICE_2_FROM,
+        //    string NET_PRICE_2_TO,
+        //    string PAYMENT_MONTH_2_FROM,
+        //    string PAYMENT_MONTH_2_TO,
+        //    string ASSOCIATE_NAME_3,
+        //    string NET_PRICE_3_FROM,
+        //    string NET_PRICE_3_TO,
+        //    string PAYMENT_MONTH_3_FROM,
+        //    string PAYMENT_MONTH_3_TO
+        //) => this._storedProcessor.P_Get_OrderList_ForLegacyExcel(
+        //    DEFAULT: false
+        //    (ODR_PERIOD == Common.ROUTE_PARAM_NULL) ? null : int.Parse(ODR_PERIOD),
+        //    (ODR_CATEGORY == Common.ROUTE_PARAM_NULL) ? null : ODR_CATEGORY,
+        //    (ODR_MONTH == Common.ROUTE_PARAM_NULL) ? null : ODR_MONTH,
+        //    (ODR_SEQ == Common.ROUTE_PARAM_NULL) ? null : int.Parse(ODR_SEQ),
+        //    (STATUS == Common.ROUTE_PARAM_NULL) ? null : int.Parse(STATUS),
+        //    (CNST_MANAGER_ID == Common.ROUTE_PARAM_NULL) ? null : CNST_MANAGER_ID,
+        //    (CUSTOMER_NAME == Common.ROUTE_PARAM_NULL) ? null : CUSTOMER_NAME,
+        //    (ODR_NAME == Common.ROUTE_PARAM_NULL) ? null : ODR_NAME,
+        //    (ACCEPT_DATE_FROM == Common.ROUTE_PARAM_NULL) ? null : ACCEPT_DATE_FROM,
+        //    (ACCEPT_DATE_TO == Common.ROUTE_PARAM_NULL) ? null : ACCEPT_DATE_TO,
+        //    (ACCEPT_MONTH_FROM == Common.ROUTE_PARAM_NULL) ? null : ACCEPT_MONTH_FROM,
+        //    (ACCEPT_MONTH_TO == Common.ROUTE_PARAM_NULL) ? null : ACCEPT_MONTH_TO,
+        //    (PAYMENT_MONTH_FROM == Common.ROUTE_PARAM_NULL) ? null : PAYMENT_MONTH_FROM,
+        //    (PAYMENT_MONTH_TO == Common.ROUTE_PARAM_NULL) ? null : PAYMENT_MONTH_TO,
+        //    (ANS_NET_PRICE_FROM == Common.ROUTE_PARAM_NULL) ? null : int.Parse(ANS_NET_PRICE_FROM),
+        //    (ANS_NET_PRICE_TO == Common.ROUTE_PARAM_NULL) ? null : int.Parse(ANS_NET_PRICE_TO),
+        //    (ASSOCIATE_NAME_1 == Common.ROUTE_PARAM_NULL) ? null : ASSOCIATE_NAME_1,
+        //    (NET_PRICE_1_FROM == Common.ROUTE_PARAM_NULL) ? null : int.Parse(NET_PRICE_1_FROM),
+        //    (NET_PRICE_1_TO == Common.ROUTE_PARAM_NULL) ? null : int.Parse(NET_PRICE_1_TO),
+        //    (PAYMENT_MONTH_1_FROM == Common.ROUTE_PARAM_NULL) ? null : PAYMENT_MONTH_1_FROM,
+        //    (PAYMENT_MONTH_1_TO == Common.ROUTE_PARAM_NULL) ? null : PAYMENT_MONTH_1_TO,
+        //    (ASSOCIATE_NAME_2 == Common.ROUTE_PARAM_NULL) ? null : ASSOCIATE_NAME_2,
+        //    (NET_PRICE_2_FROM == Common.ROUTE_PARAM_NULL) ? null : int.Parse(NET_PRICE_2_FROM),
+        //    (NET_PRICE_2_TO == Common.ROUTE_PARAM_NULL) ? null : int.Parse(NET_PRICE_2_TO),
+        //    (PAYMENT_MONTH_2_FROM == Common.ROUTE_PARAM_NULL) ? null : PAYMENT_MONTH_2_FROM,
+        //    (PAYMENT_MONTH_2_TO == Common.ROUTE_PARAM_NULL) ? null : PAYMENT_MONTH_2_TO,
+        //    (ASSOCIATE_NAME_3 == Common.ROUTE_PARAM_NULL) ? null : ASSOCIATE_NAME_3,
+        //    (NET_PRICE_3_FROM == Common.ROUTE_PARAM_NULL) ? null : int.Parse(NET_PRICE_3_FROM),
+        //    (NET_PRICE_3_TO == Common.ROUTE_PARAM_NULL) ? null : int.Parse(NET_PRICE_3_TO),
+        //    (PAYMENT_MONTH_3_FROM == Common.ROUTE_PARAM_NULL) ? null : PAYMENT_MONTH_3_FROM,
+        //    (PAYMENT_MONTH_3_TO == Common.ROUTE_PARAM_NULL) ? null : PAYMENT_MONTH_3_TO
+        //);
         [HttpDelete]
         [Route("api/DatabaseAccessController/P_Delete_OrderItem_ForApp1/Delete/{ODR_PERIOD}/{ODR_CATEGORY}/{ODR_MONTH}/{ODR_SEQ}")]
         public ActionResult P_Delete_OrderItem_ForApp1(string ODR_PERIOD, string ODR_CATEGORY, string ODR_MONTH, string ODR_SEQ)

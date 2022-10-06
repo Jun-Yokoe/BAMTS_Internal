@@ -55,6 +55,8 @@ namespace BAMTS.Internal
 		public DateTime? PAYMENT_MONTH_FROM { get; set; }
 		public DateTime? PAYMENT_MONTH_TO { get; set; }
 		public int? ANS_NET_PRICE { get; set; }
+		public int? ANS_NET_PRICE_FROM { get; set; }
+		public int? ANS_NET_PRICE_TO { get; set; }
 		public int? ANS_TAX_PRICE { get; set; }
 		public int? CNST_NET_PRICE { get; set; }
 		public int? CNST_TAX_PRICE { get; set; }
@@ -64,20 +66,32 @@ namespace BAMTS.Internal
 		public string ASSOCIATE_NAME_1 { get; set; }
 		public string WORKER_NAME_1 { get; set; }
 		public int? NET_PRICE_1 { get; set; }
+		public int? NET_PRICE_1_FROM { get; set; }
+		public int? NET_PRICE_1_TO { get; set; }
 		public int? TAX_PRICE_1 { get; set; }
 		public DateTime? PAYMENT_MONTH_1 { get; set; }
+		public DateTime? PAYMENT_MONTH_1_FROM{ get; set; }
+		public DateTime? PAYMENT_MONTH_1_TO{ get; set; }
 		public int? ASSOCIATE_ID_2 { get; set; }
 		public string ASSOCIATE_NAME_2 { get; set; }
 		public string WORKER_NAME_2 { get; set; }
 		public int? NET_PRICE_2 { get; set; }
+		public int? NET_PRICE_2_FROM { get; set; }
+		public int? NET_PRICE_2_TO { get; set; }
 		public int? TAX_PRICE_2 { get; set; }
 		public DateTime? PAYMENT_MONTH_2 { get; set; }
+		public DateTime? PAYMENT_MONTH_2_FROM { get; set; }
+		public DateTime? PAYMENT_MONTH_2_TO { get; set; }
 		public int? ASSOCIATE_ID_3 { get; set; }
 		public string ASSOCIATE_NAME_3 { get; set; }
 		public string WORKER_NAME_3 { get; set; }
 		public int? NET_PRICE_3 { get; set; }
+		public int? NET_PRICE_3_FROM { get; set; }
+		public int? NET_PRICE_3_TO { get; set; }
 		public int? TAX_PRICE_3 { get; set; }
 		public DateTime? PAYMENT_MONTH_3 { get; set; }
+		public DateTime? PAYMENT_MONTH_3_FROM { get; set; }
+		public DateTime? PAYMENT_MONTH_3_TO { get; set; }
 		public int? TAX_RATE { get; set; } = 10;
 		public DateTime? UPD_TIME { get; set; } = DateTime.Now;
 		public string UPD_USER { get; set; } = "Tool";

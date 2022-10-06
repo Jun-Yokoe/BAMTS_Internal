@@ -279,7 +279,7 @@
     </table>
 </div>
 <hr />
-<BSModal DataId="SearchInput" @ref="SearchInput" IsFullScreen="true" FullScreenSize="Size.Medium" IsCentered="true" IsStaticBackdrop="true" IsScrollable="true" Size="Size.Medium">
+<BSModal DataId="SearchInput" @ref="SearchInput" IsFullScreen="true" FullScreenSize="Size.Large" IsCentered="true" IsStaticBackdrop="true" IsScrollable="true" Size="Size.Large">
     <Header><SurveyPrompt Title="@this.SearchInput_HeaderTitle" /></Header>
     <Content>
         <EditForm Model="this.searchModel" OnValidSubmit="this.SearchExecute">
@@ -432,6 +432,108 @@
                                     </div>
                                 </td>
                             </tr>
+                            <!--
+                            <tr>
+                                <td class="table-secondary">
+                                    <label class="text-nowrap">EDI回答金額</label>
+                                </td>
+                                <td>
+                                    <input type="number" @bind-value="this.searchModel.ANS_NET_PRICE_FROM" style="width: 100px;" />
+                                    <label>～</label>
+                                    <input type="number" @bind-value="this.searchModel.ANS_NET_PRICE_TO" style="width: 100px;" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-secondary">
+                                    <label class="text-nowrap">協力会社-施工：会社名</label>
+                                </td>
+                                <td>
+                                    <BSInput InputType="InputType.Text" @bind-Value="this.searchModel.ASSOCIATE_NAME_1" style="width: stretch" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-secondary">
+                                    <label class="text-nowrap">協力会社-施工：金額(税抜)</label>
+                                </td>
+                                <td>
+                                    <input type="number" @bind-value="this.searchModel.NET_PRICE_1_FROM" style="width: 100px;" />
+                                    <label>～</label>
+                                    <input type="number" @bind-value="this.searchModel.NET_PRICE_1_TO" style="width: 100px;" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-secondary">
+                                    <label class="text-nowrap">協力会社-施工：請求月</label>
+                                </td>
+                                <td>
+                                    <div style="display: flex;">
+                                        <BSInput InputType="InputType.Month" @bind-Value="this.searchModel.PAYMENT_MONTH_1_FROM" />
+                                        <label>～</label>
+                                        <BSInput InputType="InputType.Month" @bind-Value="this.searchModel.PAYMENT_MONTH_1_TO" />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-secondary">
+                                    <label class="text-nowrap">協力会社-セットアップ：会社名</label>
+                                </td>
+                                <td>
+                                    <BSInput InputType="InputType.Text" @bind-Value="this.searchModel.ASSOCIATE_NAME_2" style="width: stretch" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-secondary">
+                                    <label class="text-nowrap">協力会社-セットアップ：金額(税抜)</label>
+                                </td>
+                                <td>
+                                    <input type="number" @bind-value="this.searchModel.NET_PRICE_2_FROM" style="width: 100px;" />
+                                    <label>～</label>
+                                    <input type="number" @bind-value="this.searchModel.NET_PRICE_2_TO" style="width: 100px;" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-secondary">
+                                    <label class="text-nowrap">協力会社-セットアップ：請求月</label>
+                                </td>
+                                <td>
+                                    <div style="display: flex;">
+                                        <BSInput InputType="InputType.Month" @bind-Value="this.searchModel.PAYMENT_MONTH_2_FROM" />
+                                        <label>～</label>
+                                        <BSInput InputType="InputType.Month" @bind-Value="this.searchModel.PAYMENT_MONTH_2_TO" />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-secondary">
+                                    <label class="text-nowrap">協力会社-その他：会社名</label>
+                                </td>
+                                <td>
+                                    <BSInput InputType="InputType.Text" @bind-Value="this.searchModel.ASSOCIATE_NAME_3" style="width: stretch" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-secondary">
+                                    <label class="text-nowrap">協力会社-その他：金額(税抜)</label>
+                                </td>
+                                <td>
+                                    <input type="number" @bind-value="this.searchModel.NET_PRICE_3_FROM" style="width: 100px;" />
+                                    <label>～</label>
+                                    <input type="number" @bind-value="this.searchModel.NET_PRICE_3_TO" style="width: 100px;" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-secondary">
+                                    <label class="text-nowrap">協力会社-その他：請求月</label>
+                                </td>
+                                <td>
+                                    <div style="display: flex;">
+                                        <BSInput InputType="InputType.Month" @bind-Value="this.searchModel.PAYMENT_MONTH_3_FROM" />
+                                        <label>～</label>
+                                        <BSInput InputType="InputType.Month" @bind-Value="this.searchModel.PAYMENT_MONTH_3_TO" />
+                                    </div>
+                                </td>
+                            </tr>
+                            -->
                         </tbody>
                     </table>
                 </div>
@@ -1386,6 +1488,23 @@
         this.searchModel.ACCEPT_MONTH_TO = null;
         this.searchModel.PAYMENT_MONTH_FROM = null;
         this.searchModel.PAYMENT_MONTH_TO = null;
+        this.searchModel.ANS_NET_PRICE_FROM = null;
+        this.searchModel.ANS_NET_PRICE_TO = null;
+        this.searchModel.ASSOCIATE_NAME_1 = null;
+        this.searchModel.NET_PRICE_1_FROM = null;
+        this.searchModel.NET_PRICE_1_TO = null;
+        this.searchModel.PAYMENT_MONTH_1_FROM = null;
+        this.searchModel.PAYMENT_MONTH_1_TO = null;
+        this.searchModel.ASSOCIATE_NAME_2 = null;
+        this.searchModel.NET_PRICE_2_FROM = null;
+        this.searchModel.NET_PRICE_2_TO = null;
+        this.searchModel.PAYMENT_MONTH_2_FROM = null;
+        this.searchModel.PAYMENT_MONTH_2_TO = null;
+        this.searchModel.ASSOCIATE_NAME_3 = null;
+        this.searchModel.NET_PRICE_3_FROM = null;
+        this.searchModel.NET_PRICE_3_TO = null;
+        this.searchModel.PAYMENT_MONTH_3_FROM = null;
+        this.searchModel.PAYMENT_MONTH_3_TO = null;
 
         this.StateHasChanged();
     }
@@ -1769,6 +1888,34 @@
             else sb.Append($"/{this.searchModel.PAYMENT_MONTH_FROM:yyyy-MM-dd}");
             if(this.searchModel.PAYMENT_MONTH_TO == null) sb.Append($"/{Common.ROUTE_PARAM_NULL}");
             else sb.Append($"/{this.searchModel.PAYMENT_MONTH_TO:yyyy-MM-dd}");
+
+            //sb.Append($"/{this.searchModel.ANS_NET_PRICE_FROM?.ToString() ?? Common.ROUTE_PARAM_NULL}");
+            //sb.Append($"/{this.searchModel.ANS_NET_PRICE_TO?.ToString() ?? Common.ROUTE_PARAM_NULL}");
+
+            //sb.Append($"/{(string.IsNullOrEmpty(this.searchModel.ASSOCIATE_NAME_1) ? null : this.searchModel.ASSOCIATE_NAME_1)?.ToString() ?? Common.ROUTE_PARAM_NULL}");
+            //sb.Append($"/{this.searchModel.NET_PRICE_1_FROM?.ToString() ?? Common.ROUTE_PARAM_NULL}");
+            //sb.Append($"/{this.searchModel.NET_PRICE_1_TO?.ToString() ?? Common.ROUTE_PARAM_NULL}");
+            //if(this.searchModel.PAYMENT_MONTH_1_FROM == null) sb.Append($"/{Common.ROUTE_PARAM_NULL}");
+            //else sb.Append($"/{this.searchModel.PAYMENT_MONTH_1_FROM:yyyy-MM-dd}");
+            //if(this.searchModel.PAYMENT_MONTH_1_TO == null) sb.Append($"/{Common.ROUTE_PARAM_NULL}");
+            //else sb.Append($"/{this.searchModel.PAYMENT_MONTH_1_TO:yyyy-MM-dd}");
+
+            //sb.Append($"/{(string.IsNullOrEmpty(this.searchModel.ASSOCIATE_NAME_2) ? null : this.searchModel.ASSOCIATE_NAME_2)?.ToString() ?? Common.ROUTE_PARAM_NULL}");
+            //sb.Append($"/{this.searchModel.NET_PRICE_2_FROM?.ToString() ?? Common.ROUTE_PARAM_NULL}");
+            //sb.Append($"/{this.searchModel.NET_PRICE_2_TO?.ToString() ?? Common.ROUTE_PARAM_NULL}");
+            //if(this.searchModel.PAYMENT_MONTH_2_FROM == null) sb.Append($"/{Common.ROUTE_PARAM_NULL}");
+            //else sb.Append($"/{this.searchModel.PAYMENT_MONTH_2_FROM:yyyy-MM-dd}");
+            //if(this.searchModel.PAYMENT_MONTH_2_TO == null) sb.Append($"/{Common.ROUTE_PARAM_NULL}");
+            //else sb.Append($"/{this.searchModel.PAYMENT_MONTH_2_TO:yyyy-MM-dd}");
+
+            //sb.Append($"/{(string.IsNullOrEmpty(this.searchModel.ASSOCIATE_NAME_3) ? null : this.searchModel.ASSOCIATE_NAME_3)?.ToString() ?? Common.ROUTE_PARAM_NULL}");
+            //sb.Append($"/{this.searchModel.NET_PRICE_3_FROM?.ToString() ?? Common.ROUTE_PARAM_NULL}");
+            //sb.Append($"/{this.searchModel.NET_PRICE_3_TO?.ToString() ?? Common.ROUTE_PARAM_NULL}");
+            //if(this.searchModel.PAYMENT_MONTH_3_FROM == null) sb.Append($"/{Common.ROUTE_PARAM_NULL}");
+            //else sb.Append($"/{this.searchModel.PAYMENT_MONTH_3_FROM:yyyy-MM-dd}");
+            //if(this.searchModel.PAYMENT_MONTH_3_TO == null) sb.Append($"/{Common.ROUTE_PARAM_NULL}");
+            //else sb.Append($"/{this.searchModel.PAYMENT_MONTH_3_TO:yyyy-MM-dd}");
+
             this.URL = sb.ToString();
             this.allList = await Http.GetFromJsonAsync<List<RecVV_ORDER_LIST_FOR_EXCEL_P1>>(this.URL);
             this.dspList = this.allList.Skip(this.nowPage * this.displayRows).Take(this.displayRows).ToList();

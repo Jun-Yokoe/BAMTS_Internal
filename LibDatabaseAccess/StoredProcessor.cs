@@ -20,7 +20,8 @@ namespace BAMTS.Internal
             this.ConnectionString = connectionString;
         }
         public List<RecMV_ORDER_LIST_FOR_EXCEL_P1> P_Get_OrderList_ForLegacyExcel(
-              int? ODR_PERIOD = null
+             bool DEFAULT = true
+            , int? ODR_PERIOD = null
             , string ODR_CATEGORY = null
             , string ODR_MONTH = null
             , int? ODR_SEQ = null
@@ -34,7 +35,23 @@ namespace BAMTS.Internal
             , string ACCEPT_MONTH_TO = null
             , string PAYMENT_MONTH_FROM = null
             , string PAYMENT_MONTH_TO = null
-            , bool DEFAULT = true
+            , int? ANS_NET_PRICE_FROM = null
+            , int? ANS_NET_PRICE_TO = null
+            , string ASSOCIATE_NAME_1 = null
+            , int? NET_PRICE_1_FROM = null
+            , int? NET_PRICE_1_TO = null
+            , string PAYMENT_MONTH_1_FROM = null
+            , string PAYMENT_MONTH_1_TO = null
+            , string ASSOCIATE_NAME_2 = null
+            , int? NET_PRICE_2_FROM = null
+            , int? NET_PRICE_2_TO = null
+            , string PAYMENT_MONTH_2_FROM = null
+            , string PAYMENT_MONTH_2_TO = null
+            , string ASSOCIATE_NAME_3 = null
+            , int? NET_PRICE_3_FROM = null
+            , int? NET_PRICE_3_TO = null
+            , string PAYMENT_MONTH_3_FROM = null
+            , string PAYMENT_MONTH_3_TO = null
         )
         {
             var result = new List<RecMV_ORDER_LIST_FOR_EXCEL_P1>();
@@ -51,6 +68,12 @@ namespace BAMTS.Internal
                         DateTime? dtACCEPT_MONTH_TO = null;
                         DateTime? dtPAYMENT_MONTH_FROM = null;
                         DateTime? dtPAYMENT_MONTH_TO = null;
+                        DateTime? dtPAYMENT_MONTH_1_FROM = null;
+                        DateTime? dtPAYMENT_MONTH_1_TO = null;
+                        DateTime? dtPAYMENT_MONTH_2_FROM = null;
+                        DateTime? dtPAYMENT_MONTH_2_TO = null;
+                        DateTime? dtPAYMENT_MONTH_3_FROM = null;
+                        DateTime? dtPAYMENT_MONTH_3_TO = null;
                         if (ACCEPT_DATE_FROM != null)
                         {
                             dtACCEPT_DATE_FROM = DateTime.Parse(ACCEPT_DATE_FROM).Date;
@@ -81,6 +104,39 @@ namespace BAMTS.Internal
                             var days = DateTime.DaysInMonth(day.Year, day.Month);
                             dtPAYMENT_MONTH_TO = (new DateTime(day.Year, day.Month, days)).AddDays(1).Date.AddMilliseconds(-1);
                         }
+                        if (PAYMENT_MONTH_1_FROM != null)
+                        {
+                            var day = DateTime.Parse(PAYMENT_MONTH_1_FROM).Date;
+                            dtPAYMENT_MONTH_1_FROM = new DateTime(day.Year, day.Month, 1);
+                        }
+                        if (PAYMENT_MONTH_1_TO != null)
+                        {
+                            var day = DateTime.Parse(PAYMENT_MONTH_1_TO).Date;
+                            var days = DateTime.DaysInMonth(day.Year, day.Month);
+                            dtPAYMENT_MONTH_1_TO = (new DateTime(day.Year, day.Month, days)).AddDays(1).Date.AddMilliseconds(-1);
+                        }
+                        if (PAYMENT_MONTH_2_FROM != null)
+                        {
+                            var day = DateTime.Parse(PAYMENT_MONTH_2_FROM).Date;
+                            dtPAYMENT_MONTH_2_FROM = new DateTime(day.Year, day.Month, 1);
+                        }
+                        if (PAYMENT_MONTH_2_TO != null)
+                        {
+                            var day = DateTime.Parse(PAYMENT_MONTH_2_TO).Date;
+                            var days = DateTime.DaysInMonth(day.Year, day.Month);
+                            dtPAYMENT_MONTH_2_TO = (new DateTime(day.Year, day.Month, days)).AddDays(1).Date.AddMilliseconds(-1);
+                        }
+                        if (PAYMENT_MONTH_3_FROM != null)
+                        {
+                            var day = DateTime.Parse(PAYMENT_MONTH_3_FROM).Date;
+                            dtPAYMENT_MONTH_3_FROM = new DateTime(day.Year, day.Month, 1);
+                        }
+                        if (PAYMENT_MONTH_3_TO != null)
+                        {
+                            var day = DateTime.Parse(PAYMENT_MONTH_3_TO).Date;
+                            var days = DateTime.DaysInMonth(day.Year, day.Month);
+                            dtPAYMENT_MONTH_3_TO = (new DateTime(day.Year, day.Month, days)).AddDays(1).Date.AddMilliseconds(-1);
+                        }
                         SqlCommand cmd = (SqlCommand)db.GetCommand(false);
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.CommandText = "P_Get_OrderList_ForLegacyExcel";
@@ -98,6 +154,23 @@ namespace BAMTS.Internal
                         cmd.Parameters.Add("@ACCEPT_MONTH_TO", SqlDbType.DateTime).Value = dtACCEPT_MONTH_TO ?? (object)DBNull.Value;
                         cmd.Parameters.Add("@PAYMENT_MONTH_FROM", SqlDbType.DateTime).Value = dtPAYMENT_MONTH_FROM ?? (object)DBNull.Value;
                         cmd.Parameters.Add("@PAYMENT_MONTH_TO", SqlDbType.DateTime).Value = dtPAYMENT_MONTH_TO ?? (object)DBNull.Value;
+                        //cmd.Parameters.Add("@ANS_NET_PRICE_FROM", SqlDbType.Int).Value = ANS_NET_PRICE_FROM ?? (object)DBNull.Value;
+                        //cmd.Parameters.Add("@ANS_NET_PRICE_TO", SqlDbType.Int).Value = ANS_NET_PRICE_TO ?? (object)DBNull.Value;
+                        //cmd.Parameters.Add("@ASSOCIATE_NAME_1", SqlDbType.VarChar).Value = ASSOCIATE_NAME_1 ?? (object)DBNull.Value;
+                        //cmd.Parameters.Add("@NET_PRICE_1_FROM", SqlDbType.Int).Value = NET_PRICE_1_FROM ?? (object)DBNull.Value;
+                        //cmd.Parameters.Add("@NET_PRICE_1_TO", SqlDbType.Int).Value = NET_PRICE_1_TO ?? (object)DBNull.Value;
+                        //cmd.Parameters.Add("@PAYMENT_MONTH_1_FROM", SqlDbType.DateTime).Value = dtPAYMENT_MONTH_1_FROM ?? (object)DBNull.Value;
+                        //cmd.Parameters.Add("@PAYMENT_MONTH_1_TO", SqlDbType.DateTime).Value = dtPAYMENT_MONTH_1_TO ?? (object)DBNull.Value;
+                        //cmd.Parameters.Add("@ASSOCIATE_NAME_2", SqlDbType.VarChar).Value = ASSOCIATE_NAME_2 ?? (object)DBNull.Value;
+                        //cmd.Parameters.Add("@NET_PRICE_2_FROM", SqlDbType.Int).Value = NET_PRICE_2_FROM ?? (object)DBNull.Value;
+                        //cmd.Parameters.Add("@NET_PRICE_2_TO", SqlDbType.Int).Value = NET_PRICE_2_TO ?? (object)DBNull.Value;
+                        //cmd.Parameters.Add("@PAYMENT_MONTH_2_FROM", SqlDbType.DateTime).Value = dtPAYMENT_MONTH_2_FROM ?? (object)DBNull.Value;
+                        //cmd.Parameters.Add("@PAYMENT_MONTH_2_TO", SqlDbType.DateTime).Value = dtPAYMENT_MONTH_2_TO ?? (object)DBNull.Value;
+                        //cmd.Parameters.Add("@ASSOCIATE_NAME_3", SqlDbType.VarChar).Value = ASSOCIATE_NAME_3 ?? (object)DBNull.Value;
+                        //cmd.Parameters.Add("@NET_PRICE_3_FROM", SqlDbType.Int).Value = NET_PRICE_3_FROM ?? (object)DBNull.Value;
+                        //cmd.Parameters.Add("@NET_PRICE_3_TO", SqlDbType.Int).Value = NET_PRICE_3_TO ?? (object)DBNull.Value;
+                        //cmd.Parameters.Add("@PAYMENT_MONTH_3_FROM", SqlDbType.DateTime).Value = dtPAYMENT_MONTH_3_FROM ?? (object)DBNull.Value;
+                        //cmd.Parameters.Add("@PAYMENT_MONTH_3_TO", SqlDbType.DateTime).Value = dtPAYMENT_MONTH_3_TO ?? (object)DBNull.Value;
                         cmd.Parameters.Add("@DEFAULT", SqlDbType.Int).Value = DEFAULT ? 1 : 0;
                         var ds = db.GetDataSet(cmd, false);
                         {
