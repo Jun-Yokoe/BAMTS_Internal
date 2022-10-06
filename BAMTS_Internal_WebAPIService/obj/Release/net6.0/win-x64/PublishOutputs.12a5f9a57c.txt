@@ -353,7 +353,7 @@ C:\User\Projects\BAMTS\Development\BAMTS_Internal\Source\BAMTS_Internal_WebAPISe
 C:\User\Projects\BAMTS\Development\BAMTS_Internal\Source\BAMTS_Internal_WebAPIService\obj\Release\net6.0\win-x64\PubTmp\Out\hostfxr.dll
 C:\User\Projects\BAMTS\Development\BAMTS_Internal\Source\BAMTS_Internal_WebAPIService\obj\Release\net6.0\win-x64\PubTmp\Out\hostpolicy.dll
 C:\User\Projects\BAMTS\Development\BAMTS_Internal\Source\BAMTS_Internal_WebAPIService\obj\Release\net6.0\win-x64\PubTmp\Out\mscordaccore.dll
-C:\User\Projects\BAMTS\Development\BAMTS_Internal\Source\BAMTS_Internal_WebAPIService\obj\Release\net6.0\win-x64\PubTmp\Out\mscordaccore_amd64_amd64_6.0.822.36306.dll
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\Source\BAMTS_Internal_WebAPIService\obj\Release\net6.0\win-x64\PubTmp\Out\mscordaccore_amd64_amd64_6.0.922.41905.dll
 C:\User\Projects\BAMTS\Development\BAMTS_Internal\Source\BAMTS_Internal_WebAPIService\obj\Release\net6.0\win-x64\PubTmp\Out\mscordbi.dll
 C:\User\Projects\BAMTS\Development\BAMTS_Internal\Source\BAMTS_Internal_WebAPIService\obj\Release\net6.0\win-x64\PubTmp\Out\mscorrc.dll
 C:\User\Projects\BAMTS\Development\BAMTS_Internal\Source\BAMTS_Internal_WebAPIService\obj\Release\net6.0\win-x64\PubTmp\Out\msquic.dll

@@ -19,7 +19,23 @@ namespace BAMTS.Internal
         {
             this.ConnectionString = connectionString;
         }
-        public List<RecMV_ORDER_LIST_FOR_EXCEL_P1> P_Get_OrderList_ForLegacyExcel(int? ODR_PERIOD = null, string ODR_CATEGORY = null, string ODR_MONTH = null, int? ODR_SEQ = null, int? STATUS = null, string CNST_MANAGER_ID = null, string CUSTOMER_NAME = null, string ODR_NAME = null, bool DEFAULT = true)
+        public List<RecMV_ORDER_LIST_FOR_EXCEL_P1> P_Get_OrderList_ForLegacyExcel(
+              int? ODR_PERIOD = null
+            , string ODR_CATEGORY = null
+            , string ODR_MONTH = null
+            , int? ODR_SEQ = null
+            , int? STATUS = null
+            , string CNST_MANAGER_ID = null
+            , string CUSTOMER_NAME = null
+            , string ODR_NAME = null
+            , string ACCEPT_DATE_FROM = null
+            , string ACCEPT_DATE_TO = null
+            , string ACCEPT_MONTH_FROM = null
+            , string ACCEPT_MONTH_TO = null
+            , string PAYMENT_MONTH_FROM = null
+            , string PAYMENT_MONTH_TO = null
+            , bool DEFAULT = true
+        )
         {
             var result = new List<RecMV_ORDER_LIST_FOR_EXCEL_P1>();
             for (int tryCount = 0; tryCount <= this.MaxRetryCount; tryCount++)
@@ -29,6 +45,42 @@ namespace BAMTS.Internal
                     db.Open();
                     try
                     {
+                        DateTime? dtACCEPT_DATE_FROM = null;
+                        DateTime? dtACCEPT_DATE_TO = null;
+                        DateTime? dtACCEPT_MONTH_FROM = null;
+                        DateTime? dtACCEPT_MONTH_TO = null;
+                        DateTime? dtPAYMENT_MONTH_FROM = null;
+                        DateTime? dtPAYMENT_MONTH_TO = null;
+                        if (ACCEPT_DATE_FROM != null)
+                        {
+                            dtACCEPT_DATE_FROM = DateTime.Parse(ACCEPT_DATE_FROM).Date;
+                        }
+                        if (ACCEPT_DATE_TO != null)
+                        {
+                            dtACCEPT_DATE_TO = DateTime.Parse(ACCEPT_DATE_TO).Date.AddDays(1).Date.AddMilliseconds(-1);
+                        }
+                        if (ACCEPT_MONTH_FROM != null)
+                        {
+                            var day = DateTime.Parse(ACCEPT_MONTH_FROM).Date;
+                            dtACCEPT_MONTH_FROM = new DateTime(day.Year, day.Month, 1);
+                        }
+                        if (ACCEPT_MONTH_TO != null)
+                        {
+                            var day = DateTime.Parse(ACCEPT_MONTH_TO).Date;
+                            var days = DateTime.DaysInMonth(day.Year, day.Month);
+                            dtACCEPT_MONTH_TO = (new DateTime(day.Year, day.Month, days)).AddDays(1).Date.AddMilliseconds(-1);
+                        }
+                        if (PAYMENT_MONTH_FROM != null)
+                        {
+                            var day = DateTime.Parse(PAYMENT_MONTH_FROM).Date;
+                            dtPAYMENT_MONTH_FROM = new DateTime(day.Year, day.Month, 1);
+                        }
+                        if (PAYMENT_MONTH_TO != null)
+                        {
+                            var day = DateTime.Parse(PAYMENT_MONTH_TO).Date;
+                            var days = DateTime.DaysInMonth(day.Year, day.Month);
+                            dtPAYMENT_MONTH_TO = (new DateTime(day.Year, day.Month, days)).AddDays(1).Date.AddMilliseconds(-1);
+                        }
                         SqlCommand cmd = (SqlCommand)db.GetCommand(false);
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.CommandText = "P_Get_OrderList_ForLegacyExcel";
@@ -40,6 +92,12 @@ namespace BAMTS.Internal
                         cmd.Parameters.Add("@CNST_MANAGER_ID", SqlDbType.VarChar).Value = CNST_MANAGER_ID ?? (object)DBNull.Value;
                         cmd.Parameters.Add("@CUSTOMER_NAME", SqlDbType.VarChar).Value = CUSTOMER_NAME ?? (object)DBNull.Value;
                         cmd.Parameters.Add("@ODR_NAME", SqlDbType.VarChar).Value = ODR_NAME ?? (object)DBNull.Value;
+                        cmd.Parameters.Add("@ACCEPT_DATE_FROM", SqlDbType.DateTime).Value = dtACCEPT_DATE_FROM ?? (object)DBNull.Value;
+                        cmd.Parameters.Add("@ACCEPT_DATE_TO", SqlDbType.DateTime).Value = dtACCEPT_DATE_TO ?? (object)DBNull.Value;
+                        cmd.Parameters.Add("@ACCEPT_MONTH_FROM", SqlDbType.DateTime).Value = dtACCEPT_MONTH_FROM ?? (object)DBNull.Value;
+                        cmd.Parameters.Add("@ACCEPT_MONTH_TO", SqlDbType.DateTime).Value = dtACCEPT_MONTH_TO ?? (object)DBNull.Value;
+                        cmd.Parameters.Add("@PAYMENT_MONTH_FROM", SqlDbType.DateTime).Value = dtPAYMENT_MONTH_FROM ?? (object)DBNull.Value;
+                        cmd.Parameters.Add("@PAYMENT_MONTH_TO", SqlDbType.DateTime).Value = dtPAYMENT_MONTH_TO ?? (object)DBNull.Value;
                         cmd.Parameters.Add("@DEFAULT", SqlDbType.Int).Value = DEFAULT ? 1 : 0;
                         var ds = db.GetDataSet(cmd, false);
                         {

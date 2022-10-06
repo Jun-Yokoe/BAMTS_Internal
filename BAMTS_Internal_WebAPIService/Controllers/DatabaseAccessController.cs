@@ -18,7 +18,7 @@ namespace BAMTS_Internal_WebAPIService.Controllers
         private StoredProcessor _storedProcessor;
         public DatabaseAccessController() => this._storedProcessor = new StoredProcessor(DatabaseAccessController._TARGET_INFO_TEXT);
         [HttpGet]
-        [Route("api/DatabaseAccessController/P_Get_OrderList_ForLegacyExcel/Search/{ODR_PERIOD}/{ODR_CATEGORY}/{ODR_MONTH}/{ODR_SEQ}/{STATUS}/{CNST_MANAGER_ID}/{CUSTOMER_NAME}/{ODR_NAME}")]
+        [Route("api/DatabaseAccessController/P_Get_OrderList_ForLegacyExcel/Search/{ODR_PERIOD}/{ODR_CATEGORY}/{ODR_MONTH}/{ODR_SEQ}/{STATUS}/{CNST_MANAGER_ID}/{CUSTOMER_NAME}/{ODR_NAME}/{ACCEPT_DATE_FROM}/{ACCEPT_DATE_TO}/{ACCEPT_MONTH_FROM}/{ACCEPT_MONTH_TO}/{PAYMENT_MONTH_FROM}/{PAYMENT_MONTH_TO}")]
         public IList<RecMV_ORDER_LIST_FOR_EXCEL_P1> P_Get_OrderList_ForLegacyExcel(
             string ODR_PERIOD, 
             string ODR_CATEGORY, 
@@ -27,7 +27,13 @@ namespace BAMTS_Internal_WebAPIService.Controllers
             string STATUS,
             string CNST_MANAGER_ID,
             string CUSTOMER_NAME,
-            string ODR_NAME
+            string ODR_NAME,
+            string ACCEPT_DATE_FROM,
+            string ACCEPT_DATE_TO,
+            string ACCEPT_MONTH_FROM,
+            string ACCEPT_MONTH_TO,
+            string PAYMENT_MONTH_FROM,
+            string PAYMENT_MONTH_TO
         ) => this._storedProcessor.P_Get_OrderList_ForLegacyExcel(
             (ODR_PERIOD == Common.ROUTE_PARAM_NULL) ? null : int.Parse(ODR_PERIOD),
             (ODR_CATEGORY == Common.ROUTE_PARAM_NULL) ? null : ODR_CATEGORY,
@@ -37,6 +43,12 @@ namespace BAMTS_Internal_WebAPIService.Controllers
             (CNST_MANAGER_ID == Common.ROUTE_PARAM_NULL) ? null : CNST_MANAGER_ID,
             (CUSTOMER_NAME == Common.ROUTE_PARAM_NULL) ? null : CUSTOMER_NAME,
             (ODR_NAME == Common.ROUTE_PARAM_NULL) ? null : ODR_NAME,
+            (ACCEPT_DATE_FROM == Common.ROUTE_PARAM_NULL) ? null : ACCEPT_DATE_FROM,
+            (ACCEPT_DATE_TO == Common.ROUTE_PARAM_NULL) ? null : ACCEPT_DATE_TO,
+            (ACCEPT_MONTH_FROM == Common.ROUTE_PARAM_NULL) ? null : ACCEPT_MONTH_FROM,
+            (ACCEPT_MONTH_TO == Common.ROUTE_PARAM_NULL) ? null : ACCEPT_MONTH_TO,
+            (PAYMENT_MONTH_FROM == Common.ROUTE_PARAM_NULL) ? null : PAYMENT_MONTH_FROM,
+            (PAYMENT_MONTH_TO == Common.ROUTE_PARAM_NULL) ? null : PAYMENT_MONTH_TO,
             DEFAULT: false
         );
         [HttpDelete]

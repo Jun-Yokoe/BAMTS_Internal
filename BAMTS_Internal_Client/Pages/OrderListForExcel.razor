@@ -396,6 +396,42 @@
                                     </select>
                                 </td>
                             </tr>
+                            <tr>
+                                <td class="table-secondary">
+                                    <label class="text-nowrap">検収日</label>
+                                </td>
+                                <td>
+                                    <div style="display: flex;">
+                                        <BSInput InputType="InputType.Date" @bind-Value="this.searchModel.ACCEPT_DATE_FROM" />
+                                        <label>～</label>
+                                        <BSInput InputType="InputType.Date" @bind-Value="this.searchModel.ACCEPT_DATE_TO" />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-secondary">
+                                    <label class="text-nowrap">検収月</label>
+                                </td>
+                                <td>
+                                    <div style="display: flex;">
+                                        <BSInput InputType="InputType.Month" @bind-Value="this.searchModel.ACCEPT_MONTH_FROM" />
+                                        <label>～</label>
+                                        <BSInput InputType="InputType.Month" @bind-Value="this.searchModel.ACCEPT_MONTH_TO" />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-secondary">
+                                    <label class="text-nowrap">入金月</label>
+                                </td>
+                                <td>
+                                    <div style="display: flex;">
+                                        <BSInput InputType="InputType.Month" @bind-Value="this.searchModel.PAYMENT_MONTH_FROM" />
+                                        <label>～</label>
+                                        <BSInput InputType="InputType.Month" @bind-Value="this.searchModel.PAYMENT_MONTH_TO" />
+                                    </div>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -1344,6 +1380,13 @@
         this.searchModel.STATUS = null;
         this.searchModel.TYPE = null;
         this.searchModel.CNST_MANAGER_ID = null;
+        this.searchModel.ACCEPT_DATE_FROM = null;
+        this.searchModel.ACCEPT_DATE_TO = null;
+        this.searchModel.ACCEPT_MONTH_FROM = null;
+        this.searchModel.ACCEPT_MONTH_TO = null;
+        this.searchModel.PAYMENT_MONTH_FROM = null;
+        this.searchModel.PAYMENT_MONTH_TO = null;
+
         this.StateHasChanged();
     }
     private void AutoCalcANS_NET_PRICE(bool discount)
@@ -1714,6 +1757,18 @@
             sb.Append($"/{(string.IsNullOrEmpty(this.searchModel.CNST_MANAGER_ID) ? null : this.searchModel.CNST_MANAGER_ID)?.ToString() ?? Common.ROUTE_PARAM_NULL}");
             sb.Append($"/{(string.IsNullOrEmpty(this.searchModel.CUSTOMER_NAME) ? null : this.searchModel.CUSTOMER_NAME)?.ToString() ?? Common.ROUTE_PARAM_NULL}");
             sb.Append($"/{(string.IsNullOrEmpty(this.searchModel.ODR_NAME) ? null : this.searchModel.ODR_NAME)?.ToString() ?? Common.ROUTE_PARAM_NULL}");
+            if(this.searchModel.ACCEPT_DATE_FROM == null) sb.Append($"/{Common.ROUTE_PARAM_NULL}");
+            else sb.Append($"/{this.searchModel.ACCEPT_DATE_FROM:yyyy-MM-dd}");
+            if(this.searchModel.ACCEPT_DATE_TO == null) sb.Append($"/{Common.ROUTE_PARAM_NULL}");
+            else sb.Append($"/{this.searchModel.ACCEPT_DATE_TO:yyyy-MM-dd}");
+            if(this.searchModel.ACCEPT_MONTH_FROM == null) sb.Append($"/{Common.ROUTE_PARAM_NULL}");
+            else sb.Append($"/{this.searchModel.ACCEPT_MONTH_FROM:yyyy-MM-dd}");
+            if(this.searchModel.ACCEPT_MONTH_TO == null) sb.Append($"/{Common.ROUTE_PARAM_NULL}");
+            else sb.Append($"/{this.searchModel.ACCEPT_MONTH_TO:yyyy-MM-dd}");
+            if(this.searchModel.PAYMENT_MONTH_FROM == null) sb.Append($"/{Common.ROUTE_PARAM_NULL}");
+            else sb.Append($"/{this.searchModel.PAYMENT_MONTH_FROM:yyyy-MM-dd}");
+            if(this.searchModel.PAYMENT_MONTH_TO == null) sb.Append($"/{Common.ROUTE_PARAM_NULL}");
+            else sb.Append($"/{this.searchModel.PAYMENT_MONTH_TO:yyyy-MM-dd}");
             this.URL = sb.ToString();
             this.allList = await Http.GetFromJsonAsync<List<RecVV_ORDER_LIST_FOR_EXCEL_P1>>(this.URL);
             this.dspList = this.allList.Skip(this.nowPage * this.displayRows).Take(this.displayRows).ToList();

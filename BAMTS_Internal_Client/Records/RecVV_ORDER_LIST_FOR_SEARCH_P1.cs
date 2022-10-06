@@ -46,8 +46,14 @@ namespace BAMTS.Internal
 		public DateTime? ODR_DATE { get; set; }
 		public string ODR_NO { get; set; }
 		public DateTime? ACCEPT_DATE { get; set; }
+		public DateTime? ACCEPT_DATE_FROM { get; set; }
+		public DateTime? ACCEPT_DATE_TO { get; set; }
 		public DateTime? ACCEPT_MONTH { get; set; }
+		public DateTime? ACCEPT_MONTH_FROM { get; set; }
+		public DateTime? ACCEPT_MONTH_TO { get; set; }
 		public DateTime? PAYMENT_MONTH { get; set; }
+		public DateTime? PAYMENT_MONTH_FROM { get; set; }
+		public DateTime? PAYMENT_MONTH_TO { get; set; }
 		public int? ANS_NET_PRICE { get; set; }
 		public int? ANS_TAX_PRICE { get; set; }
 		public int? CNST_NET_PRICE { get; set; }
