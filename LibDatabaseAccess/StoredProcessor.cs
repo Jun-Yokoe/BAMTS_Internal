@@ -20,7 +20,7 @@ namespace BAMTS.Internal
             this.ConnectionString = connectionString;
         }
         public List<RecMV_ORDER_LIST_FOR_EXCEL_P1> P_Get_OrderList_ForLegacyExcel(
-             bool DEFAULT = true
+              bool DEFAULT = true
             , int? ODR_PERIOD = null
             , string ODR_CATEGORY = null
             , string ODR_MONTH = null
@@ -154,23 +154,23 @@ namespace BAMTS.Internal
                         cmd.Parameters.Add("@ACCEPT_MONTH_TO", SqlDbType.DateTime).Value = dtACCEPT_MONTH_TO ?? (object)DBNull.Value;
                         cmd.Parameters.Add("@PAYMENT_MONTH_FROM", SqlDbType.DateTime).Value = dtPAYMENT_MONTH_FROM ?? (object)DBNull.Value;
                         cmd.Parameters.Add("@PAYMENT_MONTH_TO", SqlDbType.DateTime).Value = dtPAYMENT_MONTH_TO ?? (object)DBNull.Value;
-                        //cmd.Parameters.Add("@ANS_NET_PRICE_FROM", SqlDbType.Int).Value = ANS_NET_PRICE_FROM ?? (object)DBNull.Value;
-                        //cmd.Parameters.Add("@ANS_NET_PRICE_TO", SqlDbType.Int).Value = ANS_NET_PRICE_TO ?? (object)DBNull.Value;
-                        //cmd.Parameters.Add("@ASSOCIATE_NAME_1", SqlDbType.VarChar).Value = ASSOCIATE_NAME_1 ?? (object)DBNull.Value;
-                        //cmd.Parameters.Add("@NET_PRICE_1_FROM", SqlDbType.Int).Value = NET_PRICE_1_FROM ?? (object)DBNull.Value;
-                        //cmd.Parameters.Add("@NET_PRICE_1_TO", SqlDbType.Int).Value = NET_PRICE_1_TO ?? (object)DBNull.Value;
-                        //cmd.Parameters.Add("@PAYMENT_MONTH_1_FROM", SqlDbType.DateTime).Value = dtPAYMENT_MONTH_1_FROM ?? (object)DBNull.Value;
-                        //cmd.Parameters.Add("@PAYMENT_MONTH_1_TO", SqlDbType.DateTime).Value = dtPAYMENT_MONTH_1_TO ?? (object)DBNull.Value;
-                        //cmd.Parameters.Add("@ASSOCIATE_NAME_2", SqlDbType.VarChar).Value = ASSOCIATE_NAME_2 ?? (object)DBNull.Value;
-                        //cmd.Parameters.Add("@NET_PRICE_2_FROM", SqlDbType.Int).Value = NET_PRICE_2_FROM ?? (object)DBNull.Value;
-                        //cmd.Parameters.Add("@NET_PRICE_2_TO", SqlDbType.Int).Value = NET_PRICE_2_TO ?? (object)DBNull.Value;
-                        //cmd.Parameters.Add("@PAYMENT_MONTH_2_FROM", SqlDbType.DateTime).Value = dtPAYMENT_MONTH_2_FROM ?? (object)DBNull.Value;
-                        //cmd.Parameters.Add("@PAYMENT_MONTH_2_TO", SqlDbType.DateTime).Value = dtPAYMENT_MONTH_2_TO ?? (object)DBNull.Value;
-                        //cmd.Parameters.Add("@ASSOCIATE_NAME_3", SqlDbType.VarChar).Value = ASSOCIATE_NAME_3 ?? (object)DBNull.Value;
-                        //cmd.Parameters.Add("@NET_PRICE_3_FROM", SqlDbType.Int).Value = NET_PRICE_3_FROM ?? (object)DBNull.Value;
-                        //cmd.Parameters.Add("@NET_PRICE_3_TO", SqlDbType.Int).Value = NET_PRICE_3_TO ?? (object)DBNull.Value;
-                        //cmd.Parameters.Add("@PAYMENT_MONTH_3_FROM", SqlDbType.DateTime).Value = dtPAYMENT_MONTH_3_FROM ?? (object)DBNull.Value;
-                        //cmd.Parameters.Add("@PAYMENT_MONTH_3_TO", SqlDbType.DateTime).Value = dtPAYMENT_MONTH_3_TO ?? (object)DBNull.Value;
+                        cmd.Parameters.Add("@ANS_NET_PRICE_FROM", SqlDbType.Int).Value = ANS_NET_PRICE_FROM ?? (object)DBNull.Value;
+                        cmd.Parameters.Add("@ANS_NET_PRICE_TO", SqlDbType.Int).Value = ANS_NET_PRICE_TO ?? (object)DBNull.Value;
+                        cmd.Parameters.Add("@ASSOCIATE_NAME_1", SqlDbType.VarChar).Value = ASSOCIATE_NAME_1 ?? (object)DBNull.Value;
+                        cmd.Parameters.Add("@NET_PRICE_1_FROM", SqlDbType.Int).Value = NET_PRICE_1_FROM ?? (object)DBNull.Value;
+                        cmd.Parameters.Add("@NET_PRICE_1_TO", SqlDbType.Int).Value = NET_PRICE_1_TO ?? (object)DBNull.Value;
+                        cmd.Parameters.Add("@PAYMENT_MONTH_1_FROM", SqlDbType.DateTime).Value = dtPAYMENT_MONTH_1_FROM ?? (object)DBNull.Value;
+                        cmd.Parameters.Add("@PAYMENT_MONTH_1_TO", SqlDbType.DateTime).Value = dtPAYMENT_MONTH_1_TO ?? (object)DBNull.Value;
+                        cmd.Parameters.Add("@ASSOCIATE_NAME_2", SqlDbType.VarChar).Value = ASSOCIATE_NAME_2 ?? (object)DBNull.Value;
+                        cmd.Parameters.Add("@NET_PRICE_2_FROM", SqlDbType.Int).Value = NET_PRICE_2_FROM ?? (object)DBNull.Value;
+                        cmd.Parameters.Add("@NET_PRICE_2_TO", SqlDbType.Int).Value = NET_PRICE_2_TO ?? (object)DBNull.Value;
+                        cmd.Parameters.Add("@PAYMENT_MONTH_2_FROM", SqlDbType.DateTime).Value = dtPAYMENT_MONTH_2_FROM ?? (object)DBNull.Value;
+                        cmd.Parameters.Add("@PAYMENT_MONTH_2_TO", SqlDbType.DateTime).Value = dtPAYMENT_MONTH_2_TO ?? (object)DBNull.Value;
+                        cmd.Parameters.Add("@ASSOCIATE_NAME_3", SqlDbType.VarChar).Value = ASSOCIATE_NAME_3 ?? (object)DBNull.Value;
+                        cmd.Parameters.Add("@NET_PRICE_3_FROM", SqlDbType.Int).Value = NET_PRICE_3_FROM ?? (object)DBNull.Value;
+                        cmd.Parameters.Add("@NET_PRICE_3_TO", SqlDbType.Int).Value = NET_PRICE_3_TO ?? (object)DBNull.Value;
+                        cmd.Parameters.Add("@PAYMENT_MONTH_3_FROM", SqlDbType.DateTime).Value = dtPAYMENT_MONTH_3_FROM ?? (object)DBNull.Value;
+                        cmd.Parameters.Add("@PAYMENT_MONTH_3_TO", SqlDbType.DateTime).Value = dtPAYMENT_MONTH_3_TO ?? (object)DBNull.Value;
                         cmd.Parameters.Add("@DEFAULT", SqlDbType.Int).Value = DEFAULT ? 1 : 0;
                         var ds = db.GetDataSet(cmd, false);
                         {

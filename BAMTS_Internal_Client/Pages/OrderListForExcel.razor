@@ -432,7 +432,6 @@
                                     </div>
                                 </td>
                             </tr>
-                            <!--
                             <tr>
                                 <td class="table-secondary">
                                     <label class="text-nowrap">EDI回答金額</label>
@@ -533,7 +532,6 @@
                                     </div>
                                 </td>
                             </tr>
-                            -->
                         </tbody>
                     </table>
                 </div>
@@ -888,7 +886,11 @@
                                             <div class="input-group">
                                                 <span class="input-group-text" style="width:100px">依頼No.</span>
                                                 <div style="display: flex;">
-                                                    <BSInput InputType="InputType.Text" @bind-Value="this.inputModel.ESTREQ_NO_1" style="width: 100px" />
+                                                    <!--<BSInput InputType="InputType.Text" @bind-Value="this.inputModel.ESTREQ_NO_1" style="width: 100px" />-->
+                                                    <input type="text" autocomplete="on" list="reqNoList"  @bind-value="this.inputModel.ESTREQ_NO_1" style="width: 100px" >
+                                                    <datalist id="reqNoList">
+                                                        <option value="YRECM"/>
+                                                    </datalist>
                                                     <BSInput InputType="InputType.Text" @bind-Value="this.inputModel.ESTREQ_NO_2" style="width: 100px" />
                                                 </div>
                                             </div>
@@ -1867,55 +1869,98 @@
             this.nowPage = 0;
             this.allList.Clear();
             this.dspList.Clear();
-            var sb = new StringBuilder($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_OrderList_ForLegacyExcel/Search");
-            sb.Append($"/{this.searchModel.ODR_PERIOD?.ToString() ?? Common.ROUTE_PARAM_NULL}");
-            sb.Append($"/{(string.IsNullOrEmpty(this.searchModel.ODR_CATEGORY) ? null : this.searchModel.ODR_CATEGORY)?.ToString() ?? Common.ROUTE_PARAM_NULL}");
-            sb.Append($"/{(string.IsNullOrEmpty(this.searchModel.ODR_MONTH) ? null : this.searchModel.ODR_MONTH)?.ToString() ?? Common.ROUTE_PARAM_NULL}");
-            sb.Append($"/{this.searchModel.ODR_SEQ?.ToString() ?? Common.ROUTE_PARAM_NULL}");
-            sb.Append($"/{this.searchModel.STATUS?.ToString() ?? Common.ROUTE_PARAM_NULL}");
-            sb.Append($"/{(string.IsNullOrEmpty(this.searchModel.CNST_MANAGER_ID) ? null : this.searchModel.CNST_MANAGER_ID)?.ToString() ?? Common.ROUTE_PARAM_NULL}");
-            sb.Append($"/{(string.IsNullOrEmpty(this.searchModel.CUSTOMER_NAME) ? null : this.searchModel.CUSTOMER_NAME)?.ToString() ?? Common.ROUTE_PARAM_NULL}");
-            sb.Append($"/{(string.IsNullOrEmpty(this.searchModel.ODR_NAME) ? null : this.searchModel.ODR_NAME)?.ToString() ?? Common.ROUTE_PARAM_NULL}");
-            if(this.searchModel.ACCEPT_DATE_FROM == null) sb.Append($"/{Common.ROUTE_PARAM_NULL}");
-            else sb.Append($"/{this.searchModel.ACCEPT_DATE_FROM:yyyy-MM-dd}");
-            if(this.searchModel.ACCEPT_DATE_TO == null) sb.Append($"/{Common.ROUTE_PARAM_NULL}");
-            else sb.Append($"/{this.searchModel.ACCEPT_DATE_TO:yyyy-MM-dd}");
-            if(this.searchModel.ACCEPT_MONTH_FROM == null) sb.Append($"/{Common.ROUTE_PARAM_NULL}");
-            else sb.Append($"/{this.searchModel.ACCEPT_MONTH_FROM:yyyy-MM-dd}");
-            if(this.searchModel.ACCEPT_MONTH_TO == null) sb.Append($"/{Common.ROUTE_PARAM_NULL}");
-            else sb.Append($"/{this.searchModel.ACCEPT_MONTH_TO:yyyy-MM-dd}");
-            if(this.searchModel.PAYMENT_MONTH_FROM == null) sb.Append($"/{Common.ROUTE_PARAM_NULL}");
-            else sb.Append($"/{this.searchModel.PAYMENT_MONTH_FROM:yyyy-MM-dd}");
-            if(this.searchModel.PAYMENT_MONTH_TO == null) sb.Append($"/{Common.ROUTE_PARAM_NULL}");
-            else sb.Append($"/{this.searchModel.PAYMENT_MONTH_TO:yyyy-MM-dd}");
-
-            //sb.Append($"/{this.searchModel.ANS_NET_PRICE_FROM?.ToString() ?? Common.ROUTE_PARAM_NULL}");
-            //sb.Append($"/{this.searchModel.ANS_NET_PRICE_TO?.ToString() ?? Common.ROUTE_PARAM_NULL}");
-
-            //sb.Append($"/{(string.IsNullOrEmpty(this.searchModel.ASSOCIATE_NAME_1) ? null : this.searchModel.ASSOCIATE_NAME_1)?.ToString() ?? Common.ROUTE_PARAM_NULL}");
-            //sb.Append($"/{this.searchModel.NET_PRICE_1_FROM?.ToString() ?? Common.ROUTE_PARAM_NULL}");
-            //sb.Append($"/{this.searchModel.NET_PRICE_1_TO?.ToString() ?? Common.ROUTE_PARAM_NULL}");
-            //if(this.searchModel.PAYMENT_MONTH_1_FROM == null) sb.Append($"/{Common.ROUTE_PARAM_NULL}");
-            //else sb.Append($"/{this.searchModel.PAYMENT_MONTH_1_FROM:yyyy-MM-dd}");
-            //if(this.searchModel.PAYMENT_MONTH_1_TO == null) sb.Append($"/{Common.ROUTE_PARAM_NULL}");
-            //else sb.Append($"/{this.searchModel.PAYMENT_MONTH_1_TO:yyyy-MM-dd}");
-
-            //sb.Append($"/{(string.IsNullOrEmpty(this.searchModel.ASSOCIATE_NAME_2) ? null : this.searchModel.ASSOCIATE_NAME_2)?.ToString() ?? Common.ROUTE_PARAM_NULL}");
-            //sb.Append($"/{this.searchModel.NET_PRICE_2_FROM?.ToString() ?? Common.ROUTE_PARAM_NULL}");
-            //sb.Append($"/{this.searchModel.NET_PRICE_2_TO?.ToString() ?? Common.ROUTE_PARAM_NULL}");
-            //if(this.searchModel.PAYMENT_MONTH_2_FROM == null) sb.Append($"/{Common.ROUTE_PARAM_NULL}");
-            //else sb.Append($"/{this.searchModel.PAYMENT_MONTH_2_FROM:yyyy-MM-dd}");
-            //if(this.searchModel.PAYMENT_MONTH_2_TO == null) sb.Append($"/{Common.ROUTE_PARAM_NULL}");
-            //else sb.Append($"/{this.searchModel.PAYMENT_MONTH_2_TO:yyyy-MM-dd}");
-
-            //sb.Append($"/{(string.IsNullOrEmpty(this.searchModel.ASSOCIATE_NAME_3) ? null : this.searchModel.ASSOCIATE_NAME_3)?.ToString() ?? Common.ROUTE_PARAM_NULL}");
-            //sb.Append($"/{this.searchModel.NET_PRICE_3_FROM?.ToString() ?? Common.ROUTE_PARAM_NULL}");
-            //sb.Append($"/{this.searchModel.NET_PRICE_3_TO?.ToString() ?? Common.ROUTE_PARAM_NULL}");
-            //if(this.searchModel.PAYMENT_MONTH_3_FROM == null) sb.Append($"/{Common.ROUTE_PARAM_NULL}");
-            //else sb.Append($"/{this.searchModel.PAYMENT_MONTH_3_FROM:yyyy-MM-dd}");
-            //if(this.searchModel.PAYMENT_MONTH_3_TO == null) sb.Append($"/{Common.ROUTE_PARAM_NULL}");
-            //else sb.Append($"/{this.searchModel.PAYMENT_MONTH_3_TO:yyyy-MM-dd}");
-
+            #region "P_Get_OrderList_ForLegacyExcel/Search/P1"
+            var sb = new StringBuilder($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_OrderList_ForLegacyExcel/Search/P1/", 1024);
+            sb.Append($"{this.searchModel.ODR_PERIOD?.ToString() ?? Common.API_PARAM_NULL}");
+            sb.Append($"{Common.API_PARAM_SEPARATER}{(string.IsNullOrEmpty(this.searchModel.ODR_CATEGORY) ? null : this.searchModel.ODR_CATEGORY)?.ToString() ?? Common.API_PARAM_NULL}");
+            sb.Append($"{Common.API_PARAM_SEPARATER}{(string.IsNullOrEmpty(this.searchModel.ODR_MONTH) ? null : this.searchModel.ODR_MONTH)?.ToString() ?? Common.API_PARAM_NULL}");
+            sb.Append($"{Common.API_PARAM_SEPARATER}{this.searchModel.ODR_SEQ?.ToString() ?? Common.API_PARAM_NULL}");
+            sb.Append($"{Common.API_PARAM_SEPARATER}{this.searchModel.STATUS?.ToString() ?? Common.API_PARAM_NULL}");
+            sb.Append($"{Common.API_PARAM_SEPARATER}{(string.IsNullOrEmpty(this.searchModel.CNST_MANAGER_ID) ? null : this.searchModel.CNST_MANAGER_ID)?.ToString() ?? Common.API_PARAM_NULL}");
+            sb.Append($"{Common.API_PARAM_SEPARATER}{(string.IsNullOrEmpty(this.searchModel.CUSTOMER_NAME) ? null : this.searchModel.CUSTOMER_NAME)?.ToString() ?? Common.API_PARAM_NULL}");
+            sb.Append($"{Common.API_PARAM_SEPARATER}{(string.IsNullOrEmpty(this.searchModel.ODR_NAME) ? null : this.searchModel.ODR_NAME)?.ToString() ?? Common.API_PARAM_NULL}");
+            if(this.searchModel.ACCEPT_DATE_FROM == null) sb.Append($"{Common.API_PARAM_SEPARATER}{Common.API_PARAM_NULL}");
+            else sb.Append($"{Common.API_PARAM_SEPARATER}{this.searchModel.ACCEPT_DATE_FROM:yyyy-MM-dd}");
+            if(this.searchModel.ACCEPT_DATE_TO == null) sb.Append($"{Common.API_PARAM_SEPARATER}{Common.API_PARAM_NULL}");
+            else sb.Append($"{Common.API_PARAM_SEPARATER}{this.searchModel.ACCEPT_DATE_TO:yyyy-MM-dd}");
+            if(this.searchModel.ACCEPT_MONTH_FROM == null) sb.Append($"{Common.API_PARAM_SEPARATER}{Common.API_PARAM_NULL}");
+            else sb.Append($"{Common.API_PARAM_SEPARATER}{this.searchModel.ACCEPT_MONTH_FROM:yyyy-MM-dd}");
+            if(this.searchModel.ACCEPT_MONTH_TO == null) sb.Append($"{Common.API_PARAM_SEPARATER}{Common.API_PARAM_NULL}");
+            else sb.Append($"{Common.API_PARAM_SEPARATER}{this.searchModel.ACCEPT_MONTH_TO:yyyy-MM-dd}");
+            if(this.searchModel.PAYMENT_MONTH_FROM == null) sb.Append($"{Common.API_PARAM_SEPARATER}{Common.API_PARAM_NULL}");
+            else sb.Append($"{Common.API_PARAM_SEPARATER}{this.searchModel.PAYMENT_MONTH_FROM:yyyy-MM-dd}");
+            if(this.searchModel.PAYMENT_MONTH_TO == null) sb.Append($"{Common.API_PARAM_SEPARATER}{Common.API_PARAM_NULL}");
+            else sb.Append($"{Common.API_PARAM_SEPARATER}{this.searchModel.PAYMENT_MONTH_TO:yyyy-MM-dd}");
+            sb.Append($"{Common.API_PARAM_SEPARATER}{this.searchModel.ANS_NET_PRICE_FROM?.ToString() ?? Common.API_PARAM_NULL}");
+            sb.Append($"{Common.API_PARAM_SEPARATER}{this.searchModel.ANS_NET_PRICE_TO?.ToString() ?? Common.API_PARAM_NULL}");
+            sb.Append($"{Common.API_PARAM_SEPARATER}{(string.IsNullOrEmpty(this.searchModel.ASSOCIATE_NAME_1) ? null : this.searchModel.ASSOCIATE_NAME_1)?.ToString() ?? Common.API_PARAM_NULL}");
+            sb.Append($"{Common.API_PARAM_SEPARATER}{this.searchModel.NET_PRICE_1_FROM?.ToString() ?? Common.API_PARAM_NULL}");
+            sb.Append($"{Common.API_PARAM_SEPARATER}{this.searchModel.NET_PRICE_1_TO?.ToString() ?? Common.API_PARAM_NULL}");
+            if(this.searchModel.PAYMENT_MONTH_1_FROM == null) sb.Append($"{Common.API_PARAM_SEPARATER}{Common.API_PARAM_NULL}");
+            else sb.Append($"{Common.API_PARAM_SEPARATER}{this.searchModel.PAYMENT_MONTH_1_FROM:yyyy-MM-dd}");
+            if(this.searchModel.PAYMENT_MONTH_1_TO == null) sb.Append($"{Common.API_PARAM_SEPARATER}{Common.API_PARAM_NULL}");
+            else sb.Append($"{Common.API_PARAM_SEPARATER}{this.searchModel.PAYMENT_MONTH_1_TO:yyyy-MM-dd}");
+            sb.Append($"{Common.API_PARAM_SEPARATER}{(string.IsNullOrEmpty(this.searchModel.ASSOCIATE_NAME_2) ? null : this.searchModel.ASSOCIATE_NAME_2)?.ToString() ?? Common.API_PARAM_NULL}");
+            sb.Append($"{Common.API_PARAM_SEPARATER}{this.searchModel.NET_PRICE_2_FROM?.ToString() ?? Common.API_PARAM_NULL}");
+            sb.Append($"{Common.API_PARAM_SEPARATER}{this.searchModel.NET_PRICE_2_TO?.ToString() ?? Common.API_PARAM_NULL}");
+            if(this.searchModel.PAYMENT_MONTH_2_FROM == null) sb.Append($"{Common.API_PARAM_SEPARATER}{Common.API_PARAM_NULL}");
+            else sb.Append($"{Common.API_PARAM_SEPARATER}{this.searchModel.PAYMENT_MONTH_2_FROM:yyyy-MM-dd}");
+            if(this.searchModel.PAYMENT_MONTH_2_TO == null) sb.Append($"{Common.API_PARAM_SEPARATER}{Common.API_PARAM_NULL}");
+            else sb.Append($"{Common.API_PARAM_SEPARATER}{this.searchModel.PAYMENT_MONTH_2_TO:yyyy-MM-dd}");
+            sb.Append($"{Common.API_PARAM_SEPARATER}{(string.IsNullOrEmpty(this.searchModel.ASSOCIATE_NAME_3) ? null : this.searchModel.ASSOCIATE_NAME_3)?.ToString() ?? Common.API_PARAM_NULL}");
+            sb.Append($"{Common.API_PARAM_SEPARATER}{this.searchModel.NET_PRICE_3_FROM?.ToString() ?? Common.API_PARAM_NULL}");
+            sb.Append($"{Common.API_PARAM_SEPARATER}{this.searchModel.NET_PRICE_3_TO?.ToString() ?? Common.API_PARAM_NULL}");
+            if(this.searchModel.PAYMENT_MONTH_3_FROM == null) sb.Append($"{Common.API_PARAM_SEPARATER}{Common.API_PARAM_NULL}");
+            else sb.Append($"{Common.API_PARAM_SEPARATER}{this.searchModel.PAYMENT_MONTH_3_FROM:yyyy-MM-dd}");
+            if(this.searchModel.PAYMENT_MONTH_3_TO == null) sb.Append($"{Common.API_PARAM_SEPARATER}{Common.API_PARAM_NULL}");
+            else sb.Append($"{Common.API_PARAM_SEPARATER}{this.searchModel.PAYMENT_MONTH_3_TO:yyyy-MM-dd}");
+            #endregion
+            #region "P_Get_OrderList_ForLegacyExcel/Search/P0"
+            //////var sb = new StringBuilder($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_OrderList_ForLegacyExcel/Search/P0");
+            //////sb.Append($"/{this.searchModel.ODR_PERIOD?.ToString() ?? Common.API_PARAM_NULL}");
+            //////sb.Append($"/{(string.IsNullOrEmpty(this.searchModel.ODR_CATEGORY) ? null : this.searchModel.ODR_CATEGORY)?.ToString() ?? Common.API_PARAM_NULL}");
+            //////sb.Append($"/{(string.IsNullOrEmpty(this.searchModel.ODR_MONTH) ? null : this.searchModel.ODR_MONTH)?.ToString() ?? Common.API_PARAM_NULL}");
+            //////sb.Append($"/{this.searchModel.ODR_SEQ?.ToString() ?? Common.API_PARAM_NULL}");
+            //////sb.Append($"/{this.searchModel.STATUS?.ToString() ?? Common.API_PARAM_NULL}");
+            //////sb.Append($"/{(string.IsNullOrEmpty(this.searchModel.CNST_MANAGER_ID) ? null : this.searchModel.CNST_MANAGER_ID)?.ToString() ?? Common.API_PARAM_NULL}");
+            //////sb.Append($"/{(string.IsNullOrEmpty(this.searchModel.CUSTOMER_NAME) ? null : this.searchModel.CUSTOMER_NAME)?.ToString() ?? Common.API_PARAM_NULL}");
+            //////sb.Append($"/{(string.IsNullOrEmpty(this.searchModel.ODR_NAME) ? null : this.searchModel.ODR_NAME)?.ToString() ?? Common.API_PARAM_NULL}");
+            //////if(this.searchModel.ACCEPT_DATE_FROM == null) sb.Append($"/{Common.API_PARAM_NULL}");
+            //////else sb.Append($"/{this.searchModel.ACCEPT_DATE_FROM:yyyy-MM-dd}");
+            //////if(this.searchModel.ACCEPT_DATE_TO == null) sb.Append($"/{Common.API_PARAM_NULL}");
+            //////else sb.Append($"/{this.searchModel.ACCEPT_DATE_TO:yyyy-MM-dd}");
+            //////if(this.searchModel.ACCEPT_MONTH_FROM == null) sb.Append($"/{Common.API_PARAM_NULL}");
+            //////else sb.Append($"/{this.searchModel.ACCEPT_MONTH_FROM:yyyy-MM-dd}");
+            //////if(this.searchModel.ACCEPT_MONTH_TO == null) sb.Append($"/{Common.API_PARAM_NULL}");
+            //////else sb.Append($"/{this.searchModel.ACCEPT_MONTH_TO:yyyy-MM-dd}");
+            //////if(this.searchModel.PAYMENT_MONTH_FROM == null) sb.Append($"/{Common.API_PARAM_NULL}");
+            //////else sb.Append($"/{this.searchModel.PAYMENT_MONTH_FROM:yyyy-MM-dd}");
+            //////if(this.searchModel.PAYMENT_MONTH_TO == null) sb.Append($"/{Common.API_PARAM_NULL}");
+            //////else sb.Append($"/{this.searchModel.PAYMENT_MONTH_TO:yyyy-MM-dd}");
+            //////sb.Append($"/{this.searchModel.ANS_NET_PRICE_FROM?.ToString() ?? Common.API_PARAM_NULL}");
+            //////sb.Append($"/{this.searchModel.ANS_NET_PRICE_TO?.ToString() ?? Common.API_PARAM_NULL}");
+            //////sb.Append($"/{(string.IsNullOrEmpty(this.searchModel.ASSOCIATE_NAME_1) ? null : this.searchModel.ASSOCIATE_NAME_1)?.ToString() ?? Common.API_PARAM_NULL}");
+            //////sb.Append($"/{this.searchModel.NET_PRICE_1_FROM?.ToString() ?? Common.API_PARAM_NULL}");
+            //////sb.Append($"/{this.searchModel.NET_PRICE_1_TO?.ToString() ?? Common.API_PARAM_NULL}");
+            //////if(this.searchModel.PAYMENT_MONTH_1_FROM == null) sb.Append($"/{Common.API_PARAM_NULL}");
+            //////else sb.Append($"/{this.searchModel.PAYMENT_MONTH_1_FROM:yyyy-MM-dd}");
+            //////if(this.searchModel.PAYMENT_MONTH_1_TO == null) sb.Append($"/{Common.API_PARAM_NULL}");
+            //////else sb.Append($"/{this.searchModel.PAYMENT_MONTH_1_TO:yyyy-MM-dd}");
+            //////sb.Append($"/{(string.IsNullOrEmpty(this.searchModel.ASSOCIATE_NAME_2) ? null : this.searchModel.ASSOCIATE_NAME_2)?.ToString() ?? Common.API_PARAM_NULL}");
+            //////sb.Append($"/{this.searchModel.NET_PRICE_2_FROM?.ToString() ?? Common.API_PARAM_NULL}");
+            //////sb.Append($"/{this.searchModel.NET_PRICE_2_TO?.ToString() ?? Common.API_PARAM_NULL}");
+            //////if(this.searchModel.PAYMENT_MONTH_2_FROM == null) sb.Append($"/{Common.API_PARAM_NULL}");
+            //////else sb.Append($"/{this.searchModel.PAYMENT_MONTH_2_FROM:yyyy-MM-dd}");
+            //////if(this.searchModel.PAYMENT_MONTH_2_TO == null) sb.Append($"/{Common.API_PARAM_NULL}");
+            //////else sb.Append($"/{this.searchModel.PAYMENT_MONTH_2_TO:yyyy-MM-dd}");
+            //////sb.Append($"/{(string.IsNullOrEmpty(this.searchModel.ASSOCIATE_NAME_3) ? null : this.searchModel.ASSOCIATE_NAME_3)?.ToString() ?? Common.API_PARAM_NULL}");
+            //////sb.Append($"/{this.searchModel.NET_PRICE_3_FROM?.ToString() ?? Common.API_PARAM_NULL}");
+            //////sb.Append($"/{this.searchModel.NET_PRICE_3_TO?.ToString() ?? Common.API_PARAM_NULL}");
+            //////if(this.searchModel.PAYMENT_MONTH_3_FROM == null) sb.Append($"/{Common.API_PARAM_NULL}");
+            //////else sb.Append($"/{this.searchModel.PAYMENT_MONTH_3_FROM:yyyy-MM-dd}");
+            //////if(this.searchModel.PAYMENT_MONTH_3_TO == null) sb.Append($"/{Common.API_PARAM_NULL}");
+            //////else sb.Append($"/{this.searchModel.PAYMENT_MONTH_3_TO:yyyy-MM-dd}");
+            #endregion
             this.URL = sb.ToString();
             this.allList = await Http.GetFromJsonAsync<List<RecVV_ORDER_LIST_FOR_EXCEL_P1>>(this.URL);
             this.dspList = this.allList.Skip(this.nowPage * this.displayRows).Take(this.displayRows).ToList();

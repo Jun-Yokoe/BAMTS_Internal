@@ -18,7 +18,8 @@ namespace BAMTS.Internal
         public static string TARGET_WEBAPI_CONTROLLER = "DatabaseAccessController";
         public static int TAX_RATE = 10;
         public static string LOGIN_STAFF_ID;
-        public static string ROUTE_PARAM_NULL = "|";
+        public static string API_PARAM_NULL = "|";
+        public static string API_PARAM_SEPARATER = "~";
         public static DateTime LOGIN_TIME;
         public static string RESULT_OPTION_CANRETRY = "[%CanRetry%]";
         public enum InputMode
