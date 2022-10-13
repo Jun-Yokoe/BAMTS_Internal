@@ -65,29 +65,35 @@ namespace BAMTS_Internal_WebAPIService.Controllers
             string CNST_MANAGER_ID = paramList[5];
             string CUSTOMER_NAME = paramList[6];
             string ODR_NAME = paramList[7];
-            string ACCEPT_DATE_FROM = paramList[8];
-            string ACCEPT_DATE_TO = paramList[9];
-            string ACCEPT_MONTH_FROM = paramList[10];
-            string ACCEPT_MONTH_TO = paramList[11];
-            string PAYMENT_MONTH_FROM = paramList[12];
-            string PAYMENT_MONTH_TO = paramList[13];
-            string ANS_NET_PRICE_FROM = paramList[14];
-            string ANS_NET_PRICE_TO = paramList[15];
-            string ASSOCIATE_NAME_1 = paramList[16];
-            string NET_PRICE_1_FROM = paramList[17];
-            string NET_PRICE_1_TO = paramList[18];
-            string PAYMENT_MONTH_1_FROM = paramList[19];
-            string PAYMENT_MONTH_1_TO = paramList[20];
-            string ASSOCIATE_NAME_2 = paramList[21];
-            string NET_PRICE_2_FROM = paramList[22];
-            string NET_PRICE_2_TO = paramList[23];
-            string PAYMENT_MONTH_2_FROM = paramList[24];
-            string PAYMENT_MONTH_2_TO = paramList[25];
-            string ASSOCIATE_NAME_3 = paramList[26];
-            string NET_PRICE_3_FROM = paramList[27];
-            string NET_PRICE_3_TO = paramList[28];
-            string PAYMENT_MONTH_3_FROM = paramList[29];
-            string PAYMENT_MONTH_3_TO = paramList[30];
+            string REQ_DATE_FROM = paramList[8];
+            string REQ_DATE_TO = paramList[9];
+            string REQ_NO = paramList[10];
+            string ODR_DATE_FROM = paramList[11];
+            string ODR_DATE_TO = paramList[12];
+            string ODR_NO = paramList[13];
+            string ACCEPT_DATE_FROM = paramList[14];
+            string ACCEPT_DATE_TO = paramList[15];
+            string ACCEPT_MONTH_FROM = paramList[16];
+            string ACCEPT_MONTH_TO = paramList[17];
+            string PAYMENT_MONTH_FROM = paramList[18];
+            string PAYMENT_MONTH_TO = paramList[19];
+            string ANS_NET_PRICE_FROM = paramList[20];
+            string ANS_NET_PRICE_TO = paramList[21];
+            string ASSOCIATE_NAME_1 = paramList[22];
+            string NET_PRICE_1_FROM = paramList[23];
+            string NET_PRICE_1_TO = paramList[24];
+            string PAYMENT_MONTH_1_FROM = paramList[25];
+            string PAYMENT_MONTH_1_TO = paramList[26];
+            string ASSOCIATE_NAME_2 = paramList[27];
+            string NET_PRICE_2_FROM = paramList[28];
+            string NET_PRICE_2_TO = paramList[29];
+            string PAYMENT_MONTH_2_FROM = paramList[30];
+            string PAYMENT_MONTH_2_TO = paramList[31];
+            string ASSOCIATE_NAME_3 = paramList[32];
+            string NET_PRICE_3_FROM = paramList[33];
+            string NET_PRICE_3_TO = paramList[34];
+            string PAYMENT_MONTH_3_FROM = paramList[35];
+            string PAYMENT_MONTH_3_TO = paramList[36];
             return this._storedProcessor.P_Get_OrderList_ForLegacyExcel(
                 DEFAULT: false,
                 (ODR_PERIOD == Common.API_PARAM_NULL) ? null : int.Parse(ODR_PERIOD),
@@ -98,6 +104,12 @@ namespace BAMTS_Internal_WebAPIService.Controllers
                 (CNST_MANAGER_ID == Common.API_PARAM_NULL) ? null : CNST_MANAGER_ID,
                 (CUSTOMER_NAME == Common.API_PARAM_NULL) ? null : CUSTOMER_NAME,
                 (ODR_NAME == Common.API_PARAM_NULL) ? null : ODR_NAME,
+                (REQ_DATE_FROM == Common.API_PARAM_NULL) ? null : REQ_DATE_FROM,
+                (REQ_DATE_TO == Common.API_PARAM_NULL) ? null : REQ_DATE_TO,
+                (REQ_NO == Common.API_PARAM_NULL) ? null : REQ_NO,
+                (ODR_DATE_FROM == Common.API_PARAM_NULL) ? null : ODR_DATE_FROM,
+                (ODR_DATE_TO == Common.API_PARAM_NULL) ? null : ODR_DATE_TO,
+                (ODR_NO == Common.API_PARAM_NULL) ? null : ODR_NO,
                 (ACCEPT_DATE_FROM == Common.API_PARAM_NULL) ? null : ACCEPT_DATE_FROM,
                 (ACCEPT_DATE_TO == Common.API_PARAM_NULL) ? null : ACCEPT_DATE_TO,
                 (ACCEPT_MONTH_FROM == Common.API_PARAM_NULL) ? null : ACCEPT_MONTH_FROM,

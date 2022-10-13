@@ -7,10 +7,10 @@
   "linkerEnabled": true,
   "resources": {
     "assembly": {
-      "BAMSS.Data.SQLServerAccessor.dll": "sha256-rjlopCSIucCeXMLRPkDYWiiod6aLdxnEWbuW3nEA+QQ=",
-      "BAMSS.Extensions.Exception.dll": "sha256-HtrzVpKRkZyfSkysqEfuTSidCbwrMUY1qwBqOFNbezs=",
+      "BAMSS.Data.SQLServerAccessor.dll": "sha256-PSNK+NrMviE84CIs5Q8qS4FwAqKEdi28r0d0hfu4oc0=",
+      "BAMSS.Extensions.Exception.dll": "sha256-HrirDrZyztwnINk15cYrUG3cSk3FAkePGyH47m1\/ls8=",
       "BAMSS.Logging.Message.LoggingMessageInterface.dll": "sha256-UceWSJj9F+Ci1w82\/DvMsw4s5nYJV97Oz7DjuqZ\/Q34=",
-      "BAMTS_Internal_Client.dll": "sha256-ZhNUkSe2Wch8KpQNsab+OevPsjsd1zD00YDBCSR8vY0=",
+      "BAMTS_Internal_Client.dll": "sha256-5LGnOpRbA\/qb4xo66npfE20JGv810AondmDGpzXfJWs=",
       "BlazorComponentUtilities.dll": "sha256-UapksNiQg3lu5QM9uVSLyjEuzRH\/7o22fmcmxcLAAeI=",
       "BlazorStrap.dll": "sha256-8jKt9kHfGSYjF9GPz3QyCbXY6tYQd+lFvabBLTutBXI=",
       "LibCommon.dll": "sha256-EVXYb5qFBndL2uDBcrp9yrF1UzluJFzUGOu8+C8A2ME=",

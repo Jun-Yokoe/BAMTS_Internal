@@ -42,8 +42,12 @@ namespace BAMTS.Internal
 		public string ESTREQ_NO_2 { get; set; }
 		public string PRODUCT_NO { get; set; }
 		public DateTime? REQ_DATE { get; set; }
+		public DateTime? REQ_DATE_FROM { get; set; }
+		public DateTime? REQ_DATE_TO { get; set; }
 		public string REQ_NO { get; set; }
 		public DateTime? ODR_DATE { get; set; }
+		public DateTime? ODR_DATE_FROM { get; set; }
+		public DateTime? ODR_DATE_TO { get; set; }
 		public string ODR_NO { get; set; }
 		public DateTime? ACCEPT_DATE { get; set; }
 		public DateTime? ACCEPT_DATE_FROM { get; set; }

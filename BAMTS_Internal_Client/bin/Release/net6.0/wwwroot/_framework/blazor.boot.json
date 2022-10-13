@@ -199,12 +199,12 @@
       "mscorlib.dll": "sha256-MnMyZHtcymf0sLxXeFBbQZVsdNdxT0GXJaa9t3ZdSek=",
       "netstandard.dll": "sha256-+SGdnDhVMiZ9hq0EsYwJ+mcK0odf3bAtXnSKLorGDCs=",
       "System.Private.CoreLib.dll": "sha256-mqfalNg3wC8XHlyA+j5ioNcnc0kt4prNudKdyJoaYaU=",
-      "BAMSS.Data.SQLServerAccessor.dll": "sha256-rjlopCSIucCeXMLRPkDYWiiod6aLdxnEWbuW3nEA+QQ=",
-      "BAMSS.Extensions.Exception.dll": "sha256-HtrzVpKRkZyfSkysqEfuTSidCbwrMUY1qwBqOFNbezs=",
+      "BAMSS.Data.SQLServerAccessor.dll": "sha256-PSNK+NrMviE84CIs5Q8qS4FwAqKEdi28r0d0hfu4oc0=",
+      "BAMSS.Extensions.Exception.dll": "sha256-HrirDrZyztwnINk15cYrUG3cSk3FAkePGyH47m1\/ls8=",
       "BAMSS.Logging.Message.LoggingMessageInterface.dll": "sha256-UceWSJj9F+Ci1w82\/DvMsw4s5nYJV97Oz7DjuqZ\/Q34=",
       "LibCommon.dll": "sha256-EVXYb5qFBndL2uDBcrp9yrF1UzluJFzUGOu8+C8A2ME=",
       "LibModels.dll": "sha256-m+Irqq1pY21tClPHwbyVhdQDHo\/U7VvyoJOpHqv1toU=",
-      "BAMTS_Internal_Client.dll": "sha256-ZhNUkSe2Wch8KpQNsab+OevPsjsd1zD00YDBCSR8vY0="
+      "BAMTS_Internal_Client.dll": "sha256-5LGnOpRbA\/qb4xo66npfE20JGv810AondmDGpzXfJWs="
     },
     "extensions": null,
     "lazyAssembly": null,
@@ -212,10 +212,10 @@
     "pdb": {
       "LibCommon.pdb": "sha256-JhcuEbA1u64sEFxYjHRU7NIXLCspvzJQgI3FNrr6Cgo=",
       "LibModels.pdb": "sha256-ey2kGFirJkobJk60mYCU6hceMBMCDdaiF8KgglHXoPI=",
-      "BAMSS.Data.SQLServerAccessor.pdb": "sha256-NiDYvBWal\/6+D4Gjtcw2W7O+zuUOOkvY9xyEK\/1nd1A=",
-      "BAMSS.Extensions.Exception.pdb": "sha256-m\/XzW53chKR2FA2HZ7XxX0YXIZgl\/2GBhajfPFC0TUg=",
+      "BAMSS.Data.SQLServerAccessor.pdb": "sha256-9npZqi72pWu3tU7gNUYTtNAgo2oqMd3TyGE47rMAxo4=",
+      "BAMSS.Extensions.Exception.pdb": "sha256-AdU+zWyPAdcvEciCajANcKXLanphgl6eaI6sM6j197I=",
       "BAMSS.Logging.Message.LoggingMessageInterface.pdb": "sha256-uUMF\/7LrwYscQE\/r9zo5xeDsjcobO5YtSQ9+uXybYRc=",
-      "BAMTS_Internal_Client.pdb": "sha256-9nMuODiEnzqA5dMMujbQM9gqCg7ENXUYN+9jQbfvndQ="
+      "BAMTS_Internal_Client.pdb": "sha256-M0LpkXdNs6J9Jbg+u3pGrjVz2WM7UGqNYXvBjyIdHLo="
     },
     "runtime": {
       "dotnet.6.0.9.637yxzn135.js": "sha256-Azk5sbYFVo84h8NpIst9roIPGLH2y8ewQ9SY\/sUHvgs=",

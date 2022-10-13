@@ -29,6 +29,12 @@ namespace BAMTS.Internal
             , string CNST_MANAGER_ID = null
             , string CUSTOMER_NAME = null
             , string ODR_NAME = null
+            , string REQ_DATE_FROM = null
+            , string REQ_DATE_TO = null
+            , string REQ_NO = null
+            , string ODR_DATE_FROM = null
+            , string ODR_DATE_TO = null
+            , string ODR_NO = null
             , string ACCEPT_DATE_FROM = null
             , string ACCEPT_DATE_TO = null
             , string ACCEPT_MONTH_FROM = null
@@ -62,6 +68,10 @@ namespace BAMTS.Internal
                     db.Open();
                     try
                     {
+                        DateTime? dtREQ_DATE_FROM = null;
+                        DateTime? dtREQ_DATE_TO = null;
+                        DateTime? dtODR_DATE_FROM = null;
+                        DateTime? dtODR_DATE_TO = null;
                         DateTime? dtACCEPT_DATE_FROM = null;
                         DateTime? dtACCEPT_DATE_TO = null;
                         DateTime? dtACCEPT_MONTH_FROM = null;
@@ -74,6 +84,22 @@ namespace BAMTS.Internal
                         DateTime? dtPAYMENT_MONTH_2_TO = null;
                         DateTime? dtPAYMENT_MONTH_3_FROM = null;
                         DateTime? dtPAYMENT_MONTH_3_TO = null;
+                        if (REQ_DATE_FROM != null)
+                        {
+                            dtREQ_DATE_FROM = DateTime.Parse(REQ_DATE_FROM).Date;
+                        }
+                        if (REQ_DATE_TO != null)
+                        {
+                            dtREQ_DATE_TO = DateTime.Parse(REQ_DATE_TO).Date.AddDays(1).Date.AddMilliseconds(-1);
+                        }
+                        if (ODR_DATE_FROM != null)
+                        {
+                            dtODR_DATE_FROM = DateTime.Parse(ODR_DATE_FROM).Date;
+                        }
+                        if (ODR_DATE_TO != null)
+                        {
+                            dtODR_DATE_TO = DateTime.Parse(ODR_DATE_TO).Date.AddDays(1).Date.AddMilliseconds(-1);
+                        }
                         if (ACCEPT_DATE_FROM != null)
                         {
                             dtACCEPT_DATE_FROM = DateTime.Parse(ACCEPT_DATE_FROM).Date;
@@ -148,6 +174,14 @@ namespace BAMTS.Internal
                         cmd.Parameters.Add("@CNST_MANAGER_ID", SqlDbType.VarChar).Value = CNST_MANAGER_ID ?? (object)DBNull.Value;
                         cmd.Parameters.Add("@CUSTOMER_NAME", SqlDbType.VarChar).Value = CUSTOMER_NAME ?? (object)DBNull.Value;
                         cmd.Parameters.Add("@ODR_NAME", SqlDbType.VarChar).Value = ODR_NAME ?? (object)DBNull.Value;
+
+                        cmd.Parameters.Add("@REQ_DATE_FROM", SqlDbType.DateTime).Value = dtREQ_DATE_FROM ?? (object)DBNull.Value;
+                        cmd.Parameters.Add("@REQ_DATE_TO", SqlDbType.DateTime).Value = dtREQ_DATE_TO ?? (object)DBNull.Value;
+                        cmd.Parameters.Add("@REQ_NO", SqlDbType.VarChar).Value = REQ_NO ?? (object)DBNull.Value;
+                        cmd.Parameters.Add("@ODR_DATE_FROM", SqlDbType.DateTime).Value = dtODR_DATE_FROM ?? (object)DBNull.Value;
+                        cmd.Parameters.Add("@ODR_DATE_TO", SqlDbType.DateTime).Value = dtODR_DATE_TO ?? (object)DBNull.Value;
+                        cmd.Parameters.Add("@ODR_NO", SqlDbType.VarChar).Value = ODR_NO ?? (object)DBNull.Value;
+
                         cmd.Parameters.Add("@ACCEPT_DATE_FROM", SqlDbType.DateTime).Value = dtACCEPT_DATE_FROM ?? (object)DBNull.Value;
                         cmd.Parameters.Add("@ACCEPT_DATE_TO", SqlDbType.DateTime).Value = dtACCEPT_DATE_TO ?? (object)DBNull.Value;
                         cmd.Parameters.Add("@ACCEPT_MONTH_FROM", SqlDbType.DateTime).Value = dtACCEPT_MONTH_FROM ?? (object)DBNull.Value;

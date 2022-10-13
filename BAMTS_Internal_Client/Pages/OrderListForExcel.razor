@@ -398,6 +398,46 @@
                             </tr>
                             <tr>
                                 <td class="table-secondary">
+                                    <label class="text-nowrap">EDI見積依頼<br />依頼日</label>
+                                </td>
+                                <td>
+                                    <div style="display: flex;">
+                                        <BSInput InputType="InputType.Date" @bind-Value="this.searchModel.REQ_DATE_FROM" />
+                                        <label>～</label>
+                                        <BSInput InputType="InputType.Date" @bind-Value="this.searchModel.REQ_DATE_TO" />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-secondary">
+                                    <label class="text-nowrap">EDI見積依頼<br />依頼No</label>
+                                </td>
+                                <td colspan="3">
+                                    <BSInput InputType="InputType.Text" @bind-Value="searchModel.REQ_NO" style="width: stretch" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-secondary">
+                                    <label class="text-nowrap">EDI注文依頼<br />注文日</label>
+                                </td>
+                                <td>
+                                    <div style="display: flex;">
+                                        <BSInput InputType="InputType.Date" @bind-Value="this.searchModel.ODR_DATE_FROM" />
+                                        <label>～</label>
+                                        <BSInput InputType="InputType.Date" @bind-Value="this.searchModel.ODR_DATE_TO" />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-secondary">
+                                    <label class="text-nowrap">EDI注文依頼<br />注文No</label>
+                                </td>
+                                <td colspan="3">
+                                    <BSInput InputType="InputType.Text" @bind-Value="searchModel.ODR_NO" style="width: stretch" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-secondary">
                                     <label class="text-nowrap">検収日</label>
                                 </td>
                                 <td>
@@ -447,7 +487,14 @@
                                     <label class="text-nowrap">協力会社-施工：会社名</label>
                                 </td>
                                 <td>
-                                    <BSInput InputType="InputType.Text" @bind-Value="this.searchModel.ASSOCIATE_NAME_1" style="width: stretch" />
+                                    <!--<BSInput InputType="InputType.Text" @bind-Value="this.searchModel.ASSOCIATE_NAME_1" style="width: stretch" />-->
+                                    <input type="text" autocomplete="on" list="selAssociateList"  @bind-value="this.searchModel.ASSOCIATE_NAME_1" style="width: 400px" >
+                                    <datalist id="selAssociateList">
+                                        @foreach (var item in this.selAssociate)
+                                        {
+                                            <option value="@item.Text"/>
+                                        }
+                                    </datalist>
                                 </td>
                             </tr>
                             <tr>
@@ -477,7 +524,14 @@
                                     <label class="text-nowrap">協力会社-セットアップ：会社名</label>
                                 </td>
                                 <td>
-                                    <BSInput InputType="InputType.Text" @bind-Value="this.searchModel.ASSOCIATE_NAME_2" style="width: stretch" />
+                                    <!--<BSInput InputType="InputType.Text" @bind-Value="this.searchModel.ASSOCIATE_NAME_2" style="width: stretch" />-->
+                                    <input type="text" autocomplete="on" list="selAssociateList"  @bind-value="this.searchModel.ASSOCIATE_NAME_2" style="width: 400px" >
+                                    <datalist id="selAssociateList">
+                                        @foreach (var item in this.selAssociate)
+                                        {
+                                            <option value="@item.Text"/>
+                                        }
+                                    </datalist>
                                 </td>
                             </tr>
                             <tr>
@@ -507,7 +561,14 @@
                                     <label class="text-nowrap">協力会社-その他：会社名</label>
                                 </td>
                                 <td>
-                                    <BSInput InputType="InputType.Text" @bind-Value="this.searchModel.ASSOCIATE_NAME_3" style="width: stretch" />
+                                    <!--<BSInput InputType="InputType.Text" @bind-Value="this.searchModel.ASSOCIATE_NAME_3" style="width: stretch" />-->
+                                    <input type="text" autocomplete="on" list="selAssociateList"  @bind-value="this.searchModel.ASSOCIATE_NAME_3" style="width: 400px" >
+                                    <datalist id="selAssociateList">
+                                        @foreach (var item in this.selAssociate)
+                                        {
+                                            <option value="@item.Text"/>
+                                        }
+                                    </datalist>
                                 </td>
                             </tr>
                             <tr>
@@ -1026,6 +1087,15 @@
                                                         <option value="@item.Value">@item.Text</option>
                                                     }
                                                 </select>
+                                                @*
+                                                <input type="text" autocomplete="on" list="associateList1"  @bind-value="this.inputModel.ASSOCIATE_ID_1">
+                                                <datalist id="associateList1">
+                                                    @foreach (var item in this.selAssociate)
+                                                    {
+                                                        <option value="@item.Text"/>
+                                                    }
+                                                </datalist>
+                                                *@
                                             </div>
                                             <div class="input-group">
                                                 <span class="input-group-text">金　　額</span>
@@ -1063,6 +1133,15 @@
                                                         <option value="@item.Value">@item.Text</option>
                                                     }
                                                 </select>
+                                                @*
+                                                <input type="text" autocomplete="on" list="associateList2"  @bind-value="this.inputModel.ASSOCIATE_ID_2">
+                                                <datalist id="associateList2">
+                                                    @foreach (var item in this.selAssociate)
+                                                    {
+                                                        <option value="@item.Text"/>
+                                                    }
+                                                </datalist>
+                                                *@
                                             </div>
                                             <div class="input-group">
                                                 <span class="input-group-text">金　　額</span>
@@ -1100,6 +1179,15 @@
                                                         <option value="@item.Value">@item.Text</option>
                                                     }
                                                 </select>
+                                                @*
+                                                <input type="text" autocomplete="on" list="associateList3"  @bind-value="this.inputModel.ASSOCIATE_ID_3">
+                                                <datalist id="associateList3">
+                                                    @foreach (var item in this.selAssociate)
+                                                    {
+                                                        <option value="@item.Text"/>
+                                                    }
+                                                </datalist>
+                                                *@
                                             </div>
                                             <div class="input-group">
                                                 <span class="input-group-text">金　　額</span>
@@ -1444,7 +1532,7 @@
         var targetIndex = this.allList.FindIndex(c => (c.ODR_PERIOD == this.inputModel.ODR_PERIOD) && (c.ODR_CATEGORY == this.inputModel.ODR_CATEGORY) && (c.ODR_MONTH == this.inputModel.ODR_MONTH) && (c.ODR_SEQ == this.inputModel.ODR_SEQ));
         return ((targetIndex > 0) && (targetIndex <= (this.allList.Count - 1)));
     }
-    private async void MoveEditRowNext()
+    private void MoveEditRowNext()
     {
         this.ValueKeeper.SaveKeepItemValue(this.inputModel);
         var targetIndex = this.allList.FindIndex(c => (c.ODR_PERIOD == this.inputModel.ODR_PERIOD) && (c.ODR_CATEGORY == this.inputModel.ODR_CATEGORY) && (c.ODR_MONTH == this.inputModel.ODR_MONTH) && (c.ODR_SEQ == this.inputModel.ODR_SEQ));
@@ -1452,13 +1540,14 @@
         {
             this.inputModel = this.allList[targetIndex+1].Copy();
         }
-        await this.DataInput.HideAsync();   //編集画面を閉じる
+        //await this.DataInput.HideAsync();   //編集画面を閉じる
         this.DispListPageAsyncEdit();
         this.inputMode = Common.InputMode.Update;
-        await this.DataInput.ShowAsync();
+        //await this.DataInput.ShowAsync();
         this.ValueKeeper.LoadKeepItemValue(this.inputModel);
+        //this.StateHasChanged();
     }
-    private async void MoveEditRowPrev()
+    private void MoveEditRowPrev()
     {
         this.ValueKeeper.SaveKeepItemValue(this.inputModel);
         var targetIndex = this.allList.FindIndex(c => (c.ODR_PERIOD == this.inputModel.ODR_PERIOD) && (c.ODR_CATEGORY == this.inputModel.ODR_CATEGORY) && (c.ODR_MONTH == this.inputModel.ODR_MONTH) && (c.ODR_SEQ == this.inputModel.ODR_SEQ));
@@ -1466,11 +1555,12 @@
         {
             this.inputModel = this.allList[targetIndex-1].Copy();
         }
-        await this.DataInput.HideAsync();   //編集画面を閉じる
+        //await this.DataInput.HideAsync();   //編集画面を閉じる
         this.DispListPageAsyncEdit();
         this.inputMode = Common.InputMode.Update;
-        await this.DataInput.ShowAsync();
+        //await this.DataInput.ShowAsync();
         this.ValueKeeper.LoadKeepItemValue(this.inputModel);
+        //this.StateHasChanged();
     }
     private void ClearSearchInput()
     {
@@ -1484,6 +1574,12 @@
         this.searchModel.STATUS = null;
         this.searchModel.TYPE = null;
         this.searchModel.CNST_MANAGER_ID = null;
+        this.searchModel.REQ_DATE_FROM = null;
+        this.searchModel.REQ_DATE_TO = null;
+        this.searchModel.REQ_NO = null;
+        this.searchModel.ODR_DATE_FROM = null;
+        this.searchModel.ODR_DATE_TO = null;
+        this.searchModel.ODR_NO = null;
         this.searchModel.ACCEPT_DATE_FROM = null;
         this.searchModel.ACCEPT_DATE_TO = null;
         this.searchModel.ACCEPT_MONTH_FROM = null;
@@ -1507,7 +1603,6 @@
         this.searchModel.NET_PRICE_3_TO = null;
         this.searchModel.PAYMENT_MONTH_3_FROM = null;
         this.searchModel.PAYMENT_MONTH_3_TO = null;
-
         this.StateHasChanged();
     }
     private void AutoCalcANS_NET_PRICE(bool discount)
@@ -1879,6 +1974,16 @@
             sb.Append($"{Common.API_PARAM_SEPARATER}{(string.IsNullOrEmpty(this.searchModel.CNST_MANAGER_ID) ? null : this.searchModel.CNST_MANAGER_ID)?.ToString() ?? Common.API_PARAM_NULL}");
             sb.Append($"{Common.API_PARAM_SEPARATER}{(string.IsNullOrEmpty(this.searchModel.CUSTOMER_NAME) ? null : this.searchModel.CUSTOMER_NAME)?.ToString() ?? Common.API_PARAM_NULL}");
             sb.Append($"{Common.API_PARAM_SEPARATER}{(string.IsNullOrEmpty(this.searchModel.ODR_NAME) ? null : this.searchModel.ODR_NAME)?.ToString() ?? Common.API_PARAM_NULL}");
+            if(this.searchModel.REQ_DATE_FROM == null) sb.Append($"{Common.API_PARAM_SEPARATER}{Common.API_PARAM_NULL}");
+            else sb.Append($"{Common.API_PARAM_SEPARATER}{this.searchModel.REQ_DATE_FROM:yyyy-MM-dd}");
+            if(this.searchModel.REQ_DATE_TO == null) sb.Append($"{Common.API_PARAM_SEPARATER}{Common.API_PARAM_NULL}");
+            else sb.Append($"{Common.API_PARAM_SEPARATER}{this.searchModel.REQ_DATE_TO:yyyy-MM-dd}");
+            sb.Append($"{Common.API_PARAM_SEPARATER}{(string.IsNullOrEmpty(this.searchModel.REQ_NO) ? null : this.searchModel.REQ_NO)?.ToString() ?? Common.API_PARAM_NULL}");
+            if(this.searchModel.ODR_DATE_FROM == null) sb.Append($"{Common.API_PARAM_SEPARATER}{Common.API_PARAM_NULL}");
+            else sb.Append($"{Common.API_PARAM_SEPARATER}{this.searchModel.ODR_DATE_FROM:yyyy-MM-dd}");
+            if(this.searchModel.ODR_DATE_TO == null) sb.Append($"{Common.API_PARAM_SEPARATER}{Common.API_PARAM_NULL}");
+            else sb.Append($"{Common.API_PARAM_SEPARATER}{this.searchModel.ODR_DATE_TO:yyyy-MM-dd}");
+            sb.Append($"{Common.API_PARAM_SEPARATER}{(string.IsNullOrEmpty(this.searchModel.ODR_NO) ? null : this.searchModel.ODR_NO)?.ToString() ?? Common.API_PARAM_NULL}");
             if(this.searchModel.ACCEPT_DATE_FROM == null) sb.Append($"{Common.API_PARAM_SEPARATER}{Common.API_PARAM_NULL}");
             else sb.Append($"{Common.API_PARAM_SEPARATER}{this.searchModel.ACCEPT_DATE_FROM:yyyy-MM-dd}");
             if(this.searchModel.ACCEPT_DATE_TO == null) sb.Append($"{Common.API_PARAM_SEPARATER}{Common.API_PARAM_NULL}");
