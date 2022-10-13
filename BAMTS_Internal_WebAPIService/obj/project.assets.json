@@ -4688,11 +4688,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_WebAPIService\\BAMTS_Internal_WebAPIService.csproj",
+      "projectUniqueName": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\BAMTS_Internal_WebAPIService\\BAMTS_Internal_WebAPIService.csproj",
       "projectName": "BAMTS_Internal_WebAPIService",
-      "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_WebAPIService\\BAMTS_Internal_WebAPIService.csproj",
+      "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\BAMTS_Internal_WebAPIService\\BAMTS_Internal_WebAPIService.csproj",
       "packagesPath": "C:\\Users\\jun\\.nuget\\packages\\",
-      "outputPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_WebAPIService\\obj\\",
+      "outputPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\BAMTS_Internal_WebAPIService\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -4709,6 +4709,7 @@
         "net6.0"
       ],
       "sources": {
+        "C:\\OPC\\NuGetPackages": {},
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
@@ -4716,11 +4717,11 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\LibDatabaseAccess\\LibDatabaseAccess.csproj": {
-              "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\LibDatabaseAccess\\LibDatabaseAccess.csproj"
+            "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\LibDatabaseAccess\\LibDatabaseAccess.csproj": {
+              "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\LibDatabaseAccess\\LibDatabaseAccess.csproj"
             },
-            "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\LibModels\\LibModels.csproj": {
-              "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\LibModels\\LibModels.csproj"
+            "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\LibModels\\LibModels.csproj": {
+              "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\LibModels\\LibModels.csproj"
             }
           }
         }
@@ -4770,7 +4771,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.305\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.302\\RuntimeIdentifierGraph.json"
       }
     }
   }

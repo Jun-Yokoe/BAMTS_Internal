@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "frZYyW6Jr2yugR3OGEz6UpdYBeQxWGTJ7KuyvqKCAwc29KjDHV7dHFx46GjeF9mOgsQ67McnwISTUJ6V+8FTsQ==",
+  "dgSpecHash": "tBB4Ga0ODOQd/bcevLH24iFydOF4hvUGcx5R8bqxayES0aRwKnMfQ3mxbDNU4reDzJVReS2Gk2fV2X6NjC0jJg==",
   "success": true,
-  "projectFilePath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\BAMTS_Internal_Client.csproj",
+  "projectFilePath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\BAMTS_Internal_Client\\BAMTS_Internal_Client.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\jun\\.nuget\\packages\\blazorcomponentutilities\\1.7.1\\blazorcomponentutilities.1.7.1.nupkg.sha512",
     "C:\\Users\\jun\\.nuget\\packages\\blazorstrap\\5.0.106\\blazorstrap.5.0.106.nupkg.sha512",
@@ -38,8 +38,7 @@
     "C:\\Users\\jun\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
     "C:\\Users\\jun\\.nuget\\packages\\system.text.encoding.codepages\\6.0.0\\system.text.encoding.codepages.6.0.0.nupkg.sha512",
     "C:\\Users\\jun\\.nuget\\packages\\system.text.encodings.web\\6.0.0\\system.text.encodings.web.6.0.0.nupkg.sha512",
-    "C:\\Users\\jun\\.nuget\\packages\\system.text.json\\6.0.0\\system.text.json.6.0.0.nupkg.sha512",
-    "C:\\Users\\jun\\.nuget\\packages\\microsoft.netcore.app.runtime.mono.browser-wasm\\6.0.10\\microsoft.netcore.app.runtime.mono.browser-wasm.6.0.10.nupkg.sha512"
+    "C:\\Users\\jun\\.nuget\\packages\\system.text.json\\6.0.0\\system.text.json.6.0.0.nupkg.sha512"
   ],
   "logs": []
 }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\BAMTS_Internal_Client.csproj": {}
+    "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\BAMTS_Internal_Client\\BAMTS_Internal_Client.csproj": {}
   },
   "projects": {
-    "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\BAMTS_Internal_Client.csproj": {
+    "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\BAMTS_Internal_Client\\BAMTS_Internal_Client.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\BAMTS_Internal_Client.csproj",
+        "projectUniqueName": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\BAMTS_Internal_Client\\BAMTS_Internal_Client.csproj",
         "projectName": "BAMTS_Internal_Client",
-        "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\BAMTS_Internal_Client.csproj",
+        "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\BAMTS_Internal_Client\\BAMTS_Internal_Client.csproj",
         "packagesPath": "C:\\Users\\jun\\.nuget\\packages\\",
-        "outputPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\obj\\",
+        "outputPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\BAMTS_Internal_Client\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -28,6 +28,7 @@
           "net6.0"
         ],
         "sources": {
+          "C:\\OPC\\NuGetPackages": {},
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
@@ -35,11 +36,11 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\LibCommon\\LibCommon.csproj": {
-                "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\LibCommon\\LibCommon.csproj"
+              "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\LibCommon\\LibCommon.csproj": {
+                "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\LibCommon\\LibCommon.csproj"
               },
-              "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\LibModels\\LibModels.csproj": {
-                "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\LibModels\\LibModels.csproj"
+              "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\LibModels\\LibModels.csproj": {
+                "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\LibModels\\LibModels.csproj"
               }
             }
           }
@@ -96,18 +97,12 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.NETCore.App.Runtime.Mono.browser-wasm",
-              "version": "[6.0.10, 6.0.10]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.305\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.302\\RuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {
@@ -116,16 +111,16 @@
         }
       }
     },
-    "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\LibCommon\\LibCommon.csproj": {
+    "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\LibCommon\\LibCommon.csproj": {
       "restore": {
-        "projectUniqueName": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\LibCommon\\LibCommon.csproj",
+        "projectUniqueName": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\LibCommon\\LibCommon.csproj",
         "projectName": "LibCommon",
-        "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\LibCommon\\LibCommon.csproj",
+        "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\LibCommon\\LibCommon.csproj",
         "frameworks": {
           "net472": {
             "projectReferences": {
-              "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\LibModels\\LibModels.csproj": {
-                "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\LibModels\\LibModels.csproj"
+              "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\LibModels\\LibModels.csproj": {
+                "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\LibModels\\LibModels.csproj"
               }
             }
           }
@@ -135,16 +130,16 @@
         "net472": {}
       }
     },
-    "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\LibModels\\LibModels.csproj": {
+    "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\LibModels\\LibModels.csproj": {
       "restore": {
-        "projectUniqueName": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\LibModels\\LibModels.csproj",
+        "projectUniqueName": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\LibModels\\LibModels.csproj",
         "projectName": "LibModels",
-        "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\LibModels\\LibModels.csproj",
+        "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\LibModels\\LibModels.csproj",
         "frameworks": {
           "net472": {
             "projectReferences": {
-              "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\Library\\BAMSS.Data.SQLServerAccessor\\BAMSS.Data.SQLServerAccessor.csproj": {
-                "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\Library\\BAMSS.Data.SQLServerAccessor\\BAMSS.Data.SQLServerAccessor.csproj"
+              "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Library\\BAMSS.Data.SQLServerAccessor\\BAMSS.Data.SQLServerAccessor.csproj": {
+                "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Library\\BAMSS.Data.SQLServerAccessor\\BAMSS.Data.SQLServerAccessor.csproj"
               }
             }
           }
@@ -154,19 +149,19 @@
         "net472": {}
       }
     },
-    "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\Library\\BAMSS.Data.SQLServerAccessor\\BAMSS.Data.SQLServerAccessor.csproj": {
+    "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Library\\BAMSS.Data.SQLServerAccessor\\BAMSS.Data.SQLServerAccessor.csproj": {
       "restore": {
-        "projectUniqueName": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\Library\\BAMSS.Data.SQLServerAccessor\\BAMSS.Data.SQLServerAccessor.csproj",
+        "projectUniqueName": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Library\\BAMSS.Data.SQLServerAccessor\\BAMSS.Data.SQLServerAccessor.csproj",
         "projectName": "BAMSS.Data.SQLServerAccessor",
-        "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\Library\\BAMSS.Data.SQLServerAccessor\\BAMSS.Data.SQLServerAccessor.csproj",
+        "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Library\\BAMSS.Data.SQLServerAccessor\\BAMSS.Data.SQLServerAccessor.csproj",
         "frameworks": {
           "net462": {
             "projectReferences": {
-              "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\Library\\Extensions\\Exception\\BAMSS.Extensions.Exception.csproj": {
-                "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\Library\\Extensions\\Exception\\BAMSS.Extensions.Exception.csproj"
+              "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Library\\Extensions\\Exception\\BAMSS.Extensions.Exception.csproj": {
+                "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Library\\Extensions\\Exception\\BAMSS.Extensions.Exception.csproj"
               },
-              "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\Library\\Logging\\Message\\LoggingMessageInterface\\BAMSS.Logging.Message.LoggingMessageInterface.csproj": {
-                "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\Library\\Logging\\Message\\LoggingMessageInterface\\BAMSS.Logging.Message.LoggingMessageInterface.csproj"
+              "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Library\\Logging\\Message\\LoggingMessageInterface\\BAMSS.Logging.Message.LoggingMessageInterface.csproj": {
+                "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Library\\Logging\\Message\\LoggingMessageInterface\\BAMSS.Logging.Message.LoggingMessageInterface.csproj"
               }
             }
           }
@@ -176,16 +171,16 @@
         "net462": {}
       }
     },
-    "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\Library\\Extensions\\Exception\\BAMSS.Extensions.Exception.csproj": {
+    "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Library\\Extensions\\Exception\\BAMSS.Extensions.Exception.csproj": {
       "restore": {
-        "projectUniqueName": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\Library\\Extensions\\Exception\\BAMSS.Extensions.Exception.csproj",
+        "projectUniqueName": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Library\\Extensions\\Exception\\BAMSS.Extensions.Exception.csproj",
         "projectName": "BAMSS.Extensions.Exception",
-        "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\Library\\Extensions\\Exception\\BAMSS.Extensions.Exception.csproj",
+        "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Library\\Extensions\\Exception\\BAMSS.Extensions.Exception.csproj",
         "frameworks": {
           "net462": {
             "projectReferences": {
-              "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\Library\\Logging\\Message\\LoggingMessageInterface\\BAMSS.Logging.Message.LoggingMessageInterface.csproj": {
-                "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\Library\\Logging\\Message\\LoggingMessageInterface\\BAMSS.Logging.Message.LoggingMessageInterface.csproj"
+              "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Library\\Logging\\Message\\LoggingMessageInterface\\BAMSS.Logging.Message.LoggingMessageInterface.csproj": {
+                "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Library\\Logging\\Message\\LoggingMessageInterface\\BAMSS.Logging.Message.LoggingMessageInterface.csproj"
               }
             }
           }
@@ -195,11 +190,11 @@
         "net462": {}
       }
     },
-    "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\Library\\Logging\\Message\\LoggingMessageInterface\\BAMSS.Logging.Message.LoggingMessageInterface.csproj": {
+    "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Library\\Logging\\Message\\LoggingMessageInterface\\BAMSS.Logging.Message.LoggingMessageInterface.csproj": {
       "restore": {
-        "projectUniqueName": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\Library\\Logging\\Message\\LoggingMessageInterface\\BAMSS.Logging.Message.LoggingMessageInterface.csproj",
+        "projectUniqueName": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Library\\Logging\\Message\\LoggingMessageInterface\\BAMSS.Logging.Message.LoggingMessageInterface.csproj",
         "projectName": "BAMSS.Logging.Message.LoggingMessageInterface",
-        "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\Library\\Logging\\Message\\LoggingMessageInterface\\BAMSS.Logging.Message.LoggingMessageInterface.csproj",
+        "projectPath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Library\\Logging\\Message\\LoggingMessageInterface\\BAMSS.Logging.Message.LoggingMessageInterface.csproj",
         "frameworks": {
           "net462": {
             "projectReferences": {}
