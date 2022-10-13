@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "SvHA6hxDKcdFBWP/TVvz0gP4l3LokjwBtUHKr4UEvXLLVE4Gd1HrV4Fhm25+C5pQ3SeztkR8kUITZFImDvqqLg==",
+  "dgSpecHash": "8dZAbbNSfdJ3jtbiEOs5tb6YMpjelgf1LPaTKVPuHX+dCrEI4XIDqNdWud/+IErynTmMvuECMOoXwsyR6sm3Qg==",
   "success": true,
   "projectFilePath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\BAMTS_Internal_Client.csproj",
   "expectedPackageFiles": [
@@ -39,7 +39,7 @@
     "C:\\Users\\jun\\.nuget\\packages\\system.text.encoding.codepages\\6.0.0\\system.text.encoding.codepages.6.0.0.nupkg.sha512",
     "C:\\Users\\jun\\.nuget\\packages\\system.text.encodings.web\\6.0.0\\system.text.encodings.web.6.0.0.nupkg.sha512",
     "C:\\Users\\jun\\.nuget\\packages\\system.text.json\\6.0.0\\system.text.json.6.0.0.nupkg.sha512",
-    "C:\\Users\\jun\\.nuget\\packages\\microsoft.netcore.app.runtime.mono.browser-wasm\\6.0.9\\microsoft.netcore.app.runtime.mono.browser-wasm.6.0.9.nupkg.sha512"
+    "C:\\Users\\jun\\.nuget\\packages\\microsoft.netcore.app.runtime.mono.browser-wasm\\6.0.10\\microsoft.netcore.app.runtime.mono.browser-wasm.6.0.10.nupkg.sha512"
   ],
   "logs": []
 }

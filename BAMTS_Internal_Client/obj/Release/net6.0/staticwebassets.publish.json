@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "mnCTLElUWU2gXI9aWBRlRIxjM+Uw2qb4cIL2vzSA1FA=",
+  "Hash": "4P+eN9FsdNdnx2NATu5eropApZT7vvrQRnMxwuS+1tE=",
   "Source": "BAMTS_Internal_Client",
   "BasePath": "/",
   "Mode": "Root",
@@ -34,12 +34,12 @@
       "OriginalItemSpec": "C:\\Users\\jun\\.nuget\\packages\\microsoft.aspnetcore.components.webassembly\\6.0.7\\build\\net6.0\\blazor.webassembly.js"
     },
     {
-      "Identity": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\bin\\Release\\net6.0\\wwwroot\\_framework\\dotnet.6.0.9.637yxzn135.js",
+      "Identity": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\bin\\Release\\net6.0\\wwwroot\\_framework\\dotnet.6.0.10.kbjkrgu40t.js",
       "SourceId": "BAMTS_Internal_Client",
       "SourceType": "Computed",
       "ContentRoot": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\obj\\Release\\net6.0\\browser-wasm\\PubTmp\\Out\\wwwroot\\",
       "BasePath": "/",
-      "RelativePath": "_framework/dotnet.6.0.9.637yxzn135.js",
+      "RelativePath": "_framework/dotnet.6.0.10.kbjkrgu40t.js",
       "AssetKind": "Publish",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -48,7 +48,7 @@
       "AssetTraitValue": "native",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\bin\\Release\\net6.0\\wwwroot\\_framework\\dotnet.6.0.9.637yxzn135.js"
+      "OriginalItemSpec": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\bin\\Release\\net6.0\\wwwroot\\_framework\\dotnet.6.0.10.kbjkrgu40t.js"
     },
     {
       "Identity": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\bin\\Release\\net6.0\\wwwroot\\_framework\\dotnet.timezones.blat",
@@ -170,23 +170,6 @@
       "OriginalItemSpec": "obj\\Release\\net6.0\\blazor.publish.boot.json"
     },
     {
-      "Identity": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\obj\\Release\\net6.0\\build-gz\\+cAjmx0S.gz",
-      "SourceId": "BAMTS_Internal_Client",
-      "SourceType": "Computed",
-      "ContentRoot": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\obj\\Release\\net6.0\\browser-wasm\\PubTmp\\Out\\wwwroot\\",
-      "BasePath": "/",
-      "RelativePath": "_framework/dotnet.6.0.9.637yxzn135.js.gz",
-      "AssetKind": "Publish",
-      "AssetMode": "All",
-      "AssetRole": "Alternative",
-      "RelatedAsset": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\bin\\Release\\net6.0\\wwwroot\\_framework\\dotnet.6.0.9.637yxzn135.js",
-      "AssetTraitName": "Content-Encoding",
-      "AssetTraitValue": "gzip",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\obj\\Release\\net6.0\\build-gz\\+cAjmx0S.gz"
-    },
-    {
       "Identity": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\obj\\Release\\net6.0\\build-gz\\bOX4iUsc.gz",
       "SourceId": "BAMTS_Internal_Client",
       "SourceType": "Computed",
@@ -202,6 +185,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\obj\\Release\\net6.0\\build-gz\\bOX4iUsc.gz"
+    },
+    {
+      "Identity": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\obj\\Release\\net6.0\\build-gz\\eYWZL78l.gz",
+      "SourceId": "BAMTS_Internal_Client",
+      "SourceType": "Computed",
+      "ContentRoot": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\obj\\Release\\net6.0\\browser-wasm\\PubTmp\\Out\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "_framework/dotnet.6.0.10.kbjkrgu40t.js.gz",
+      "AssetKind": "Publish",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "RelatedAsset": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\bin\\Release\\net6.0\\wwwroot\\_framework\\dotnet.6.0.10.kbjkrgu40t.js",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\obj\\Release\\net6.0\\build-gz\\eYWZL78l.gz"
     },
     {
       "Identity": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\obj\\Release\\net6.0\\build-gz\\MsCZ7xEY.gz",
@@ -255,6 +255,23 @@
       "OriginalItemSpec": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\bin\\Release\\net6.0\\wwwroot\\_framework\\blazor.webassembly.js"
     },
     {
+      "Identity": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\obj\\Release\\net6.0\\build-gz\\S+NaVGEm.gz",
+      "SourceId": "BAMTS_Internal_Client",
+      "SourceType": "Computed",
+      "ContentRoot": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\obj\\Release\\net6.0\\browser-wasm\\PubTmp\\Out\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "_framework/dotnet.wasm.gz",
+      "AssetKind": "Publish",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "RelatedAsset": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\bin\\Release\\net6.0\\wwwroot\\_framework\\dotnet.wasm",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\obj\\Release\\net6.0\\build-gz\\S+NaVGEm.gz"
+    },
+    {
       "Identity": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\obj\\Release\\net6.0\\build-gz\\urlzg9YO.gz",
       "SourceId": "BAMTS_Internal_Client",
       "SourceType": "Computed",
@@ -287,23 +304,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\obj\\Release\\net6.0\\build-gz\\XIW3m96J.gz"
-    },
-    {
-      "Identity": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\obj\\Release\\net6.0\\build-gz\\Xns3EBEb.gz",
-      "SourceId": "BAMTS_Internal_Client",
-      "SourceType": "Computed",
-      "ContentRoot": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\obj\\Release\\net6.0\\browser-wasm\\PubTmp\\Out\\wwwroot\\",
-      "BasePath": "/",
-      "RelativePath": "_framework/dotnet.wasm.gz",
-      "AssetKind": "Publish",
-      "AssetMode": "All",
-      "AssetRole": "Alternative",
-      "RelatedAsset": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\bin\\Release\\net6.0\\wwwroot\\_framework\\dotnet.wasm",
-      "AssetTraitName": "Content-Encoding",
-      "AssetTraitValue": "gzip",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\obj\\Release\\net6.0\\build-gz\\Xns3EBEb.gz"
     },
     {
       "Identity": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\obj\\Release\\net6.0\\build-gz\\yG4xtihT.gz",
@@ -627,6 +627,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\bin\\Release\\net6.0\\wwwroot\\_framework\\icudt_EFIGS.dat"
+    },
+    {
+      "Identity": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\obj\\Release\\net6.0\\compress\\31f0eRvY.br",
+      "SourceId": "BAMTS_Internal_Client",
+      "SourceType": "Computed",
+      "ContentRoot": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\obj\\Release\\net6.0\\browser-wasm\\PubTmp\\Out\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "_framework/dotnet.6.0.10.kbjkrgu40t.js.br",
+      "AssetKind": "Publish",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "RelatedAsset": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\bin\\Release\\net6.0\\wwwroot\\_framework\\dotnet.6.0.10.kbjkrgu40t.js",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "br",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\bin\\Release\\net6.0\\wwwroot\\_framework\\dotnet.6.0.10.kbjkrgu40t.js"
     },
     {
       "Identity": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\obj\\Release\\net6.0\\compress\\5c4C+lKi.br",
@@ -1698,23 +1715,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\bin\\Release\\net6.0\\wwwroot\\_framework\\dotnet.wasm"
-    },
-    {
-      "Identity": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\obj\\Release\\net6.0\\compress\\IWSosEr1.br",
-      "SourceId": "BAMTS_Internal_Client",
-      "SourceType": "Computed",
-      "ContentRoot": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\obj\\Release\\net6.0\\browser-wasm\\PubTmp\\Out\\wwwroot\\",
-      "BasePath": "/",
-      "RelativePath": "_framework/dotnet.6.0.9.637yxzn135.js.br",
-      "AssetKind": "Publish",
-      "AssetMode": "All",
-      "AssetRole": "Alternative",
-      "RelatedAsset": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\bin\\Release\\net6.0\\wwwroot\\_framework\\dotnet.6.0.9.637yxzn135.js",
-      "AssetTraitName": "Content-Encoding",
-      "AssetTraitValue": "br",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\bin\\Release\\net6.0\\wwwroot\\_framework\\dotnet.6.0.9.637yxzn135.js"
     },
     {
       "Identity": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_Client\\obj\\Release\\net6.0\\compress\\ixpGSDD+.br",
