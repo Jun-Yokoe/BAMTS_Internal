@@ -5,4 +5,8 @@ git commit -m ""
 
 git push https://github.com/Jun-Yokoe/BAMTS_Internal
 
-
+【自動改行コード変換設定：解除】
+<全リポジトリ>
+git config --global core.autocrlf false
+<リポジトリ毎>
+git config --local core.autocrlf false
