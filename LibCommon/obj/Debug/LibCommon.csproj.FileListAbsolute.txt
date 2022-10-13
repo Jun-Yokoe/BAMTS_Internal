@@ -24,3 +24,16 @@ C:\User\Projects\BAMTS\Development\BAMTS_Internal\Source\LibCommon\obj\Debug\Lib
 C:\User\Projects\BAMTS\Development\BAMTS_Internal\Source\LibCommon\obj\Debug\LibCommon.csproj.CopyComplete
 C:\User\Projects\BAMTS\Development\BAMTS_Internal\Source\LibCommon\obj\Debug\LibCommon.dll
 C:\User\Projects\BAMTS\Development\BAMTS_Internal\Source\LibCommon\obj\Debug\LibCommon.pdb
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\LibCommon\bin\Debug\LibCommon.dll
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\LibCommon\bin\Debug\LibCommon.pdb
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\LibCommon\bin\Debug\LibModels.dll
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\LibCommon\bin\Debug\BAMSS.Data.SQLServerAccessor.dll
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\LibCommon\bin\Debug\BAMSS.Logging.Message.LoggingMessageInterface.dll
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\LibCommon\bin\Debug\LibModels.pdb
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\LibCommon\bin\Debug\BAMSS.Data.SQLServerAccessor.pdb
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\LibCommon\bin\Debug\BAMSS.Logging.Message.LoggingMessageInterface.pdb
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\LibCommon\obj\Debug\LibCommon.csproj.AssemblyReference.cache
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\LibCommon\obj\Debug\LibCommon.csproj.CoreCompileInputs.cache
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\LibCommon\obj\Debug\LibCommon.csproj.CopyComplete
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\LibCommon\obj\Debug\LibCommon.dll
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\LibCommon\obj\Debug\LibCommon.pdb

@@ -40,3 +40,14 @@ C:\User\Projects\BAMTS\Development\BAMTS_Internal\Source\Library\BAMSS.Data.SQLS
 C:\User\Projects\BAMTS\Development\BAMTS_Internal\Source\Library\BAMSS.Data.SQLServerAccessor\obj\Debug\BAMSS.Data.SQLServerAccessor.csproj.CopyComplete
 C:\User\Projects\BAMTS\Development\BAMTS_Internal\Source\Library\BAMSS.Data.SQLServerAccessor\obj\Debug\BAMSS.Data.SQLServerAccessor.dll
 C:\User\Projects\BAMTS\Development\BAMTS_Internal\Source\Library\BAMSS.Data.SQLServerAccessor\obj\Debug\BAMSS.Data.SQLServerAccessor.pdb
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\Library\BAMSS.Data.SQLServerAccessor\bin\Debug\BAMSS.Data.SQLServerAccessor.dll
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\Library\BAMSS.Data.SQLServerAccessor\bin\Debug\BAMSS.Data.SQLServerAccessor.pdb
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\Library\BAMSS.Data.SQLServerAccessor\bin\Debug\BAMSS.Extensions.Exception.dll
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\Library\BAMSS.Data.SQLServerAccessor\bin\Debug\BAMSS.Logging.Message.LoggingMessageInterface.dll
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\Library\BAMSS.Data.SQLServerAccessor\bin\Debug\BAMSS.Extensions.Exception.pdb
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\Library\BAMSS.Data.SQLServerAccessor\bin\Debug\BAMSS.Logging.Message.LoggingMessageInterface.pdb
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\Library\BAMSS.Data.SQLServerAccessor\obj\Debug\BAMSS.Data.SQLServerAccessor.csproj.AssemblyReference.cache
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\Library\BAMSS.Data.SQLServerAccessor\obj\Debug\BAMSS.Data.SQLServerAccessor.csproj.CoreCompileInputs.cache
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\Library\BAMSS.Data.SQLServerAccessor\obj\Debug\BAMSS.Data.SQLServerAccessor.csproj.CopyComplete
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\Library\BAMSS.Data.SQLServerAccessor\obj\Debug\BAMSS.Data.SQLServerAccessor.dll
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\Library\BAMSS.Data.SQLServerAccessor\obj\Debug\BAMSS.Data.SQLServerAccessor.pdb
