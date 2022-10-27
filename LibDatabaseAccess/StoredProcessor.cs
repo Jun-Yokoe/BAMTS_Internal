@@ -227,7 +227,7 @@ namespace BAMTS.Internal
             }
             return result;
         }
-        public void P_Delete_OrderItem_ForApp1(int ODR_PERIOD, string ODR_CATEGORY, string ODR_MONTH, int ODR_SEQ)
+        public void P_Delete_OrderItem_ForApp1(int ODR_PERIOD, string ODR_CATEGORY, string ODR_MONTH, int ODR_SEQ, string UPD_USER)
         {
             for (int tryCount = 0; tryCount <= this.MaxRetryCount; tryCount++)
             {
@@ -244,6 +244,7 @@ namespace BAMTS.Internal
                         cmd.Parameters.Add("@ODR_CATEGORY", SqlDbType.VarChar).Value = ODR_CATEGORY ?? "";
                         cmd.Parameters.Add("@ODR_MONTH", SqlDbType.VarChar).Value = ODR_MONTH ?? "";
                         cmd.Parameters.Add("@ODR_SEQ", SqlDbType.Int).Value = ODR_SEQ;
+                        cmd.Parameters.Add("@UPD_USER", SqlDbType.VarChar).Value = UPD_USER ?? "";
                         var ds = db.GetDataSet(cmd, true);
                         {
                             var dt = ds.Tables[0];
@@ -357,6 +358,41 @@ namespace BAMTS.Internal
                         SqlCommand cmd = (SqlCommand)db.GetCommand(false);
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.CommandText = "P_Get_T_ASSOCIATE_Selector1";
+                        var ds = db.GetDataSet(cmd, false);
+                        {
+                            var dt = ds.Tables[0];
+                            for (var i = 0; i < dt.Rows.Count; i++)
+                            {
+                                var rec = new SelectorItem();
+                                rec.BuildRecord(dt.Rows[i]);
+                                result.Add(rec);
+                            }
+                        }
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        if (tryCount >= this.MaxRetryCount) throw;
+                        System.Threading.Thread.Sleep(this.RetryIntervalMS);
+                    }
+                }
+            }
+            return result;
+        }
+        public List<SelectorItem> P_Get_T_ASSOCIATE_Selector2(string TYPE_ID)
+        {
+            var result = new List<SelectorItem>();
+            for (int tryCount = 0; tryCount <= this.MaxRetryCount; tryCount++)
+            {
+                using (SQLServerAccessMethods db = new SQLServerAccessMethods(this.ConnectionString))
+                {
+                    db.Open();
+                    try
+                    {
+                        SqlCommand cmd = (SqlCommand)db.GetCommand(false);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.CommandText = "P_Get_T_ASSOCIATE_Selector2";
+                        cmd.Parameters.Add("@TYPE_ID", SqlDbType.VarChar).Value = TYPE_ID ?? (object)DBNull.Value;
                         var ds = db.GetDataSet(cmd, false);
                         {
                             var dt = ds.Tables[0];

@@ -1,0 +1,37 @@
+﻿@page "/ComferenceRoom"
+@using BAMTS.Internal;
+@using System.Text;
+@using System.Timers;
+@using BlazorStrap;
+@using Newtonsoft.Json;
+@using BAMTS_Internal_Client.Components;
+@inject HttpClient Http
+@inject IBlazorStrap blazorStrap
+@inject IJSRuntime JSRuntime
+
+<h3>ComferenceRoom</h3>
+
+@code {
+    [Inject]
+    private NavigationManager NavManager { get; set; }
+    private string ACCESS_FUNC_NAME = "会議室";
+    private string ACCESS_FUNC_ID = "ComferenceRoom";
+    private string ACCESS_ITEM_VWOPEN_ID = "ViewOpen";
+    private string ACCESS_ITEM_DELREC_ID = "DeleteOrderRecord";
+    private SetLOGON_USER_INFO loginInfo;
+    protected override async Task OnInitializedAsync()
+    {
+        if (Common.LOGIN_STAFF_ID == null)
+        {
+            this.NavManager.NavigateTo("UserLogin");
+            return;
+        }
+        //this.InitializeSortInfo();
+        this.loginInfo = await Http.GetFromJsonAsync<SetLOGON_USER_INFO>($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_LoginUserInfo/{Common.LOGIN_STAFF_ID}");
+        if (!this.loginInfo.USER_AUTHORITY.Exists(c => (c.ACCESS_FUNC_ID == this.ACCESS_FUNC_ID) && (c.ACCESS_ITEM_ID == this.ACCESS_ITEM_VWOPEN_ID)))
+        {
+            this.NavManager.NavigateTo($"ViewOpenDenied/{this.ACCESS_FUNC_NAME}");
+            return;
+        }
+    }
+}

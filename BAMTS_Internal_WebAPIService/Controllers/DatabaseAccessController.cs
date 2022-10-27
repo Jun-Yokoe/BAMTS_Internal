@@ -136,12 +136,12 @@ namespace BAMTS_Internal_WebAPIService.Controllers
             );
         }
         [HttpDelete]
-        [Route("api/DatabaseAccessController/P_Delete_OrderItem_ForApp1/Delete/{ODR_PERIOD}/{ODR_CATEGORY}/{ODR_MONTH}/{ODR_SEQ}")]
-        public ActionResult P_Delete_OrderItem_ForApp1(string ODR_PERIOD, string ODR_CATEGORY, string ODR_MONTH, string ODR_SEQ)
+        [Route("api/DatabaseAccessController/P_Delete_OrderItem_ForApp1/Delete/{ODR_PERIOD}/{ODR_CATEGORY}/{ODR_MONTH}/{ODR_SEQ}/{UPD_USER}")]
+        public ActionResult P_Delete_OrderItem_ForApp1(string ODR_PERIOD, string ODR_CATEGORY, string ODR_MONTH, string ODR_SEQ, string UPD_USER)
         {
             try
             {
-                this._storedProcessor.P_Delete_OrderItem_ForApp1(int.Parse(ODR_PERIOD), ODR_CATEGORY, ODR_MONTH, int.Parse(ODR_SEQ));
+                this._storedProcessor.P_Delete_OrderItem_ForApp1(int.Parse(ODR_PERIOD), ODR_CATEGORY, ODR_MONTH, int.Parse(ODR_SEQ), UPD_USER);
                 return Ok();
             }
             catch (Exception ex)
@@ -170,6 +170,9 @@ namespace BAMTS_Internal_WebAPIService.Controllers
         [HttpGet]
         [Route("api/DatabaseAccessController/P_Get_T_ASSOCIATE_Selector1")]
         public IList<SelectorItem> P_Get_T_ASSOCIATE_Selector1() => this._storedProcessor.P_Get_T_ASSOCIATE_Selector1();
+        [HttpGet]
+        [Route("api/DatabaseAccessController/P_Get_T_ASSOCIATE_Selector2/{TYPE_ID}")]
+        public IList<SelectorItem> P_Get_T_ASSOCIATE_Selector2(string TYPE_ID) => this._storedProcessor.P_Get_T_ASSOCIATE_Selector2(TYPE_ID);
         [HttpGet]
         [Route("api/DatabaseAccessController/P_Get_T_CUSTOMER_Selector1")]
         public IList<SelectorItem> P_Get_T_CUSTOMER_Selector1() => this._storedProcessor.P_Get_T_CUSTOMER_Selector1();

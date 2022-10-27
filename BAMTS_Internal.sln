@@ -29,7 +29,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImportOrderDataFromExcel", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibExcelAccess", "LibExcelAccess\LibExcelAccess.csproj", "{B38130A4-69C9-4A4F-B202-6CD6BED0CF54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BAMTS_Internal_Client", "BAMTS_Internal_Client\BAMTS_Internal_Client.csproj", "{020333BA-E8FB-4763-B9D0-E82D7EA08ED9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BAMTS_Internal_Client", "BAMTS_Internal_Client\BAMTS_Internal_Client.csproj", "{020333BA-E8FB-4763-B9D0-E82D7EA08ED9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

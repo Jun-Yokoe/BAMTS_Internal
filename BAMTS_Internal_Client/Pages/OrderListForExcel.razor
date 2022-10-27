@@ -41,9 +41,6 @@
     <h4 style="color: forestgreen">@message</h4>&emsp;
     <strong>@this.recordCount</strong><span>件中&emsp;</span>@(this.DisplayRowWindow())<span>&emsp;</span>
     <BSPagination Pages="this.GetMaxPage()+1" @bind-Value="this.NowPage" style="width: 700px; margin-top: 12px" />
-    <BSAlert Color="BSColor.Info" HasIcon="true" MarginTop="Margins.Small">各行をダブルクリックすると編集画面が開きます。</BSAlert>
-    &emsp;&emsp;&emsp;
-    <button class="btn btn-primary" @onclick="OnClickDownloadOrderList"><span class="oi oi-cloud-download" aria-hidden="true"></span>&emsp;一覧CSVダウンロード</button>
     &emsp;&emsp;&emsp;
     @if(this.readOnly)
     {
@@ -59,6 +56,10 @@
             <button class="btn" style="background-color: teal; color:white;" @onclick="UnlockOrderList"><Icons Value="1"></Icons>&emsp;更新権利破棄</button>
         }
     }
+    &emsp;&emsp;&emsp;
+    <BSAlert Color="BSColor.Info" HasIcon="true" MarginTop="Margins.Small">各行をダブルクリックすると編集画面が開きます。</BSAlert>
+    &emsp;&emsp;&emsp;
+    <button class="btn btn-primary" @onclick="OnClickDownloadOrderList"><span class="oi oi-cloud-download" aria-hidden="true"></span>&emsp;一覧CSVダウンロード</button>
     &emsp;&emsp;&emsp;
     @if (this.readOnly == false)
     {
@@ -265,11 +266,11 @@
                     <td rowspan="1" align="center"></td>
                     <td rowspan="1" align="center"></td>
                     <td rowspan="1" align="center"></td>
-                    <td rowspan="1" align="center"></td>
                     <td rowspan="1" align="right" class="text-nowrap">&yen;@($"{this.allList.Sum(item => item.ANS_NET_PRICE + item.CALC_ANS_TAX_PRICE): ###,0}")</td>
                     <td rowspan="1" align="right" class="text-nowrap">&yen;@($"{this.allList.Sum(item => item.NET_PRICE_1 + item.CALC_ASS1_TAX_PRICE): ###,0}")</td>
                     <td rowspan="1" align="right" class="text-nowrap">&yen;@($"{this.allList.Sum(item => item.NET_PRICE_2 + item.CALC_ASS2_TAX_PRICE): ###,0}")</td>
                     <td rowspan="1" align="right" class="text-nowrap">&yen;@($"{this.allList.Sum(item => item.NET_PRICE_3 + item.CALC_ASS3_TAX_PRICE): ###,0}")</td>
+                    <td rowspan="1" align="center"></td>
                     <td rowspan="1" align="center"></td>
                     <td rowspan="1" align="center"></td>
                     <td rowspan="1" align="center"></td>
@@ -488,9 +489,9 @@
                                 </td>
                                 <td>
                                     <!--<BSInput InputType="InputType.Text" @bind-Value="this.searchModel.ASSOCIATE_NAME_1" style="width: stretch" />-->
-                                    <input type="text" autocomplete="on" list="selAssociateList"  @bind-value="this.searchModel.ASSOCIATE_NAME_1" style="width: 400px" >
-                                    <datalist id="selAssociateList">
-                                        @foreach (var item in this.selAssociate)
+                                    <input type="text" autocomplete="on" list="selAssociateListC"  @bind-value="this.searchModel.ASSOCIATE_NAME_1" style="width: 400px" >
+                                    <datalist id="selAssociateListC">
+                                        @foreach (var item in this.selAssociateC)
                                         {
                                             <option value="@item.Text"/>
                                         }
@@ -525,9 +526,9 @@
                                 </td>
                                 <td>
                                     <!--<BSInput InputType="InputType.Text" @bind-Value="this.searchModel.ASSOCIATE_NAME_2" style="width: stretch" />-->
-                                    <input type="text" autocomplete="on" list="selAssociateList"  @bind-value="this.searchModel.ASSOCIATE_NAME_2" style="width: 400px" >
-                                    <datalist id="selAssociateList">
-                                        @foreach (var item in this.selAssociate)
+                                    <input type="text" autocomplete="on" list="selAssociateListS"  @bind-value="this.searchModel.ASSOCIATE_NAME_2" style="width: 400px" >
+                                    <datalist id="selAssociateListS">
+                                        @foreach (var item in this.selAssociateS)
                                         {
                                             <option value="@item.Text"/>
                                         }
@@ -562,9 +563,9 @@
                                 </td>
                                 <td>
                                     <!--<BSInput InputType="InputType.Text" @bind-Value="this.searchModel.ASSOCIATE_NAME_3" style="width: stretch" />-->
-                                    <input type="text" autocomplete="on" list="selAssociateList"  @bind-value="this.searchModel.ASSOCIATE_NAME_3" style="width: 400px" >
-                                    <datalist id="selAssociateList">
-                                        @foreach (var item in this.selAssociate)
+                                    <input type="text" autocomplete="on" list="selAssociateListO"  @bind-value="this.searchModel.ASSOCIATE_NAME_3" style="width: 400px" >
+                                    <datalist id="selAssociateListO">
+                                        @foreach (var item in this.selAssociateO)
                                         {
                                             <option value="@item.Text"/>
                                         }
@@ -1081,20 +1082,20 @@
                                         <td>
                                             <div class="input-group">
                                                 <span class="input-group-text">会社</span>
+                                                <input type="text" autocomplete="on" list="associateList1"  @bind-value="this.inputModel.ASSOCIATE_NAME_1">
+                                                <datalist id="associateList1">
+                                                    @foreach (var item in this.selAssociateC)
+                                                    {
+                                                        <option value="@item.Text"/>
+                                                    }
+                                                </datalist>
+                                                @*
                                                 <select class="custom-select" id="inputAssociateID1" @bind="this.inputModel.ASSOCIATE_ID_1">
                                                     @foreach (var item in this.selAssociate)
                                                     {
                                                         <option value="@item.Value">@item.Text</option>
                                                     }
                                                 </select>
-                                                @*
-                                                <input type="text" autocomplete="on" list="associateList1"  @bind-value="this.inputModel.ASSOCIATE_ID_1">
-                                                <datalist id="associateList1">
-                                                    @foreach (var item in this.selAssociate)
-                                                    {
-                                                        <option value="@item.Text"/>
-                                                    }
-                                                </datalist>
                                                 *@
                                             </div>
                                             <div class="input-group">
@@ -1127,20 +1128,20 @@
                                         <td>
                                             <div class="input-group">
                                                 <span class="input-group-text">会社</span>
+                                                <input type="text" autocomplete="on" list="associateList2"  @bind-value="this.inputModel.ASSOCIATE_NAME_2">
+                                                <datalist id="associateList2">
+                                                    @foreach (var item in this.selAssociateS)
+                                                    {
+                                                        <option value="@item.Text"/>
+                                                    }
+                                                </datalist>
+                                                @*
                                                 <select class="custom-select" id="inputAssociateID2" @bind="this.inputModel.ASSOCIATE_ID_2">
                                                     @foreach (var item in this.selAssociate)
                                                     {
                                                         <option value="@item.Value">@item.Text</option>
                                                     }
                                                 </select>
-                                                @*
-                                                <input type="text" autocomplete="on" list="associateList2"  @bind-value="this.inputModel.ASSOCIATE_ID_2">
-                                                <datalist id="associateList2">
-                                                    @foreach (var item in this.selAssociate)
-                                                    {
-                                                        <option value="@item.Text"/>
-                                                    }
-                                                </datalist>
                                                 *@
                                             </div>
                                             <div class="input-group">
@@ -1173,20 +1174,20 @@
                                         <td>
                                             <div class="input-group">
                                                 <span class="input-group-text">会社</span>
+                                                <input type="text" autocomplete="on" list="associateList3"  @bind-value="this.inputModel.ASSOCIATE_NAME_3">
+                                                <datalist id="associateList3">
+                                                    @foreach (var item in this.selAssociateO)
+                                                    {
+                                                        <option value="@item.Text"/>
+                                                    }
+                                                </datalist>
+                                                @*
                                                 <select class="custom-select" id="inputAssociateID3" @bind="this.inputModel.ASSOCIATE_ID_3">
                                                     @foreach (var item in this.selAssociate)
                                                     {
                                                         <option value="@item.Value">@item.Text</option>
                                                     }
                                                 </select>
-                                                @*
-                                                <input type="text" autocomplete="on" list="associateList3"  @bind-value="this.inputModel.ASSOCIATE_ID_3">
-                                                <datalist id="associateList3">
-                                                    @foreach (var item in this.selAssociate)
-                                                    {
-                                                        <option value="@item.Text"/>
-                                                    }
-                                                </datalist>
                                                 *@
                                             </div>
                                             <div class="input-group">
@@ -1368,7 +1369,9 @@
     private List<SelectorItem> selOrderType = new List<SelectorItem>();
     private List<SelectorItem> selOrderCategory = new List<SelectorItem>();
     private List<SelectorItem> selStaff = new List<SelectorItem>();
-    private List<SelectorItem> selAssociate = new List<SelectorItem>();
+    private List<SelectorItem> selAssociateC = new List<SelectorItem>();
+    private List<SelectorItem> selAssociateS = new List<SelectorItem>();
+    private List<SelectorItem> selAssociateO = new List<SelectorItem>();
     private List<SelectorItem> selCustomer = new List<SelectorItem>();
     private List<SelectorItem> lstViewParams = new List<SelectorItem>();
     private int nowPage = 0;
@@ -1430,10 +1433,7 @@
         this.TaxRate = int.Parse((await Http.GetFromJsonAsync<List<SelectorItem>>($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_T_PROGRAM_Parameters1/TAX_RATE/1")).First().Text);
         this.selStaff = await Http.GetFromJsonAsync<List<SelectorItem>>($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_T_STAFF_Selector1");
         this.selStaff.Insert(0, new SelectorItem() { Text = "", Value = null });
-        this.selAssociate = await Http.GetFromJsonAsync<List<SelectorItem>>($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_T_ASSOCIATE_Selector1");
-        this.selAssociate.Insert(0, new SelectorItem() { Text = "", Value = null });
-        this.selCustomer = await Http.GetFromJsonAsync<List<SelectorItem>>($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_T_CUSTOMER_Selector1");
-        this.selCustomer.Insert(0, new SelectorItem() { Text = "", Value = null });
+        this.ReloadInputListTargets();
         this.selOrderStatus1 = await Http.GetFromJsonAsync<List<SelectorItem>>($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_ListOrderStatus_Selector1");
         this.selOrderStatus1.Insert(0, new SelectorItem() { Text = "", Value = null });
         this.selOrderStatus2 = await Http.GetFromJsonAsync<List<SelectorItem>>($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_ListOrderStatus_Selector1");
@@ -1633,8 +1633,16 @@
         await this.SetCopyOrderNoItems();
         await DataInput.ShowAsync();
     }
-    protected async Task ReloadCustomerList()
+    private async Task  ReloadInputListTargets()
     {
+        //this.selAssociate = await Http.GetFromJsonAsync<List<SelectorItem>>($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_T_ASSOCIATE_Selector1");
+        //this.selAssociate.Insert(0, new SelectorItem() { Text = "", Value = null });
+        this.selAssociateC = await Http.GetFromJsonAsync<List<SelectorItem>>($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_T_ASSOCIATE_Selector2/CONSTRUCTION");
+        this.selAssociateC.Insert(0, new SelectorItem() { Text = "", Value = null });
+        this.selAssociateS = await Http.GetFromJsonAsync<List<SelectorItem>>($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_T_ASSOCIATE_Selector2/SETUP");
+        this.selAssociateS.Insert(0, new SelectorItem() { Text = "", Value = null });
+        this.selAssociateO = await Http.GetFromJsonAsync<List<SelectorItem>>($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_T_ASSOCIATE_Selector2/OTHER");
+        this.selAssociateO.Insert(0, new SelectorItem() { Text = "", Value = null });
         this.selCustomer = await Http.GetFromJsonAsync<List<SelectorItem>>($"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_T_CUSTOMER_Selector1");
         this.selCustomer.Insert(0, new SelectorItem() { Text = "", Value = null });
     }
@@ -1845,20 +1853,31 @@
         RecVV_ORDER_LIST_FOR_EXCEL_P1 firstItem = null;
         for(var i = 0; i < this.CopyRecs; i++)
         {
-            var newItem = new RecVV_ORDER_LIST_FOR_EXCEL_P1();
+            #region コピー項目限定版
+            //var newItem = new RecVV_ORDER_LIST_FOR_EXCEL_P1();
+            //var url = $"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_NextOrderNoItems";
+            //var items = await Http.GetFromJsonAsync<List<SelectorItem>>(url);  //.GetAwaiter().GetResult();
+            //newItem.ODR_PERIOD = int.Parse(items.Where(c => c.Text == "ODR_PERIOD").FirstOrDefault()?.Value ?? "0");
+            //newItem.ODR_CATEGORY = this.inputModel.ODR_CATEGORY;
+            //newItem.ODR_MONTH = $"{DateTime.Now.Month:00}";
+            //newItem.ODR_SEQ = int.Parse(items.Where(c => c.Text == "ODR_SEQ").FirstOrDefault()?.Value ?? "0");
+            //newItem.ODR_NAME = this.inputModel.ODR_NAME;            //←コピー項目限定
+            //newItem.CUSTOMER_ID = this.inputModel.CUSTOMER_ID;            //←コピー項目限定
+            //newItem.CUSTOMER_NAME = this.inputModel.CUSTOMER_NAME;            //←コピー項目限定
+            //newItem.EST_ISSUE_DATE = this.inputModel.EST_ISSUE_DATE;            //←コピー項目限定
+            //newItem.CNST_START_DATE = this.inputModel.CNST_START_DATE;            //←コピー項目限定
+            //newItem.CNST_END_DATE = this.inputModel.CNST_END_DATE;            //←コピー項目限定
+            //newItem.ANS_NET_PRICE = this.inputModel.ANS_NET_PRICE;            //←コピー項目限定
+            //newItem.UPD_USER = Common.LOGIN_STAFF_ID;
+            #endregion
+            var newItem = this.inputModel.Copy();
             var url = $"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Get_NextOrderNoItems";
             var items = await Http.GetFromJsonAsync<List<SelectorItem>>(url);  //.GetAwaiter().GetResult();
             newItem.ODR_PERIOD = int.Parse(items.Where(c => c.Text == "ODR_PERIOD").FirstOrDefault()?.Value ?? "0");
             newItem.ODR_CATEGORY = this.inputModel.ODR_CATEGORY;
             newItem.ODR_MONTH = $"{DateTime.Now.Month:00}";
             newItem.ODR_SEQ = int.Parse(items.Where(c => c.Text == "ODR_SEQ").FirstOrDefault()?.Value ?? "0");
-            newItem.ODR_NAME = this.inputModel.ODR_NAME;
-            newItem.CUSTOMER_ID = this.inputModel.CUSTOMER_ID;
-            newItem.CUSTOMER_NAME = this.inputModel.CUSTOMER_NAME;
-            newItem.EST_ISSUE_DATE = this.inputModel.EST_ISSUE_DATE;
-            newItem.CNST_START_DATE = this.inputModel.CNST_START_DATE;
-            newItem.CNST_END_DATE = this.inputModel.CNST_END_DATE;
-            newItem.ANS_NET_PRICE = this.inputModel.ANS_NET_PRICE;
+            newItem.UPD_USER = Common.LOGIN_STAFF_ID;
             if(firstItem == null)
             {
                 firstItem = newItem;
@@ -1938,7 +1957,7 @@
                     this.updateMessageText = await response.Content.ReadAsStringAsync();
                 }
             }
-            await this.ReloadCustomerList();
+            await this.ReloadInputListTargets();
         }
         catch (Exception ex)
         {
@@ -2098,7 +2117,7 @@
         bool confirmed = await JSRuntime.InvokeAsync<bool>("confirm", msg);
         if (confirmed)
         {
-            var URL = $"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Delete_OrderItem_ForApp1/Delete/{this.inputModel.ODR_PERIOD}/{this.inputModel.ODR_CATEGORY}/{this.inputModel.ODR_MONTH}/{this.inputModel.ODR_SEQ}";
+            var URL = $"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Delete_OrderItem_ForApp1/Delete/{this.inputModel.ODR_PERIOD}/{this.inputModel.ODR_CATEGORY}/{this.inputModel.ODR_MONTH}/{this.inputModel.ODR_SEQ}/{Common.LOGIN_STAFF_ID}";
             using (var response = await Http.DeleteAsync(URL))
             {
                 if (response.IsSuccessStatusCode == false)
@@ -2116,7 +2135,7 @@
         bool confirmed = await JSRuntime.InvokeAsync<bool>("confirm", msg);
         if (confirmed)
         {
-            var URL = $"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Delete_OrderItem_ForApp1/Delete/{this.inputModel.ODR_PERIOD}/{this.inputModel.ODR_CATEGORY}/{this.inputModel.ODR_MONTH}/{this.inputModel.ODR_SEQ}";
+            var URL = $"{Common.TARGET_WEBAPI_SCHEME}://{Common.TARGET_WEBAPI_HOST}:{Common.TARGET_WEBAPI_PORTNO}/api/{Common.TARGET_WEBAPI_CONTROLLER}/P_Delete_OrderItem_ForApp1/Delete/{this.inputModel.ODR_PERIOD}/{this.inputModel.ODR_CATEGORY}/{this.inputModel.ODR_MONTH}/{this.inputModel.ODR_SEQ}/{Common.LOGIN_STAFF_ID}";
             using (var response = await Http.DeleteAsync(URL))
             {
                 if (response.IsSuccessStatusCode == false)

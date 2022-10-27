@@ -395,4 +395,4 @@ C:\User\Projects\BAMTS\Development\BAMTS_Internal\Source\BAMTS_Internal_WebAPISe
 C:\User\Projects\BAMTS\Development\BAMTS_Internal\Source\BAMTS_Internal_WebAPIService\obj\Release\net6.0\win-x64\BAMTS_Internal_WebAPIService.pdb
 C:\User\Projects\BAMTS\Development\BAMTS_Internal\Source\BAMTS_Internal_WebAPIService\obj\Release\net6.0\win-x64\BAMTS_Internal_WebAPIService.genruntimeconfig.cache
 C:\User\Projects\BAMTS\Development\BAMTS_Internal\Source\BAMTS_Internal_WebAPIService\obj\Release\net6.0\win-x64\ref\BAMTS_Internal_WebAPIService.dll
-C:\User\Projects\BAMTS\Development\BAMTS_Internal\Source\BAMTS_Internal_WebAPIService\bin\Release\net6.0\win-x64\mscordaccore_amd64_amd64_6.0.922.41905.dll
+C:\User\Projects\BAMTS\Development\BAMTS_Internal\Source\BAMTS_Internal_WebAPIService\bin\Release\net6.0\win-x64\mscordaccore_amd64_amd64_6.0.1022.47605.dll

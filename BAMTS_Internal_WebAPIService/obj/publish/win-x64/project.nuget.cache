@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "09VW2V3Z0wtL07OS329ph2Yuqu6srlZYCiBVkU9DJIin+aPvFnZ70B/dCjB9E7e9qt1F9NqbmBC9lR2ephocKw==",
+  "dgSpecHash": "e3Rho7lc+DkKErjvX6PNFJ0yN58yIZI/c1H7K+3Xc50HdtjyZMJT73ptgy9Ek3fNbd5f1jXuew39SaggASZZ5w==",
   "success": true,
   "projectFilePath": "C:\\User\\Projects\\BAMTS\\Development\\BAMTS_Internal\\Source\\BAMTS_Internal_WebAPIService\\BAMTS_Internal_WebAPIService.csproj",
   "expectedPackageFiles": [
@@ -114,9 +114,9 @@
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.threading.tasks.extensions\\4.5.1\\system.threading.tasks.extensions.4.5.1.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.xml.readerwriter\\4.0.11\\system.xml.readerwriter.4.0.11.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.xml.xdocument\\4.0.11\\system.xml.xdocument.4.0.11.nupkg.sha512",
-    "C:\\Users\\jun\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\6.0.9\\microsoft.netcore.app.runtime.win-x64.6.0.9.nupkg.sha512",
-    "C:\\Users\\jun\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\6.0.9\\microsoft.windowsdesktop.app.runtime.win-x64.6.0.9.nupkg.sha512",
-    "C:\\Users\\jun\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\6.0.9\\microsoft.aspnetcore.app.runtime.win-x64.6.0.9.nupkg.sha512"
+    "C:\\Users\\jun\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\6.0.10\\microsoft.netcore.app.runtime.win-x64.6.0.10.nupkg.sha512",
+    "C:\\Users\\jun\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\6.0.10\\microsoft.windowsdesktop.app.runtime.win-x64.6.0.10.nupkg.sha512",
+    "C:\\Users\\jun\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\6.0.10\\microsoft.aspnetcore.app.runtime.win-x64.6.0.10.nupkg.sha512"
   ],
   "logs": []
 }

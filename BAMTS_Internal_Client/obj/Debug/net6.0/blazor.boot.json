@@ -204,7 +204,7 @@
       "BAMSS.Logging.Message.LoggingMessageInterface.dll": "sha256-kUlf4WiH2M4WbT3osBAdQJunWfipGOrDQtauyqj0H70=",
       "LibCommon.dll": "sha256-Wb9sV1rdAao07CsN8C+Xr21WQL2EDQ6dNvZaqDb8r6M=",
       "LibModels.dll": "sha256-Qq4bUCpOM1Bp+LJc2HQJBS+F02vvvizBJTTdA1AMYrw=",
-      "BAMTS_Internal_Client.dll": "sha256-4Yet6tDyQaWxHG30ttSe1mtxFoitF6ZlAufaDQX73GI="
+      "BAMTS_Internal_Client.dll": "sha256-sr8NfDkDOaOMRhyQwL2z0EzUZNLTn6hzdDDocJf6\/jM="
     },
     "extensions": null,
     "lazyAssembly": null,
@@ -215,7 +215,7 @@
       "BAMSS.Data.SQLServerAccessor.pdb": "sha256-ZmGhjW3dIVbalxB+d2Ohuk\/ACC5PY6B9Q6Vi8y6UFkk=",
       "BAMSS.Extensions.Exception.pdb": "sha256-lRkS3SFXkCJtkX3OPfRa9wSjnrTZKjrnBsgngo3de+c=",
       "BAMSS.Logging.Message.LoggingMessageInterface.pdb": "sha256-Gq6h3UGd7dzwW4dzA51066wj5LUTTFz0NpwvM3LGmZQ=",
-      "BAMTS_Internal_Client.pdb": "sha256-Vl5DGCwcerw2QlBcRKMWHX8QJ0FBlOH+AUoyf4JPjwg="
+      "BAMTS_Internal_Client.pdb": "sha256-FSwAXzd2CtV0TQ8YlnPvSRwIwBH5pQCyS5V1MEkCf4U="
     },
     "runtime": {
       "dotnet.6.0.10.kbjkrgu40t.js": "sha256-KtM3Wrooexmrt5NmqvZfWoDPtNIe6wZqLopR6ToqUPg=",
